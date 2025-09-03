@@ -49,9 +49,14 @@ html {
 }
 
 body {
+  font-family: var(--font-family);
   line-height: 1.6;
   color: #333;
   font-size: var(--font-size-text);
+}
+
+* {
+  font-family: inherit;
 }
 
 h1 {
