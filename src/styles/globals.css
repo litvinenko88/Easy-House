@@ -37,11 +37,6 @@
   --border-gray: #e0e0e0;
   --dark-green: #2e7d32;
 
-  /* Текст - единые размеры для всего сайта */
-  --text-size: var(--font-size-base);
-  --text-size-sm: var(--font-size-sm);
-  --text-size-lg: var(--font-size-lg);
-
   /* Отступы */
   --spacing-2xl: 48px;
   --spacing-3xl: 64px;
