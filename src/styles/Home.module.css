@@ -1,24 +1,8 @@
 .hero {
-  padding: 100px 0;
+  padding: var(--spacing-xl) 0;
   text-align: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.hero h1 {
-  font-size: 48px;
-  margin-bottom: 20px;
-  font-weight: 700;
-}
-
-.hero p {
-  font-size: 20px;
-  margin-bottom: 30px;
-  opacity: 0.9;
+  /* Local container styles */
 }
