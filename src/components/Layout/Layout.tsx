@@ -13,6 +13,7 @@ export default function Layout({ children, title = 'Easy House', description = '
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="keywords" content="модульный дом под ключ, модульный дом цена, купить модульный дом, готовый модульный дом, производство модульных домов, модульный дом с отделкой, модульный дом с коммуникациями" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
