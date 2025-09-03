@@ -4,7 +4,5 @@
 }
 
 .container {
-  padding: 0 var(--container-padding);
-  max-width: 1200px;
-  margin: 0 auto;
+  /* Local container styles */
 }
