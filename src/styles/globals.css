@@ -1,38 +1,92 @@
 @font-face {
-  font-family: 'InterTight';
-  src: url('/fonts/InterTight-Regular.woff2') format('woff2'),
-       url('/fonts/InterTight-Regular.woff') format('woff');
+  font-family: "InterTight";
+  src: url("/fonts/InterTight-Regular.woff2") format("woff2"),
+    url("/fonts/InterTight-Regular.woff") format("woff");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: 'InterTight';
-  src: url('/fonts/InterTight-Bold.woff2') format('woff2'),
-       url('/fonts/InterTight-Bold.woff') format('woff');
+  font-family: "InterTight";
+  src: url("/fonts/InterTight-Bold.woff2") format("woff2"),
+    url("/fonts/InterTight-Bold.woff") format("woff");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
+  /* Цвета */
+  --color-primary: #31323d;
+  --color-accent: #df682b;
+  --color-light: #eee8f4;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray: #666666;
+  --color-gray-light: #f5f5f5;
+
+  /* Дополнительные цвета для конструктора */
+  --primary-dark: #31323d;
+  --accent-orange: #df682b;
+  --white: #ffffff;
+  --light-gray: #f5f5f5;
+  --light-purple: #eee8f4;
+  --text-dark: #31323d;
+  --text-light: #666666;
+  --border-gray: #e0e0e0;
+  --dark-green: #2e7d32;
+
+  /* Текст - единые размеры для всего сайта */
+  --text-size: var(--font-size-base);
+  --text-size-sm: var(--font-size-sm);
+  --text-size-lg: var(--font-size-lg);
+
+  /* Отступы */
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Радиусы */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+
+  /* Тени */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+  /* Переходы */
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Контейнеры */
+  --container-max-width: 1400px;
+
+  /* Брейкпоинты */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+
   /* Typography */
-  --font-family: 'InterTight', Arial, sans-serif;
+  --font-family: "InterTight", Arial, sans-serif;
   --font-size-h1: clamp(2rem, 5vw, 3.5rem);
   --font-size-h2: clamp(1.75rem, 4vw, 2.75rem);
   --font-size-h3: clamp(1.5rem, 3.5vw, 2.25rem);
   --font-size-h4: clamp(1.25rem, 3vw, 1.75rem);
   --font-size-h5: clamp(1.125rem, 2.5vw, 1.5rem);
   --font-size-text: clamp(1rem, 2vw, 1.125rem);
-  
+
   /* Spacing */
   --spacing-xs: clamp(0.5rem, 1vw, 0.75rem);
   --spacing-sm: clamp(1rem, 2vw, 1.5rem);
   --spacing-md: clamp(1.5rem, 3vw, 2.5rem);
   --spacing-lg: clamp(2rem, 4vw, 3.5rem);
   --spacing-xl: clamp(3rem, 6vw, 5rem);
-  
+
   /* Container padding */
   --container-padding: clamp(1rem, 4vw, 2rem);
   --section-gap: clamp(3rem, 8vw, 6rem);
