@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Header from '../Header/Header'
 
+
 interface LayoutProps {
   children: React.ReactNode
   title?: string
