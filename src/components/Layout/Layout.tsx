@@ -1,0 +1,25 @@
+import Head from 'next/head'
+import Header from '../Header/Header'
+import Footer from '../Footer/Footer'
+
+interface LayoutProps {
+  children: React.ReactNode
+  title?: string
+  description?: string
+}
+
+export default function Layout({ children, title = 'Easy House', description = 'Система управления умным домом' }: LayoutProps) {
+  return (
+    <>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Header />
+      <main>{children}</main>
+      <Footer />
+    </>
+  )
+}
