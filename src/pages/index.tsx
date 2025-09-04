@@ -4,6 +4,7 @@ import ProblemSolution from '../components/ProblemSolution'
 import Bestsellers from '../components/Bestsellers/Bestsellers'
 import VideoReviews from '../components/VideoReviews'
 import Features from '../components/Features'
+import VirtualTour from '../components/VirtualTour'
 
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
       <Bestsellers/>
       <VideoReviews showViewAllButton={true} />
       <Features />
+      <VirtualTour />
     </Layout>
   )
 }
