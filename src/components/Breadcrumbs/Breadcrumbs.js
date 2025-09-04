@@ -17,14 +17,14 @@ const Breadcrumbs = () => {
     'dlya-biznesa': 'Для бизнеса'
   }
 
-  const breadcrumbItems = [
+  const breadcrumbItems = useMemo(() => [
     { name: 'Главная', href: '/' },
     ...pathSegments.map((segment, index) => {
       const href = '/' + pathSegments.slice(0, index + 1).join('/')
       const name = pageNames[segment] || segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, ' ')
       return { name, href }
     })
-  ]
+  ], [pathSegments])
 
   if (breadcrumbItems.length <= 1) return null
 

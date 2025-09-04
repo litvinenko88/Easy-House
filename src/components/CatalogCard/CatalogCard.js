@@ -1,12 +1,16 @@
 import { useRouter } from "next/router";
+import { useMemo } from "react";
 import styles from "./CatalogCard.module.css";
 
-const CatalogCard = ({ house, index, isVisible }) => {
+const CatalogCard = ({ house, isVisible }) => {
   const router = useRouter();
 
+  const sanitizedSlug = useMemo(() => {
+    return house?.slug ? house.slug.replace(/[^a-zA-Z0-9-_]/g, '') : null;
+  }, [house?.slug]);
+
   const handleClick = () => {
-    if (house?.slug) {
-      const sanitizedSlug = house.slug.replace(/[^a-zA-Z0-9-_]/g, '');
+    if (sanitizedSlug) {
       router.push(`/catalog/${encodeURIComponent(sanitizedSlug)}`);
     }
   };

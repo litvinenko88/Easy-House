@@ -133,7 +133,7 @@ const allHousesData = [
 ];
 
 export default function Catalog() {
-  const [visibleCards, setVisibleCards] = useState([]);
+  const [visibleCards, setVisibleCards] = useState(new Set());
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef(null);
   const timeoutsRef = useRef([]);
@@ -145,7 +145,7 @@ export default function Catalog() {
           setIsInView(true);
           allHousesData.forEach((_, index) => {
             const timeoutId = setTimeout(() => {
-              setVisibleCards((prev) => [...prev, index]);
+              setVisibleCards((prev) => new Set([...prev, index]));
             }, index * 150);
             timeoutsRef.current.push(timeoutId);
           });
@@ -256,6 +256,9 @@ export default function Catalog() {
           content="https://house-modular.ru/images/catalog-preview.jpg"
         />
         <meta name="robots" content="index, follow" />
+        <meta name="author" content="Easy House" />
+        <meta name="language" content="ru" />
+        <meta httpEquiv="Content-Language" content="ru" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script 
           type="application/ld+json"
@@ -270,7 +273,7 @@ export default function Catalog() {
 
         <section className={styles.hero}>
           <div className="container">
-            <h1 className={styles.title}>Каталог модульных домов</h1>
+            <h1 id="catalog-heading" className={styles.title}>Каталог модульных домов</h1>
             <h2 className={styles.subtitle}>
               Выберите готовый проект из нашего каталога или создайте уникальный
               дом в конструкторе
@@ -282,7 +285,8 @@ export default function Catalog() {
           ref={sectionRef}
           className={`${styles.catalog} ${isInView ? styles.inView : ""}`}
           itemScope
-          itemType="https://schema.org/ItemList">
+          itemType="https://schema.org/ItemList"
+          aria-labelledby="catalog-heading">
           <div className="container">
             <div
               className={styles.grid}
@@ -292,8 +296,7 @@ export default function Catalog() {
                 <CatalogCard
                   key={house.id}
                   house={house}
-                  index={index}
-                  isVisible={visibleCards.includes(index)}
+                  isVisible={visibleCards.has(index)}
                 />
               ))}
             </div>
