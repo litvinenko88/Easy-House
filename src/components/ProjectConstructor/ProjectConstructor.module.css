@@ -1,6 +1,11 @@
 .section {
   padding: var(--spacing-3xl) 0;
-  background: linear-gradient(135deg, var(--color-primary) 0%, rgba(49, 50, 61, 0.95) 50%, var(--color-primary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    rgba(49, 50, 61, 0.95) 50%,
+    var(--color-primary) 100%
+  );
   position: relative;
   overflow: hidden;
   min-height: 60vh;
@@ -14,27 +19,40 @@
   right: 0;
   width: 60%;
   height: 100%;
-  background-image: url('/images/project3d.png');
+  background-image: url("/images/project3d.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   z-index: 1;
   opacity: 0.4;
-  mask: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 60%, transparent 100%);
-  -webkit-mask: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 60%, transparent 100%);
+  mask: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.8) 30%,
+    rgba(0, 0, 0, 0.3) 60%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 1) 0%,
+    rgba(0, 0, 0, 0.8) 30%,
+    rgba(0, 0, 0, 0.3) 60%,
+    transparent 100%
+  );
 }
 
 .section::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, 
-    rgba(49, 50, 61, 0.8) 0%, 
-    rgba(223, 104, 43, 0.1) 30%, 
-    rgba(49, 50, 61, 0.9) 70%, 
+  background: linear-gradient(
+    135deg,
+    rgba(49, 50, 61, 0.8) 0%,
+    rgba(223, 104, 43, 0.1) 30%,
+    rgba(49, 50, 61, 0.9) 70%,
     rgba(49, 50, 61, 0.95) 100%
   );
   z-index: 2;
@@ -53,7 +71,11 @@
 .particle {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(223, 104, 43, 0.4), rgba(223, 104, 43, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(223, 104, 43, 0.4),
+    rgba(223, 104, 43, 0.1)
+  );
   animation: particleFloat 20s linear infinite;
   box-shadow: 0 0 20px rgba(223, 104, 43, 0.3);
 }
@@ -94,12 +116,14 @@
   position: absolute;
   width: 250%;
   height: 200px;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(223, 104, 43, 0.08) 20%, 
-    rgba(223, 104, 43, 0.15) 50%, 
-    rgba(223, 104, 43, 0.08) 80%, 
-    transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(223, 104, 43, 0.08) 20%,
+    rgba(223, 104, 43, 0.15) 50%,
+    rgba(223, 104, 43, 0.08) 80%,
+    transparent 100%
+  );
   border-radius: 50%;
   animation: waveMove 25s linear infinite;
   filter: blur(1px);
@@ -189,7 +213,6 @@
   line-height: 1.2;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   animation: fadeInUp 0.8s ease-out 0.4s both;
-  white-space: nowrap;
 }
 
 .subtitle {
@@ -232,13 +255,18 @@
 }
 
 .constructorButton::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
@@ -300,7 +328,8 @@
 }
 
 @keyframes starTwinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -328,12 +357,12 @@
   .section {
     padding: var(--spacing-2xl) 0;
   }
-  
+
   .backgroundImage {
     width: 50%;
     opacity: 0.3;
   }
-  
+
   .content {
     max-width: 550px;
   }
@@ -344,25 +373,35 @@
     padding: var(--spacing-xl) 0;
     min-height: auto;
   }
-  
+
   .container {
     padding: 0 var(--container-padding);
   }
-  
+
   .backgroundImage {
     width: 100%;
     height: 40%;
     top: auto;
     bottom: 0;
-    mask: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
-    -webkit-mask: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+    mask: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.3) 50%,
+      transparent 100%
+    );
+    -webkit-mask: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.3) 50%,
+      transparent 100%
+    );
   }
-  
+
   .content {
     max-width: 100%;
     text-align: center;
   }
-  
+
   .constructorButton {
     padding: 16px 36px;
     min-width: 200px;
@@ -373,13 +412,13 @@
   .container {
     padding: 0 var(--container-padding);
   }
-  
+
   .constructorButton {
     padding: 15px 32px;
     font-size: var(--font-text-sm);
     min-width: 180px;
   }
-  
+
   .wave {
     height: 120px;
   }

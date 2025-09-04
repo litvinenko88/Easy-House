@@ -395,6 +395,7 @@
   }
 
   .content {
+    display: block;
     padding: var(--spacing-xs);
     gap: var(--spacing-xs);
   }
