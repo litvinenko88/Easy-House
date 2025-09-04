@@ -87,7 +87,7 @@ export default function Bestsellers() {
   const router = useRouter();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && sectionRef.current) {
+    if (typeof window !== "undefined" && sectionRef.current) {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
@@ -108,7 +108,7 @@ export default function Bestsellers() {
   }, []);
 
   const handleCardClick = (slug) => {
-    if (typeof window !== 'undefined' && slug) {
+    if (typeof window !== "undefined" && slug) {
       router.push(`/catalog/${encodeURIComponent(slug)}`);
     }
   };
@@ -233,13 +233,12 @@ export default function Bestsellers() {
               </article>
             ))}
           </div>
-          
+
           <div className={styles.catalogButtonContainer}>
-            <button 
-              className={styles.catalogButton} 
+            <button
+              className={styles.catalogButton}
               type="button"
-              onClick={() => router.push('/catalog')}
-            >
+              onClick={() => router.push("/catalog")}>
               Смотреть весь каталог
             </button>
           </div>
