@@ -59,7 +59,7 @@ const Guarantees = () => {
 
   return (
     <section className={styles.guarantees}>
-      <div className={styles.header}>
+      <div className={styles.titleSection}>
         <h2 className={styles.title}>
           Ваша уверенность прописана в договоре
         </h2>
