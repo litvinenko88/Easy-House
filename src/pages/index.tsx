@@ -2,6 +2,7 @@ import Layout from '../components/Layout/Layout'
 import Hero from '../components/Hero'
 import ProblemSolution from '../components/ProblemSolution'
 import Bestsellers from '../components/Bestsellers/Bestsellers'
+import VideoReviews from '../components/VideoReviews'
 
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <Hero />
       <ProblemSolution/>
       <Bestsellers/>
+      <VideoReviews showViewAllButton={true} />
     </Layout>
   )
 }
