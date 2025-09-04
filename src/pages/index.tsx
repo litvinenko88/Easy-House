@@ -10,6 +10,7 @@ import ProjectConstructor from '../components/ProjectConstructor'
 import WhyChooseUs from '../components/WhyChooseUs'
 import Guarantees from '../components/Guarantees'
 import PhotoGallery from '../components/PhotoGallery'
+import DeliveryInstallation from '../components/DeliveryInstallation'
 
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
       <WhyChooseUs />
       <Guarantees />
       <PhotoGallery />
+      <DeliveryInstallation />
     </Layout>
   )
 }
