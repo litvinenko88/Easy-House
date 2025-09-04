@@ -254,11 +254,12 @@
   color: var(--color-gray);
   font-size: var(--text-size-sm) !important;
   line-height: 1.4;
-  margin-bottom: var(--spacing-sm);
-  flex-grow: 1;
+  margin-bottom: var(--spacing-xs);
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 60px;
 }
 
 .button {
@@ -279,7 +280,6 @@
   position: relative;
   overflow: hidden;
   height: 40px;
-  margin-top: auto;
   flex-shrink: 0;
 }
 
