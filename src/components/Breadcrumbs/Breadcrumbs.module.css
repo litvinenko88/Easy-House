@@ -1,6 +1,5 @@
 .breadcrumbs {
   padding: 10px 0;
-  margin-bottom: 20px;
   background-color: #f8f9fa;
   border-bottom: 1px solid #e9ecef;
 }
@@ -49,12 +48,12 @@
   .breadcrumbList {
     padding: 0 15px;
   }
-  
+
   .breadcrumbLink,
   .breadcrumbCurrent {
     font-size: var(--text-size-sm) !important;
   }
-  
+
   .breadcrumbSeparator {
     margin: 0 6px;
   }
