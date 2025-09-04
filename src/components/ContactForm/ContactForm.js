@@ -1,7 +1,36 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
-// import { sendToTelegram } from '../../utils/telegramService';
-// import { sendViaEmailJS } from '../../utils/emailService';
+const TELEGRAM_BOT_TOKEN = '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
+const TELEGRAM_CHAT_ID = '682859146';
+
+const sendToTelegram = async (data) => {
+  const message = `🏠 Новая заявка с сайта Easy House
+
+👤 Имя: ${data.name}
+📞 Телефон: ${data.phone}
+📍 Источник: ${data.source}
+⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
+  
+  try {
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      })
+    });
+    
+    const result = await response.json();
+    return { success: result.ok, data: result };
+  } catch (error) {
+    console.error('Telegram send error:', error);
+    return { success: false, error: error.message };
+  }
+};
 
 const ContactForm = ({ 
   title = "Оставьте заявку", 
@@ -107,35 +136,37 @@ const ContactForm = ({
       const formDataToSend = {
         name: formData.name,
         phone: formData.phone,
-        message: productInfo ? `Интерес к дому: ${productInfo.name} (${productInfo.size}, ${productInfo.price.toLocaleString('ru-RU')} руб.)` : '',
-        source: source
+        source: source + (productInfo ? ` - Интерес к дому: ${productInfo.name} (${productInfo.size}, ${productInfo.price.toLocaleString('ru-RU')} руб.)` : '')
       };
 
-      // Имитация отправки формы
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await sendToTelegram(formDataToSend);
       
-      setIsSuccess(true);
-      setFormData({ name: '', phone: '', consent: false });
-      setPhoneError('');
-      setConsentError(false);
-      setTimeout(() => {
-        setIsSuccess(false);
-        // Закрываем форму через родительский компонент
-        if (typeof window !== 'undefined') {
-          if (window.closeContactForm) {
-            window.closeContactForm();
+      if (result.success) {
+        setIsSuccess(true);
+        setFormData({ name: '', phone: '', consent: false });
+        setPhoneError('');
+        setConsentError(false);
+        setTimeout(() => {
+          setIsSuccess(false);
+          // Закрываем форму через родительский компонент
+          if (typeof window !== 'undefined') {
+            if (window.closeContactForm) {
+              window.closeContactForm();
+            }
+            if (window.closeContactFormHero) {
+              window.closeContactFormHero();
+            }
+            if (window.closeContactFormWhyChooseUs) {
+              window.closeContactFormWhyChooseUs();
+            }
+            if (window.closeContactFormCatalog) {
+              window.closeContactFormCatalog();
+            }
           }
-          if (window.closeContactFormHero) {
-            window.closeContactFormHero();
-          }
-          if (window.closeContactFormWhyChooseUs) {
-            window.closeContactFormWhyChooseUs();
-          }
-          if (window.closeContactFormCatalog) {
-            window.closeContactFormCatalog();
-          }
-        }
-      }, 3000);
+        }, 3000);
+      } else {
+        throw new Error('Ошибка отправки в Telegram');
+      }
     } catch (error) {
       console.error('Form submission error:', error);
       alert('Произошла ошибка при отправке. Попробуйте еще раз.');
