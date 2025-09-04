@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
 import ScrollToTop from '../ScrollToTop/ScrollToTop'
+import FloatingContacts from '../FloatingContacts/FloatingContacts'
 
 
 interface LayoutProps {
@@ -24,6 +25,7 @@ export default function Layout({ children, title = 'Easy House', description = '
       <main>{children}</main>
       <Footer />
       <ScrollToTop />
+      <FloatingContacts />
     </>
   )
 }
