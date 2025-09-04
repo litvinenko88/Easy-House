@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import Head from "next/head";
 import Layout from "../components/Layout/Layout";
 import Breadcrumbs from "../components/Breadcrumbs/Breadcrumbs";
@@ -136,6 +136,7 @@ export default function Catalog() {
   const [visibleCards, setVisibleCards] = useState([]);
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef(null);
+  const timeoutsRef = useRef([]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -143,9 +144,10 @@ export default function Catalog() {
         if (entry.isIntersecting) {
           setIsInView(true);
           allHousesData.forEach((_, index) => {
-            setTimeout(() => {
+            const timeoutId = setTimeout(() => {
               setVisibleCards((prev) => [...prev, index]);
             }, index * 150);
+            timeoutsRef.current.push(timeoutId);
           });
         }
       },
@@ -156,8 +158,54 @@ export default function Catalog() {
       observer.observe(sectionRef.current);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      timeoutsRef.current.forEach(clearTimeout);
+      timeoutsRef.current = [];
+    };
   }, []);
+
+  const structuredData = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Каталог модульных домов Easy House",
+    "description": "Каталог готовых проектов модульных домов от 855 000 руб. Строительство под ключ.",
+    "url": "https://house-modular.ru/catalog",
+    "mainEntity": {
+      "@type": "ItemList",
+      "numberOfItems": allHousesData.length,
+      "itemListElement": allHousesData.map((house, index) => ({
+        "@type": "Product",
+        "position": index + 1,
+        "name": house.name,
+        "description": house.description,
+        "image": `https://house-modular.ru${house.image}`,
+        "offers": {
+          "@type": "Offer",
+          "price": house.price?.replace(/[^0-9]/g, '') || '0',
+          "priceCurrency": "RUB",
+          "availability": "https://schema.org/InStock"
+        }
+      }))
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Главная",
+          "item": "https://house-modular.ru/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Каталог",
+          "item": "https://house-modular.ru/catalog"
+        }
+      ]
+    }
+  }), []);
 
   return (
     <Layout>
@@ -209,50 +257,12 @@ export default function Catalog() {
         />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "WebPage",
-            name: "Каталог модульных домов Easy House",
-            description:
-              "Каталог готовых проектов модульных домов от 855 000 руб. Строительство под ключ.",
-            url: "https://house-modular.ru/catalog",
-            mainEntity: {
-              "@type": "ItemList",
-              numberOfItems: allHousesData.length,
-              itemListElement: allHousesData.map((house, index) => ({
-                "@type": "Product",
-                position: index + 1,
-                name: house.name,
-                description: house.description,
-                image: `https://house-modular.ru${house.image}`,
-                offers: {
-                  "@type": "Offer",
-                  price: house.price?.replace(/[^0-9]/g, "") || "0",
-                  priceCurrency: "RUB",
-                  availability: "https://schema.org/InStock",
-                },
-              })),
-            },
-            breadcrumb: {
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Главная",
-                  item: "https://house-modular.ru/",
-                },
-                {
-                  "@type": "ListItem",
-                  position: 2,
-                  name: "Каталог",
-                  item: "https://house-modular.ru/catalog",
-                },
-              ],
-            },
-          })}
-        </script>
+        <script 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData)
+          }}
+        />
       </Head>
 
       <main>

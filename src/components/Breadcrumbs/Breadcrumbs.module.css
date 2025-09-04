@@ -23,7 +23,7 @@
 .breadcrumbLink {
   color: #007bff;
   text-decoration: none;
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   transition: color 0.2s ease;
 }
 
@@ -34,14 +34,14 @@
 
 .breadcrumbCurrent {
   color: #6c757d;
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   font-weight: 500;
 }
 
 .breadcrumbSeparator {
   margin: 0 8px;
   color: #6c757d;
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
 }
 
 @media (max-width: 768px) {
@@ -51,7 +51,7 @@
 
   .breadcrumbLink,
   .breadcrumbCurrent {
-    font-size: var(--text-size-sm) !important;
+    font-size: var(--font-text-sm);
   }
 
   .breadcrumbSeparator {

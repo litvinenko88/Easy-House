@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import styles from './Breadcrumbs.module.css'
 
 const Breadcrumbs = () => {
@@ -27,7 +28,7 @@ const Breadcrumbs = () => {
 
   if (breadcrumbItems.length <= 1) return null
 
-  const structuredData = {
+  const structuredData = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": breadcrumbItems.map((item, index) => ({
@@ -36,7 +37,7 @@ const Breadcrumbs = () => {
       "name": item.name,
       "item": `${process.env.NEXT_PUBLIC_SITE_URL || 'https://house-modular.ru'}${item.href}`
     }))
-  }
+  }), [breadcrumbItems])
 
   return (
     <>

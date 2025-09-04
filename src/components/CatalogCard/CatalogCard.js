@@ -1,11 +1,11 @@
 import { useRouter } from "next/router";
 import styles from "./CatalogCard.module.css";
 
-const CatalogCard = ({ house, index, isVisible, onClick }) => {
+const CatalogCard = ({ house, index, isVisible }) => {
   const router = useRouter();
 
   const handleClick = () => {
-    if (house.slug) {
+    if (house?.slug) {
       const sanitizedSlug = house.slug.replace(/[^a-zA-Z0-9-_]/g, '');
       router.push(`/catalog/${encodeURIComponent(sanitizedSlug)}`);
     }
@@ -27,13 +27,13 @@ const CatalogCard = ({ house, index, isVisible, onClick }) => {
       tabIndex="0"
       onClick={handleClick}
       onKeyDown={handleKeyDown}
-      aria-label={`Модульный дом ${house.name}, площадь ${house.area}, цена ${house.price}`}
+      aria-label={`Модульный дом ${house?.name || ''}, площадь ${house?.area || ''}, цена ${house?.price || ''}`}
     >
       <div className={styles.imageContainer}>
         <picture>
           <img
-            src={house.image}
-            alt={`Модульный дом ${house.name} площадью ${house.area} - ${house.feature}. Цена ${house.price}`}
+            src={house?.image || '/images/default.jpg'}
+            alt={`Модульный дом ${house?.name || ''} площадью ${house?.area || ''} - ${house?.feature || ''}. Цена ${house?.price || ''}`}
             width="400"
             height="300"
             className={styles.image}
@@ -49,22 +49,22 @@ const CatalogCard = ({ house, index, isVisible, onClick }) => {
       <div className={styles.content}>
         <header className={styles.cardHeader}>
           <h3 className={styles.cardTitle} itemProp="name">
-            {house.name}
+            {house?.name || 'Название не указано'}
           </h3>
           <div
             className={styles.area}
-            aria-label={`Площадь дома: ${house.area}`}
+            aria-label={`Площадь дома: ${house?.area || ''}`}
           >
             <span className={styles.areaIcon} aria-hidden="true">
               📐
             </span>
-            <span itemProp="floorSize">{house.area}</span>
+            <span itemProp="floorSize">{house?.area || 'Не указана'}</span>
           </div>
         </header>
 
         <div className={styles.feature} itemProp="description">
           <span className={styles.featureLabel}>Особенность:</span>
-          <span className={styles.featureText}>{house.feature}</span>
+          <span className={styles.featureText}>{house?.feature || 'Описание отсутствует'}</span>
         </div>
 
         <div
@@ -77,16 +77,16 @@ const CatalogCard = ({ house, index, isVisible, onClick }) => {
           <meta itemProp="availability" content="https://schema.org/InStock" />
           <span className={styles.priceLabel}>Цена:</span>
           <span className={styles.priceValue} itemProp="price">
-            {house.price}
+            {house?.price || 'Цена по запросу'}
           </span>
         </div>
 
-        <p className={styles.description}>{house.description}</p>
+        <p className={styles.description}>{house?.description || 'Описание отсутствует'}</p>
 
         <button
           className={styles.button}
           type="button"
-          aria-label={`Подробнее о проекте дома ${house.name}`}
+          aria-label={`Подробнее о проекте дома ${house?.name || ''}`}
           onClick={(e) => {
             e.stopPropagation();
             handleClick();
