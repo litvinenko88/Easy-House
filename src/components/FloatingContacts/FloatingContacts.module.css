@@ -28,10 +28,12 @@
   text-decoration: none;
   color: var(--color-white);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, var(--color-accent) 0%, #e8763a 100%);
+  opacity: 0;
+  transform: translateX(50px) scale(0.8);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .contactButton::before {
@@ -49,13 +51,14 @@
   left: 100%;
 }
 
-.contactButton:hover {
-  transform: translateY(-5px) scale(1.1);
+.floatingContacts.visible .contactButton:hover {
+  transform: translateX(0) translateY(-5px) scale(1.1) !important;
   box-shadow: 0 15px 40px rgba(223, 104, 43, 0.6);
+  transition: all var(--transition-fast);
 }
 
-.contactButton:active {
-  transform: translateY(-2px) scale(1.05);
+.floatingContacts.visible .contactButton:active {
+  transform: translateX(0) translateY(-2px) scale(1.05) !important;
 }
 
 .contactButton.whatsapp {
@@ -76,31 +79,31 @@
   transform: scale(1.1);
 }
 
+.contactButton {
+  opacity: 0;
+  transform: translateX(50px) scale(0.8);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .floatingContacts.visible .contactButton:nth-child(1) {
-  animation: slideInRight 0.5s ease forwards;
-  animation-delay: 0.1s;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition-delay: 0.1s;
 }
 
 .floatingContacts.visible .contactButton:nth-child(2) {
-  animation: slideInRight 0.5s ease forwards;
-  animation-delay: 0.2s;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition-delay: 0.2s;
 }
 
 .floatingContacts.visible .contactButton:nth-child(3) {
-  animation: slideInRight 0.5s ease forwards;
-  animation-delay: 0.3s;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition-delay: 0.3s;
 }
 
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(50px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
+
 
 .contactButton::after {
   content: '';
