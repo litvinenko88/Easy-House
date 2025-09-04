@@ -219,7 +219,7 @@
 }
 
 .featuresGrid.collapsed {
-  max-height: 800px;
+  max-height: 1000px;
 }
 
 .featuresGrid.expanded {
@@ -362,7 +362,7 @@
   }
 
   .featuresGrid.collapsed {
-    max-height: 700px;
+    max-height: 900px;
   }
 
   .featuresGrid.expanded {
@@ -383,7 +383,7 @@
 
 @media (max-width: 480px) {
   .featuresGrid.collapsed {
-    max-height: 600px;
+    max-height: 800px;
   }
 
   .featuresGrid.expanded {
