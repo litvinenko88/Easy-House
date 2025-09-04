@@ -6,6 +6,7 @@ import VideoReviews from '../components/VideoReviews'
 import Features from '../components/Features'
 import VirtualTour from '../components/VirtualTour'
 import ProductionProcess from '../components/ProductionProcess'
+import ProjectConstructor from '../components/ProjectConstructor'
 
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
       <Features />
       <VirtualTour />
       <ProductionProcess />
+      <ProjectConstructor />
     </Layout>
   )
 }
