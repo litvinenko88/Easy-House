@@ -84,10 +84,10 @@
   opacity: 0;
   transform: translateY(30px);
   position: relative;
-  height: 520px;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  min-height: 480px;
 }
 
 .card:hover {
@@ -166,8 +166,18 @@
   padding: var(--spacing-xs);
   display: flex;
   flex-direction: column;
-  height: 360px;
-  overflow: visible;
+  flex: 1;
+}
+
+.contentTop {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentBottom {
+  margin-top: auto;
+  padding-top: var(--spacing-xs);
 }
 
 .cardHeader {
@@ -255,11 +265,7 @@
   font-size: var(--text-size-sm) !important;
   line-height: 1.4;
   margin-bottom: var(--spacing-xs);
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  height: 60px;
+  flex: 1;
 }
 
 .button {
@@ -280,7 +286,6 @@
   position: relative;
   overflow: hidden;
   height: 40px;
-  flex-shrink: 0;
 }
 
 .button::before {
@@ -388,11 +393,7 @@
   }
 
   .card {
-    height: 500px;
-  }
-
-  .content {
-    height: 340px;
+    min-height: 460px;
   }
 }
 
@@ -407,11 +408,7 @@
   }
 
   .card {
-    height: 480px;
-  }
-
-  .content {
-    height: 340px;
+    min-height: 420px;
   }
 
   .cardHeader {
@@ -450,11 +447,10 @@
   }
 
   .card {
-    height: 460px;
+    min-height: 400px;
   }
 
   .content {
-    height: 340px;
     padding: var(--spacing-sm);
   }
 
@@ -464,10 +460,6 @@
 
   .feature {
     min-height: 35px;
-  }
-
-  .description {
-    -webkit-line-clamp: 2;
   }
 
   .catalogButton {

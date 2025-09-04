@@ -179,56 +179,60 @@ export default function Bestsellers() {
                 </div>
 
                 <div className={styles.content}>
-                  <header className={styles.cardHeader}>
-                    <h3 className={styles.cardTitle} itemProp="name">
-                      {house.name}
-                    </h3>
-                    <div
-                      className={styles.area}
-                      aria-label={`Площадь дома: ${house.area}`}>
-                      <span className={styles.areaIcon} aria-hidden="true">
-                        📐
-                      </span>
-                      <span itemProp="floorSize">{house.area}</span>
+                  <div className={styles.contentTop}>
+                    <header className={styles.cardHeader}>
+                      <h3 className={styles.cardTitle} itemProp="name">
+                        {house.name}
+                      </h3>
+                      <div
+                        className={styles.area}
+                        aria-label={`Площадь дома: ${house.area}`}>
+                        <span className={styles.areaIcon} aria-hidden="true">
+                          📐
+                        </span>
+                        <span itemProp="floorSize">{house.area}</span>
+                      </div>
+                    </header>
+
+                    <div className={styles.feature} itemProp="description">
+                      <span className={styles.featureLabel}>Особенность:</span>
+                      <span className={styles.featureText}>{house.feature}</span>
                     </div>
-                  </header>
 
-                  <div className={styles.feature} itemProp="description">
-                    <span className={styles.featureLabel}>Особенность:</span>
-                    <span className={styles.featureText}>{house.feature}</span>
+                    <div
+                      className={styles.price}
+                      itemProp="offers"
+                      itemScope
+                      itemType="https://schema.org/Offer">
+                      <meta itemProp="priceCurrency" content="RUB" />
+                      <meta
+                        itemProp="availability"
+                        content="https://schema.org/InStock"
+                      />
+                      <span className={styles.priceLabel}>Цена:</span>
+                      <span className={styles.priceValue} itemProp="price">
+                        {house.price}
+                      </span>
+                    </div>
+
+                    <p className={styles.description}>{house.description}</p>
                   </div>
 
-                  <div
-                    className={styles.price}
-                    itemProp="offers"
-                    itemScope
-                    itemType="https://schema.org/Offer">
-                    <meta itemProp="priceCurrency" content="RUB" />
-                    <meta
-                      itemProp="availability"
-                      content="https://schema.org/InStock"
-                    />
-                    <span className={styles.priceLabel}>Цена:</span>
-                    <span className={styles.priceValue} itemProp="price">
-                      {house.price}
-                    </span>
+                  <div className={styles.contentBottom}>
+                    <button
+                      className={styles.button}
+                      type="button"
+                      aria-label={`Подробнее о проекте дома ${house.name}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCardClick(house.slug);
+                      }}>
+                      <span>Подробнее о проекте</span>
+                      <span className={styles.buttonIcon} aria-hidden="true">
+                        →
+                      </span>
+                    </button>
                   </div>
-
-                  <p className={styles.description}>{house.description}</p>
-
-                  <button
-                    className={styles.button}
-                    type="button"
-                    aria-label={`Подробнее о проекте дома ${house.name}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCardClick(house.slug);
-                    }}>
-                    <span>Подробнее о проекте</span>
-                    <span className={styles.buttonIcon} aria-hidden="true">
-                      →
-                    </span>
-                  </button>
                 </div>
               </article>
             ))}
