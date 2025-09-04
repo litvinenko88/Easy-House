@@ -78,6 +78,10 @@
   --text-size-sm: clamp(0.7rem, 1.2vw, 0.875rem);
   --text-size-lg: clamp(1rem, 1.8vw, 1.25rem);
   --font-size-xs: clamp(0.6rem, 1vw, 0.75rem);
+  --h3-size: var(--font-size-h3);
+  --h4-size: var(--font-size-h4);
+  --font-size-base: var(--text-size);
+  --font-size-sm: var(--text-size-sm);
 
   /* Spacing */
   --spacing-xs: clamp(0.5rem, 1vw, 0.75rem);

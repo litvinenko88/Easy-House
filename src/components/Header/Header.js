@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
-import ContactForm from '../ContactForm';
+import ContactForm from '../ContactForm/ContactForm';
 
 const Header = ({ onConstructorOpen }) => {
   const [isRegionOpen, setIsRegionOpen] = useState(false);
