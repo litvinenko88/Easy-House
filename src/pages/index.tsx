@@ -5,6 +5,7 @@ import Bestsellers from '../components/Bestsellers/Bestsellers'
 import VideoReviews from '../components/VideoReviews'
 import Features from '../components/Features'
 import VirtualTour from '../components/VirtualTour'
+import ProductionProcess from '../components/ProductionProcess'
 
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <VideoReviews showViewAllButton={true} />
       <Features />
       <VirtualTour />
+      <ProductionProcess />
     </Layout>
   )
 }
