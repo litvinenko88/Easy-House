@@ -84,7 +84,7 @@
   --font-size-sm: var(--text-size-sm);
 
   /* Spacing */
-  --spacing-xs: clamp(0.5rem, 1vw, 0.75rem);
+  --spacing-xs: clamp(0.5rem, 1vw, 1rem);
   --spacing-sm: clamp(1rem, 2vw, 1.5rem);
   --spacing-md: clamp(1.5rem, 3vw, 2.5rem);
   --spacing-lg: clamp(2rem, 4vw, 3.5rem);
