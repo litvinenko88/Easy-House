@@ -138,41 +138,49 @@ const Features = () => {
 
   return (
     <section className={styles.features} aria-labelledby="features-title">
-      <h2 id="features-title" className={styles.sectionTitle}>
-        Что вы получаете при покупке модульного дома
-      </h2>
       <div className={styles.container} ref={containerRef}>
-        <div className={`${styles.featuresGrid} ${isExpanded ? styles.expanded : styles.collapsed}`}>
+        <header>
+          <h2 id="features-title" className={styles.sectionTitle}>
+            Что вы получаете при покупке модульного дома
+          </h2>
+        </header>
+        
+        <div className={`${styles.featuresGrid} ${isExpanded ? styles.expanded : styles.collapsed}`} id="features-grid" role="list" aria-label="Особенности модульных домов">
           {features.map((feature, index) => {
             const isEven = index % 2 === 0;
             const isHidden = index >= 4;
 
             return (
-              <div
+              <article
                 key={feature.id}
                 className={`${styles.featureItem} ${
                   isEven ? styles.right : styles.left
                 } ${isHidden ? styles.hiddenItem : ''}`}
                 style={{
                   display: !isExpanded && index >= 4 ? 'none' : 'block'
-                }}>
+                }}
+                role="listitem"
+                itemScope
+                itemType="https://schema.org/Product"
+              >
                 <div className={styles.stripe}>
-                  <div className={styles.content}>
+                  <div className={styles.content} style={{ display: 'block' }}>
                     <div className={styles.imageContainer}>
                       <img
                         src={feature.image}
                         alt={`Особенность модульного дома: ${feature.title}`}
                         className={styles.image}
                         loading="lazy"
+                        itemProp="image"
                       />
                     </div>
                     <div className={styles.textContent}>
-                      <h3 className={styles.title}>{feature.title}</h3>
-                      <p className={styles.description}>{feature.description}</p>
+                      <h3 className={styles.title} itemProp="name">{feature.title}</h3>
+                      <p className={styles.description} itemProp="description">{feature.description}</p>
                     </div>
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
@@ -182,6 +190,9 @@ const Features = () => {
             className={styles.expandButton}
             onClick={handleToggle}
             disabled={isAnimating}
+            aria-expanded={isExpanded}
+            aria-controls="features-grid"
+            aria-label={isExpanded ? 'Свернуть список особенностей' : 'Развернуть полный список особенностей'}
           >
             {isExpanded ? 'Свернуть' : 'Развернуть'}
           </button>

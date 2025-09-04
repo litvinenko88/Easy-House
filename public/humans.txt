@@ -1,0 +1,19 @@
+# humanstxt.org
+
+/* TEAM */
+Developer: Easy House Development Team
+Contact: info@easy-house.ru
+Location: Russia
+
+/* THANKS */
+Next.js: https://nextjs.org/
+React: https://reactjs.org/
+
+/* SITE */
+Last update: 2024/01/15
+Language: Russian
+Doctype: HTML5
+IDE: Visual Studio Code
+Standards: HTML5, CSS3, ES6+
+Components: React, Next.js
+Software: Node.js

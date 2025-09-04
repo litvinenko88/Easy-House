@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Основные страницы
+Allow: /catalog
+Allow: /konstruktor
+Allow: /otzyvy
+Allow: /o-kompanii
+Allow: /kontakty
+
+# Запрещаем индексацию служебных файлов
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /*.json$
+
+# Sitemap
+Sitemap: https://easy-house.ru/sitemap.xml
+
+# Время задержки для ботов
+Crawl-delay: 1
