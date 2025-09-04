@@ -162,80 +162,105 @@ export default function Catalog() {
   return (
     <Layout>
       <Head>
-        <title>Каталог модульных домов под ключ от 855 000 руб | Easy House</title>
+        <title>
+          Каталог модульных домов под ключ от 855 000 руб | Easy House
+        </title>
         <meta
           name="description"
           content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества."
         />
-        <meta name="keywords" content="каталог модульных домов, проекты домов, цены на модульные дома, готовые проекты, строительство под ключ, модульные дома цены, каркасные дома" />
+        <meta
+          name="keywords"
+          content="каталог модульных домов, проекты домов, цены на модульные дома, готовые проекты, строительство под ключ, модульные дома цены, каркасные дома"
+        />
         <link rel="canonical" href="https://house-modular.ru/catalog" />
-        <meta property="og:title" content="Каталог модульных домов под ключ от 855 000 руб | Easy House" />
-        <meta property="og:description" content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества." />
+        <meta
+          property="og:title"
+          content="Каталог модульных домов под ключ от 855 000 руб | Easy House"
+        />
+        <meta
+          property="og:description"
+          content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества."
+        />
         <meta property="og:url" content="https://house-modular.ru/catalog" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://house-modular.ru/images/catalog-preview.jpg" />
+        <meta
+          property="og:image"
+          content="https://house-modular.ru/images/catalog-preview.jpg"
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Каталог модульных домов Easy House" />
+        <meta
+          property="og:image:alt"
+          content="Каталог модульных домов Easy House"
+        />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Каталог модульных домов под ключ от 855 000 руб" />
-        <meta name="twitter:description" content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м²." />
-        <meta name="twitter:image" content="https://house-modular.ru/images/catalog-preview.jpg" />
+        <meta
+          name="twitter:title"
+          content="Каталог модульных домов под ключ от 855 000 руб"
+        />
+        <meta
+          name="twitter:description"
+          content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м²."
+        />
+        <meta
+          name="twitter:image"
+          content="https://house-modular.ru/images/catalog-preview.jpg"
+        />
         <meta name="robots" content="index, follow" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            "name": "Каталог модульных домов Easy House",
-            "description": "Каталог готовых проектов модульных домов от 855 000 руб. Строительство под ключ.",
-            "url": "https://house-modular.ru/catalog",
-            "mainEntity": {
+            name: "Каталог модульных домов Easy House",
+            description:
+              "Каталог готовых проектов модульных домов от 855 000 руб. Строительство под ключ.",
+            url: "https://house-modular.ru/catalog",
+            mainEntity: {
               "@type": "ItemList",
-              "numberOfItems": allHousesData.length,
-              "itemListElement": allHousesData.map((house, index) => ({
+              numberOfItems: allHousesData.length,
+              itemListElement: allHousesData.map((house, index) => ({
                 "@type": "Product",
-                "position": index + 1,
-                "name": house.name,
-                "description": house.description,
-                "image": `https://house-modular.ru${house.image}`,
-                "offers": {
+                position: index + 1,
+                name: house.name,
+                description: house.description,
+                image: `https://house-modular.ru${house.image}`,
+                offers: {
                   "@type": "Offer",
-                  "price": house.price?.replace(/[^0-9]/g, '') || '0',
-                  "priceCurrency": "RUB",
-                  "availability": "https://schema.org/InStock"
-                }
-              }))
+                  price: house.price?.replace(/[^0-9]/g, "") || "0",
+                  priceCurrency: "RUB",
+                  availability: "https://schema.org/InStock",
+                },
+              })),
             },
-            "breadcrumb": {
+            breadcrumb: {
               "@type": "BreadcrumbList",
-              "itemListElement": [
+              itemListElement: [
                 {
                   "@type": "ListItem",
-                  "position": 1,
-                  "name": "Главная",
-                  "item": "https://house-modular.ru/"
+                  position: 1,
+                  name: "Главная",
+                  item: "https://house-modular.ru/",
                 },
                 {
                   "@type": "ListItem",
-                  "position": 2,
-                  "name": "Каталог",
-                  "item": "https://house-modular.ru/catalog"
-                }
-              ]
-            }
+                  position: 2,
+                  name: "Каталог",
+                  item: "https://house-modular.ru/catalog",
+                },
+              ],
+            },
           })}
         </script>
       </Head>
 
       <main>
         <Breadcrumbs />
-        
+
         <section className={styles.hero}>
           <div className="container">
-            <h1 className={styles.title}>
-              Каталог модульных домов
-            </h1>
+            <h1 className={styles.title}>Каталог модульных домов</h1>
             <p className={styles.subtitle}>
               Выберите готовый проект из нашего каталога или создайте уникальный
               дом в конструкторе
@@ -247,17 +272,12 @@ export default function Catalog() {
           ref={sectionRef}
           className={`${styles.catalog} ${isInView ? styles.inView : ""}`}
           itemScope
-          itemType="https://schema.org/ItemList"
-        >
+          itemType="https://schema.org/ItemList">
           <div className="container">
-            <h2 className={styles.catalogTitle}>
-              Готовые проекты модульных домов
-            </h2>
             <div
               className={styles.grid}
               role="list"
-              aria-label="Список модульных домов"
-            >
+              aria-label="Список модульных домов">
               {allHousesData.map((house, index) => (
                 <CatalogCard
                   key={house.id}
