@@ -64,7 +64,7 @@
 }
 
 .logo {
-  font-size: var(--font-size-h4);
+  font-size: var(--font-h4);
   font-weight: 700;
   color: #ff6701;
   margin-bottom: var(--spacing-sm);
@@ -74,7 +74,7 @@
   color: #b0b0b0;
   line-height: 1.6;
   margin-bottom: var(--spacing-md);
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
 }
 
 .contacts {
@@ -97,7 +97,7 @@
 }
 
 .title {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   font-weight: 600;
   margin-bottom: var(--spacing-sm);
   color: var(--color-white);
@@ -116,7 +116,7 @@
 .linksList a {
   color: #b0b0b0;
   text-decoration: none;
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
   transition: color var(--transition-fast);
 }
 
@@ -134,7 +134,7 @@
 
 .copyright {
   color: #888;
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
 }
 
 .legal {
@@ -145,7 +145,7 @@
 .legal a {
   color: #888;
   text-decoration: none;
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
   transition: color var(--transition-fast);
 }
 

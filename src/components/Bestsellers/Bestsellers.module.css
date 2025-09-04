@@ -39,7 +39,7 @@
 }
 
 .title {
-  font-size: var(--font-size-h2) !important;
+  font-size: var(--font-h2);
   color: var(--color-primary);
   margin-bottom: var(--spacing-md);
   position: relative;
@@ -62,7 +62,7 @@
 
 .subtitle {
   color: var(--color-gray);
-  font-size: var(--text-size-lg) !important;
+  font-size: var(--font-text-lg);
   margin: 0 auto;
   line-height: 1.6;
   font-weight: 500;
@@ -150,7 +150,7 @@
 
 .viewMore {
   color: var(--color-white);
-  font-size: var(--text-size) !important;
+  font-size: var(--font-text);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -193,18 +193,18 @@
   font-weight: 700;
   line-height: 1.3;
   flex: 1;
-  font-size: var(--text-size-lg) !important;
+  font-size: var(--font-text-lg);
   margin: 0;
 }
 
 .area {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xxs);
+  gap: var(--spacing-xs);
   background: linear-gradient(135deg, var(--color-light) 0%, #e8e3f0 100%);
-  padding: var(--spacing-xxs) var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-sm);
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   font-weight: 600;
   color: var(--color-primary);
   white-space: nowrap;
@@ -212,7 +212,7 @@
 }
 
 .areaIcon {
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
 }
 
 .feature {
@@ -230,14 +230,14 @@
 .featureLabel {
   font-weight: 600;
   color: var(--color-accent);
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   display: block;
   margin-bottom: 2px;
 }
 
 .featureText {
   color: var(--color-primary);
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   line-height: 1.3;
 }
 
@@ -251,18 +251,18 @@
 .priceLabel {
   font-weight: 600;
   color: var(--color-gray);
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
 }
 
 .priceValue {
-  font-size: var(--text-size-lg) !important;
+  font-size: var(--font-text-lg);
   font-weight: 700;
   color: var(--color-accent);
 }
 
 .description {
   color: var(--color-gray);
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   line-height: 1.4;
   margin-bottom: var(--spacing-xs);
   flex: 1;
@@ -275,14 +275,14 @@
   border: none;
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--border-radius-md);
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xxs);
+  gap: var(--spacing-xs);
   position: relative;
   overflow: hidden;
   height: 40px;
@@ -318,7 +318,7 @@
 }
 
 .buttonIcon {
-  font-size: var(--text-size) !important;
+  font-size: var(--font-text);
   transition: transform var(--transition-normal);
 }
 
@@ -339,7 +339,7 @@
   color: var(--color-white);
   border: none;
   border-radius: 50px;
-  font-size: var(--text-size) !important;
+  font-size: var(--font-text);
   font-weight: 600;
   font-family: var(--font-family);
   cursor: pointer;
@@ -432,7 +432,7 @@
 
   .catalogButton {
     padding: 14px 28px;
-    font-size: var(--text-size-sm) !important;
+    font-size: var(--font-text-sm);
     min-width: 160px;
   }
 }
@@ -464,7 +464,7 @@
 
   .catalogButton {
     padding: 12px 24px;
-    font-size: var(--text-size-sm) !important;
+    font-size: var(--font-text-sm);
     min-width: 140px;
   }
 }

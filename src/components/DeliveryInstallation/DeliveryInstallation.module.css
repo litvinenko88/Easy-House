@@ -27,7 +27,7 @@
 }
 
 .title {
-  font-size: var(--font-size-h2);
+  font-size: var(--font-h2);
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: var(--spacing-lg);
@@ -47,7 +47,7 @@
 }
 
 .subtitle {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   color: var(--color-gray);
   line-height: 1.6;
   max-width: 700px;
@@ -122,7 +122,7 @@
 }
 
 .stepTitle {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   font-weight: 600;
   color: var(--color-primary);
   margin-bottom: var(--spacing-xs);
@@ -130,7 +130,7 @@
 }
 
 .stepDesc {
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
   color: var(--color-gray);
   margin: 0;
   line-height: 1.5;
@@ -145,7 +145,7 @@
 }
 
 .footerText {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   color: var(--color-primary);
   font-weight: 500;
   margin: 0;

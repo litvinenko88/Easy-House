@@ -10,7 +10,7 @@
 }
 
 .title {
-  font-size: var(--font-size-h2);
+  font-size: var(--font-h2);
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: var(--spacing-sm);
@@ -18,7 +18,7 @@
 }
 
 .subtitle {
-  font-size: var(--text-size);
+  font-size: var(--font-text);
   color: var(--color-gray);
   line-height: 1.6;
   max-width: 700px;
@@ -140,7 +140,7 @@
 }
 
 .itemTitle {
-  font-size: var(--font-size-h4);
+  font-size: var(--font-h4);
   font-weight: 600;
   color: var(--color-primary);
   margin: 0 0 var(--spacing-xs) 0;
@@ -148,7 +148,7 @@
 }
 
 .description {
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
   line-height: 1.5;
   color: var(--color-gray);
   margin: 0;
@@ -170,7 +170,7 @@
 }
 
 .footerText {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   color: var(--color-primary);
   line-height: 1.6;
   font-weight: 500;
@@ -194,11 +194,11 @@
   }
   
   .itemTitle {
-    font-size: var(--font-size-h4);
+    font-size: var(--font-h4);
   }
   
   .description {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 }
 
@@ -226,11 +226,11 @@
   }
   
   .itemTitle {
-    font-size: var(--font-size-h4);
+    font-size: var(--font-h4);
   }
   
   .description {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
   
   .footer {
@@ -238,7 +238,7 @@
   }
   
   .footerText {
-    font-size: var(--text-size);
+    font-size: var(--font-text);
   }
 }
 
@@ -258,10 +258,10 @@
   }
   
   .itemTitle {
-    font-size: var(--font-size-h4);
+    font-size: var(--font-h4);
   }
   
   .description {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 }

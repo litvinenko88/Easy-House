@@ -196,7 +196,7 @@
 }
 
 .title {
-  font-size: var(--font-size-h2);
+  font-size: var(--font-h2);
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
   background: linear-gradient(
@@ -211,7 +211,7 @@
 }
 
 .description {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: var(--spacing-lg);
   margin-left: auto;
@@ -383,7 +383,7 @@
 
 .timeDisplay {
   color: rgba(255, 255, 255, 0.9);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-text-xs);
   font-weight: 400;
   white-space: nowrap;
   font-family: "SF Mono", "Monaco", "Consolas", monospace;
@@ -438,7 +438,7 @@
   padding: 18px 32px;
   border: none;
   border-radius: 50px;
-  font-size: var(--text-size);
+  font-size: var(--font-text);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-normal);
@@ -480,11 +480,11 @@
 
 @media (max-width: 1024px) {
   .title {
-    font-size: var(--font-size-h3);
+    font-size: var(--font-h3);
   }
 
   .description {
-    font-size: var(--text-size);
+    font-size: var(--font-text);
   }
 
   .videoGrid {
@@ -506,7 +506,7 @@
   }
 
   .timeDisplay {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-text-xs);
   }
 }
 
@@ -516,11 +516,11 @@
   }
 
   .title {
-    font-size: var(--font-size-h2);
+    font-size: var(--font-h2);
   }
 
   .description {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
     margin-bottom: var(--spacing-md);
   }
 
@@ -564,7 +564,7 @@
   }
 
   .timeDisplay {
-    font-size: var(--font-size-xs);
+    font-size: var(--font-text-xs);
   }
 
   .centerPlay {
@@ -587,13 +587,13 @@
 
   .viewAllButton {
     padding: 16px 28px;
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 }
 
 @media (max-width: 480px) {
   .viewAllButton {
     padding: 14px 24px;
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 }

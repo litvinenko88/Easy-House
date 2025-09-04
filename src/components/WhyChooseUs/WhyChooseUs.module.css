@@ -39,7 +39,7 @@
 }
 
 .title {
-  font-size: var(--font-size-h2);
+  font-size: var(--font-h2);
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: var(--spacing-sm);
@@ -47,7 +47,7 @@
 }
 
 .subtitle {
-  font-size: var(--text-size);
+  font-size: var(--font-text);
   color: var(--color-gray);
   line-height: 1.6;
   max-width: 700px;
@@ -134,7 +134,7 @@
 }
 
 .cardTitle {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   font-weight: 600;
   color: var(--color-primary);
   margin-bottom: var(--spacing-xs);
@@ -142,7 +142,7 @@
 }
 
 .cardDescription {
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
   color: var(--color-gray);
   line-height: 1.5;
 }
@@ -175,14 +175,14 @@
 }
 
 .ctaTitle {
-  font-size: var(--font-size-h4);
+  font-size: var(--font-h4);
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: var(--spacing-xs);
 }
 
 .ctaText {
-  font-size: var(--text-size);
+  font-size: var(--font-text);
   color: var(--color-gray);
   margin-bottom: var(--spacing-md);
   line-height: 1.6;
@@ -195,7 +195,7 @@
   color: var(--color-white);
   border: none;
   border-radius: var(--border-radius-md);
-  font-size: var(--text-size);
+  font-size: var(--font-text);
   font-weight: 600;
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -337,16 +337,16 @@
   }
 
   .ctaTitle {
-    font-size: var(--font-size-h5);
+    font-size: var(--font-h5);
   }
 
   .ctaText {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 
   .ctaButton {
     padding: 14px 28px;
-    font-size: var(--text-size);
+    font-size: var(--font-text);
   }
 
   .modal {
@@ -368,10 +368,10 @@
   }
 
   .cardTitle {
-    font-size: var(--text-size);
+    font-size: var(--font-text);
   }
 
   .cardDescription {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 }

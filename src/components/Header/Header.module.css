@@ -39,7 +39,7 @@
 }
 
 .logoText {
-  font-size: var(--font-size-h4) !important;
+  font-size: var(--font-h4);
   font-weight: 700;
   color: var(--color-white);
   white-space: nowrap;
@@ -79,7 +79,7 @@
   padding: 0.75rem 1rem;
   text-decoration: none;
   outline: none;
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   font-family: inherit;
   background: none;
   border: none;
@@ -207,7 +207,7 @@
   border: none;
   cursor: pointer;
   width: 70px;
-  font-size: var(--font-size-xs) !important;
+  font-size: var(--font-text-xs);
   outline: none;
 }
 
@@ -275,7 +275,7 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   white-space: nowrap;
   border-bottom: 1px solid #f1f3f4;
 }
@@ -397,7 +397,7 @@
 }
 
 .mobileCloseText {
-  font-size: var(--font-size-xs) !important;
+  font-size: var(--font-text-xs);
   color: #666;
   cursor: pointer;
   padding: 0.5rem;
@@ -428,7 +428,7 @@
   position: relative;
   border-radius: 8px;
   margin: 0.25rem 0;
-  font-size: var(--text-size) !important;
+  font-size: var(--font-text);
   font-family: inherit;
   background: none;
   border: none;
@@ -465,7 +465,7 @@
   padding: 0.5rem;
   border: none;
   cursor: pointer;
-  font-size: var(--font-size-xs) !important;
+  font-size: var(--font-text-xs);
   transition: color 0.3s ease;
   width: auto;
   outline: none;
@@ -517,7 +517,7 @@
   background: none;
   cursor: pointer;
   border-bottom: 1px solid #f1f3f4;
-  font-size: var(--text-size-sm) !important;
+  font-size: var(--font-text-sm);
   white-space: nowrap;
 }
 
@@ -653,13 +653,13 @@
 
   .contactBtn {
     padding: 0.75rem 1.25rem;
-    font-size: var(--text-size-sm) !important;
+    font-size: var(--font-text-sm);
     white-space: nowrap;
   }
 
   .regionButton {
     width: 60px;
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-text-xs);
     padding: 0.45rem 0.65rem;
   }
 
@@ -672,12 +672,12 @@
 @media (max-width: 1250px) {
   .contactBtn {
     padding: 0.65rem 1rem;
-    font-size: var(--text-size-sm) !important;
+    font-size: var(--font-text-sm);
   }
 
   .regionButton {
     width: 55px;
-    font-size: var(--font-size-xs) !important;
+    font-size: var(--font-text-xs);
     padding: 0.4rem 0.6rem;
   }
 
@@ -726,7 +726,7 @@
   }
 
   .logoText {
-    font-size: var(--h3-size) !important;
+    font-size: var(--font-h3);
   }
 
   .mobileNav {
@@ -757,7 +757,7 @@
   }
 
   .logoText {
-    font-size: var(--h3-size) !important;
+    font-size: var(--font-h3);
   }
 
   .mobileNav {
@@ -782,6 +782,6 @@
 
   .mobileContactBtn {
     padding: 1rem 0.75rem;
-    font-size: var(--text-size-sm) !important;
+    font-size: var(--font-text-sm);
   }
 }

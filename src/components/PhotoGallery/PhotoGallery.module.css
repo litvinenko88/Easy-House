@@ -50,7 +50,7 @@
 }
 
 .title {
-  font-size: var(--font-size-h2);
+  font-size: var(--font-h2);
   font-weight: 700;
   color: var(--color-white);
   margin-bottom: var(--spacing-sm);
@@ -59,7 +59,7 @@
 }
 
 .subtitle {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   color: rgba(255, 255, 255, 0.9);
   line-height: 1.6;
   max-width: 700px;
@@ -234,7 +234,7 @@
   }
   
   .subtitle {
-    font-size: var(--text-size);
+    font-size: var(--font-text);
   }
   
   .sliderContainer {
@@ -266,6 +266,6 @@
   }
   
   .subtitle {
-    font-size: var(--text-size-sm);
+    font-size: var(--font-text-sm);
   }
 }
