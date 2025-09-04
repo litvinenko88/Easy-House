@@ -1,9 +1,10 @@
 # Шрифты
 
-Поместите файлы шрифта InterTight в эту папку:
-- InterTight-Regular.woff2
-- InterTight-Regular.woff
-- InterTight-Bold.woff2
-- InterTight-Bold.woff
+В проекте используется шрифт Raleway:
+- Raleway-Regular.woff2
+- Raleway-Medium.woff2
+- Raleway-SemiBold.woff2
+- Raleway-Bold.woff2
+- Raleway-ExtraBold.woff2
 
-Скачать шрифт можно с: https://fonts.google.com/specimen/Inter+Tight
+Шрифт подключен в globals.css
