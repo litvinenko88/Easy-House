@@ -163,7 +163,7 @@
 }
 
 .content {
-  padding: var(--spacing-md);
+  padding: var(--spacing-xs);
   display: flex;
   flex-direction: column;
   height: 360px;
@@ -391,7 +391,7 @@
   .card {
     height: 500px;
   }
-  
+
   .content {
     height: 340px;
   }
@@ -410,7 +410,7 @@
   .card {
     height: 480px;
   }
-  
+
   .content {
     height: 340px;
   }
@@ -453,7 +453,7 @@
   .card {
     height: 460px;
   }
-  
+
   .content {
     height: 340px;
     padding: var(--spacing-sm);
