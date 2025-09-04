@@ -321,18 +321,18 @@
 .advantages {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   margin-bottom: var(--spacing-2xl);
 }
 
 .advantage {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   padding: var(--spacing-xs) var(--spacing-sm);
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
@@ -398,15 +398,15 @@
 }
 
 .advantageIcon {
-  font-size: var(--text-size);
-  width: 24px;
-  height: 24px;
+  font-size: var(--text-size-lg);
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--color-accent) 0%, #e8763a 100%);
   color: var(--color-white);
-  border-radius: 6px;
+  border-radius: 7px;
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(223, 104, 43, 0.3);
   transition: all 0.3s ease;
@@ -420,8 +420,8 @@
 .advantageText {
   color: var(--color-white);
   font-weight: 500;
-  font-size: var(--font-size-xs);
-  line-height: 1;
+  font-size: var(--text-size-sm);
+  line-height: 1.2;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   white-space: nowrap;
 }
@@ -429,7 +429,7 @@
 .buttons {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   animation: fadeInUp 0.8s ease-out 1.8s both;
   z-index: 10;
   position: relative;
