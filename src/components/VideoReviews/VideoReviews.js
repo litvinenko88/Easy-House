@@ -11,25 +11,25 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
   const audioRefs = useRef([])
 
   const baseVideos = [
-    { video: '/video/1.mp4', audio: '/audio/1.1.mp4', title: 'Обзор дома 1' },
-    { video: '/video/2.mp4', audio: '/audio/2.1.mp4', title: 'Обзор дома 2' },
-    { video: '/video/3.mp4', audio: '/audio/3.1.mp4', title: 'Обзор дома 3' },
-    { video: '/video/4.mp4', audio: '/audio/4.1.mp4', title: 'Обзор дома 4' }
+    { video: '/videos/1.mp4', audio: '/audio/1.1.mp4', title: 'Обзор дома 1' },
+    { video: '/videos/2.mp4', audio: '/audio/2.1.mp4', title: 'Обзор дома 2' },
+    { video: '/videos/3.mp4', audio: '/audio/3.1.mp4', title: 'Обзор дома 3' },
+    { video: '/videos/4.mp4', audio: '/audio/4.1.mp4', title: 'Обзор дома 4' }
   ]
 
   const additionalVideos = [
-    { video: '/video/5.mp4', audio: '/audio/5.1.mp4', title: 'Обзор дома 5' },
-    { video: '/video/6.mp4', audio: '/audio/6.1.mp4', title: 'Обзор дома 6' },
-    { video: '/video/7.mp4', audio: '/audio/7.1.mp4', title: 'Обзор дома 7' },
-    { video: '/video/8.mp4', title: 'Обзор дома 8' },
-    { video: '/video/9.mp4', audio: '/audio/9.1.mp4', title: 'Обзор дома 9' },
-    { video: '/video/10.mp4', audio: '/audio/10.1.mp4', title: 'Обзор дома 10' },
-    { video: '/video/11.mp4', title: 'Обзор дома 11' },
-    { video: '/video/12.mp4', title: 'Обзор дома 12' },
-    { video: '/video/13.mp4', title: 'Обзор дома 13' },
-    { video: '/video/14.mp4', title: 'Обзор дома 14' },
-    { video: '/video/15.mp4', title: 'Обзор дома 15' },
-    { video: '/video/16.mp4', title: 'Обзор дома 16' }
+    { video: '/videos/5.mp4', audio: '/audio/5.1.mp4', title: 'Обзор дома 5' },
+    { video: '/videos/6.mp4', audio: '/audio/6.1.mp4', title: 'Обзор дома 6' },
+    { video: '/videos/7.mp4', audio: '/audio/7.1.mp4', title: 'Обзор дома 7' },
+    { video: '/videos/8.mp4', title: 'Обзор дома 8' },
+    { video: '/videos/9.mp4', audio: '/audio/9.1.mp4', title: 'Обзор дома 9' },
+    { video: '/videos/10.mp4', audio: '/audio/10.1.mp4', title: 'Обзор дома 10' },
+    { video: '/videos/11.mp4', title: 'Обзор дома 11' },
+    { video: '/videos/12.mp4', title: 'Обзор дома 12' },
+    { video: '/videos/13.mp4', title: 'Обзор дома 13' },
+    { video: '/videos/14.mp4', title: 'Обзор дома 14' },
+    { video: '/videos/15.mp4', title: 'Обзор дома 15' },
+    { video: '/videos/16.mp4', title: 'Обзор дома 16' }
   ]
 
   const videos = showAllVideos ? [...baseVideos, ...additionalVideos] : baseVideos

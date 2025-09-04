@@ -110,7 +110,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
     opacity: 0.7;
   }
@@ -132,7 +133,8 @@
 }
 
 @keyframes twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -143,7 +145,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.3;
   }
@@ -159,8 +162,16 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 70%, rgba(223, 104, 43, 0.05) 0%, transparent 50%),
-              radial-gradient(circle at 70% 30%, rgba(238, 232, 244, 0.05) 0%, transparent 50%);
+  background: radial-gradient(
+      circle at 30% 70%,
+      rgba(223, 104, 43, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 70% 30%,
+      rgba(238, 232, 244, 0.05) 0%,
+      transparent 50%
+    );
   z-index: 2;
 }
 
@@ -188,7 +199,11 @@
   font-size: var(--font-size-h2);
   font-weight: 700;
   margin-bottom: var(--spacing-sm);
-  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-accent) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-white) 0%,
+    var(--color-accent) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -199,7 +214,6 @@
   font-size: var(--text-size-lg);
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: var(--spacing-lg);
-  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
@@ -372,7 +386,7 @@
   font-size: var(--font-size-xs);
   font-weight: 400;
   white-space: nowrap;
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-family: "SF Mono", "Monaco", "Consolas", monospace;
 }
 
 .centerPlayButton {
@@ -468,29 +482,29 @@
   .title {
     font-size: var(--font-size-h3);
   }
-  
+
   .description {
     font-size: var(--text-size);
   }
-  
+
   .videoGrid {
     gap: var(--spacing-sm);
   }
-  
+
   .video {
     height: 200px;
   }
-  
+
   .playButton {
     width: 32px;
     height: 32px;
   }
-  
+
   .playButton svg {
     width: 12px;
     height: 12px;
   }
-  
+
   .timeDisplay {
     font-size: var(--font-size-xs);
   }
@@ -500,77 +514,77 @@
   .videoReviews {
     padding: var(--spacing-lg) 0;
   }
-  
+
   .title {
     font-size: var(--font-size-h4);
   }
-  
+
   .description {
     font-size: var(--text-size-sm);
     margin-bottom: var(--spacing-md);
   }
-  
+
   .videoGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-sm);
   }
-  
+
   .video {
     height: 180px;
   }
-  
+
   .customControls {
     padding: 16px 12px 10px;
     gap: 8px;
   }
-  
+
   .playButton {
     width: 30px;
     height: 30px;
   }
-  
+
   .playButton svg {
     width: 10px;
     height: 10px;
   }
-  
+
   .fullscreenButton {
     width: 24px;
     height: 24px;
   }
-  
+
   .fullscreenButton svg {
     width: 10px;
     height: 10px;
   }
-  
+
   .customControls {
     padding: 12px 8px 6px;
     gap: 6px;
   }
-  
+
   .timeDisplay {
     font-size: var(--font-size-xs);
   }
-  
+
   .centerPlay {
     width: 50px;
     height: 50px;
   }
-  
+
   .centerPlay svg {
     width: 20px;
     height: 20px;
   }
-  
+
   .container {
     padding: 0 var(--container-padding);
   }
-  
+
   .buttonContainer {
     margin-top: var(--spacing-md);
   }
-  
+
   .viewAllButton {
     padding: 16px 28px;
     font-size: var(--text-size-sm);

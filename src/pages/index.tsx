@@ -3,6 +3,7 @@ import Hero from '../components/Hero'
 import ProblemSolution from '../components/ProblemSolution'
 import Bestsellers from '../components/Bestsellers/Bestsellers'
 import VideoReviews from '../components/VideoReviews'
+import Features from '../components/Features'
 
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       <ProblemSolution/>
       <Bestsellers/>
       <VideoReviews showViewAllButton={true} />
+      <Features />
     </Layout>
   )
 }
