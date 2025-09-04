@@ -311,7 +311,7 @@
 .subtitle {
   font-size: var(--font-text-lg);
   color: rgba(255, 255, 255, 0.9);
-  margin: var(--spacing-md) 0 var(--spacing-2xl) 0;
+  margin: var(--spacing-md) 0 var(--spacing-lg) 0;
   line-height: 1.6;
   font-weight: 400;
   animation: fadeInUp 0.8s ease-out 1s both;
