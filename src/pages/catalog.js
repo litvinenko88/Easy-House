@@ -271,10 +271,10 @@ export default function Catalog() {
         <section className={styles.hero}>
           <div className="container">
             <h1 className={styles.title}>Каталог модульных домов</h1>
-            <p className={styles.subtitle}>
+            <h2 className={styles.subtitle}>
               Выберите готовый проект из нашего каталога или создайте уникальный
               дом в конструкторе
-            </p>
+            </h2>
           </div>
         </section>
 
