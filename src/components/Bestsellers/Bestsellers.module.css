@@ -78,14 +78,13 @@
 .card {
   background: var(--color-white);
   border-radius: var(--border-radius-lg);
-  overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all var(--transition-normal);
   cursor: pointer;
   opacity: 0;
   transform: translateY(30px);
   position: relative;
-  height: 480px;
+  height: 520px;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -113,6 +112,7 @@
   height: 160px;
   overflow: hidden;
   flex-shrink: 0;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
 }
 
 .image {
@@ -166,7 +166,8 @@
   padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
-  flex: 1;
+  height: 360px;
+  overflow: visible;
 }
 
 .cardHeader {
@@ -254,11 +255,11 @@
   font-size: var(--text-size-sm) !important;
   line-height: 1.4;
   margin-bottom: var(--spacing-sm);
+  flex-grow: 1;
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 60px;
 }
 
 .button {
@@ -388,7 +389,11 @@
   }
 
   .card {
-    height: 460px;
+    height: 500px;
+  }
+  
+  .content {
+    height: 340px;
   }
 }
 
@@ -403,7 +408,11 @@
   }
 
   .card {
-    height: 440px;
+    height: 480px;
+  }
+  
+  .content {
+    height: 340px;
   }
 
   .cardHeader {
@@ -442,15 +451,16 @@
   }
 
   .card {
-    height: 420px;
+    height: 460px;
+  }
+  
+  .content {
+    height: 340px;
+    padding: var(--spacing-sm);
   }
 
   .imageContainer {
     height: 120px;
-  }
-
-  .content {
-    padding: var(--spacing-sm);
   }
 
   .feature {
@@ -465,62 +475,5 @@
     padding: 12px 24px;
     font-size: var(--text-size-sm) !important;
     min-width: 140px;
-  }
-}
-
-/* Анимации */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card:focus-visible {
-  animation: none;
-}
-
-/* Улучшенная доступность */
-@media (prefers-reduced-motion: reduce) {
-  .card,
-  .image,
-  .imageOverlay,
-  .viewMore,
-  .button,
-  .buttonIcon,
-  .header {
-    transition: none;
-    animation: none;
-  }
-  
-  .card.visible {
-    transform: none;
-  }
-  
-  .card:hover {
-    transform: none;
-  }
-  
-  .card:hover .image {
-    transform: none;
-  }
-}
-
-/* Высокий контраст */
-@media (prefers-contrast: high) {
-  .card {
-    border: 2px solid var(--color-primary);
-  }
-  
-  .button {
-    border: 2px solid var(--color-white);
-  }
-  
-  .feature {
-    border-left-width: 4px;
   }
 }
