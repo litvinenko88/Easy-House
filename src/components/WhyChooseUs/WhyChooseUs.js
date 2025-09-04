@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./WhyChooseUs.module.css";
+import ContactForm from '../ContactForm';
 
 const WhyChooseUs = () => {
   const [visibleItems, setVisibleItems] = useState(new Set());
@@ -161,10 +162,10 @@ const WhyChooseUs = () => {
             >
               ×
             </button>
-            <div className={styles.formPlaceholder}>
-              <h3>Форма расчета стоимости</h3>
-              <p>Здесь будет компонент ContactForm</p>
-            </div>
+            <ContactForm 
+              title="Рассчитать стоимость"
+              source="блок преимуществ - кнопка рассчитать стоимость"
+            />
           </div>
         </div>
       )}
