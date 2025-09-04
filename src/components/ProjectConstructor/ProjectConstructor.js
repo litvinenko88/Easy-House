@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './ProjectConstructor.module.css';
 
-const ProjectConstructor = ({ onConstructorOpen }) => {
+const ProjectConstructor = ({ onConstructorOpen = () => {} }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
