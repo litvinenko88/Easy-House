@@ -78,8 +78,8 @@ export default function Home() {
         canonical="https://easy-house.ru/"
       >
         <Hero />
-        <ProblemSolution/>
-        <Bestsellers/>
+        <ProblemSolution />
+        <Bestsellers />
         <VideoReviews showViewAllButton={true} />
         <Features />
         <VirtualTour />
