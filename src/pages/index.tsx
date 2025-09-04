@@ -7,6 +7,7 @@ import Features from '../components/Features'
 import VirtualTour from '../components/VirtualTour'
 import ProductionProcess from '../components/ProductionProcess'
 import ProjectConstructor from '../components/ProjectConstructor'
+import WhyChooseUs from '../components/WhyChooseUs'
 
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <VirtualTour />
       <ProductionProcess />
       <ProjectConstructor />
+      <WhyChooseUs />
     </Layout>
   )
 }
