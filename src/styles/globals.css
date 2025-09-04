@@ -1,17 +1,39 @@
 @font-face {
-  font-family: "InterTight";
-  src: url("/fonts/InterTight-Regular.woff2") format("woff2"),
-    url("/fonts/InterTight-Regular.woff") format("woff");
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "InterTight";
-  src: url("/fonts/InterTight-Bold.woff2") format("woff2"),
-    url("/fonts/InterTight-Bold.woff") format("woff");
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-Bold.woff2") format("woff2");
   font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Raleway";
+  src: url("/fonts/Raleway-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
   font-style: normal;
   font-display: swap;
 }
@@ -67,7 +89,7 @@
   --breakpoint-xl: 1200px;
 
   /* Typography */
-  --font-family: "InterTight", Arial, sans-serif;
+  --font-family: "Raleway", Arial, sans-serif;
   --font-size-h1: clamp(2rem, 5vw, 3.5rem);
   --font-size-h2: clamp(1.75rem, 4vw, 2.75rem);
   --font-size-h3: clamp(1.5rem, 3.5vw, 2.25rem);
