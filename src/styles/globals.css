@@ -37,13 +37,6 @@
   --border-gray: #e0e0e0;
   --dark-green: #2e7d32;
 
-  /* Текст - единые размеры для всего сайта */
-  --text-size: 14px;
-  --text-size-sm: 0.875rem;
-  --text-size-lg: 1.25rem;
-  --font-size-xs: 0.75rem;
-  --h3-size: var(--font-size-h3);
-
   /* Отступы */
   --spacing-2xl: 48px;
   --spacing-3xl: 64px;
@@ -81,6 +74,10 @@
   --font-size-h4: clamp(1.25rem, 3vw, 1.75rem);
   --font-size-h5: clamp(1.125rem, 2.5vw, 1.5rem);
   --font-size-text: clamp(1rem, 2vw, 1.125rem);
+  --text-size: clamp(0.8rem, 1.5vw, 1rem);
+  --text-size-sm: clamp(0.7rem, 1.2vw, 0.875rem);
+  --text-size-lg: clamp(1rem, 1.8vw, 1.25rem);
+  --font-size-xs: clamp(0.6rem, 1vw, 0.75rem);
 
   /* Spacing */
   --spacing-xs: clamp(0.5rem, 1vw, 0.75rem);
