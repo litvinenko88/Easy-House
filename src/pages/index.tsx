@@ -8,6 +8,7 @@ import VirtualTour from '../components/VirtualTour'
 import ProductionProcess from '../components/ProductionProcess'
 import ProjectConstructor from '../components/ProjectConstructor'
 import WhyChooseUs from '../components/WhyChooseUs'
+import Guarantees from '../components/Guarantees'
 
 
 export default function Home() {
@@ -22,6 +23,7 @@ export default function Home() {
       <ProductionProcess />
       <ProjectConstructor />
       <WhyChooseUs />
+      <Guarantees />
     </Layout>
   )
 }
