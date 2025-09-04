@@ -395,21 +395,9 @@
   }
 
   .content {
-    display: flex;
-    flex-direction: column;
     padding: var(--spacing-xs);
     gap: var(--spacing-xs);
-  }
-  
-  .imageContainer {
-    order: 1;
-    align-self: center;
-    margin-bottom: var(--spacing-xs);
-  }
-  
-  .textContent {
-    order: 2;
-    text-align: center;
+    display: block;
   }
 
   .imageContainer {

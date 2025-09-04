@@ -164,7 +164,7 @@ const Features = () => {
                 itemType="https://schema.org/Product"
               >
                 <div className={styles.stripe}>
-                  <div className={styles.content} style={{ display: 'block' }}>
+                  <div className={styles.content}>
                     <div className={styles.imageContainer}>
                       <img
                         src={feature.image}
