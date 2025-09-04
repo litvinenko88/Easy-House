@@ -12,9 +12,11 @@
 
 .sectionTitle {
   text-align: center;
-  padding: var(--spacing-md);
   font-size: var(--font-h2);
+  font-weight: 700;
   color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.2;
 }
 
 .featureItem {
