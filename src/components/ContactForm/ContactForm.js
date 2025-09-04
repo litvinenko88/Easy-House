@@ -162,6 +162,12 @@ const ContactForm = ({
             if (window.closeContactFormCatalog) {
               window.closeContactFormCatalog();
             }
+            if (window.closeContactFormProjectInfo) {
+              window.closeContactFormProjectInfo();
+            }
+            if (window.closeContactFormProductInfo) {
+              window.closeContactFormProductInfo();
+            }
           }
         }, 3000);
       } else {
