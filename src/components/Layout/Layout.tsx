@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Header from '../Header/Header'
 import Footer from '../Footer/Footer'
+import ScrollToTop from '../ScrollToTop/ScrollToTop'
 
 
 interface LayoutProps {
@@ -22,6 +23,7 @@ export default function Layout({ children, title = 'Easy House', description = '
       <Header />
       <main>{children}</main>
       <Footer />
+      <ScrollToTop />
     </>
   )
 }
