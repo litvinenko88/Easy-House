@@ -11,6 +11,7 @@ const Breadcrumbs = () => {
     'catalog': 'Каталог',
     'projects': 'Проекты',
     'kontakty': 'Контакты',
+    'contacts': 'Контакты',
     'o-kompanii': 'О компании',
     'otzyvy': 'Отзывы',
     'konstruktor': 'Конструктор',
