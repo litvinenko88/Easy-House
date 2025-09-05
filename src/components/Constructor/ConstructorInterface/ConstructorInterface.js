@@ -27,12 +27,41 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [doors, setDoors] = useState([]);
   const [windows, setWindows] = useState([]);
   const [panelCollapsed, setPanelCollapsed] = useState(false);
-  const [houseFixed, setHouseFixed] = useState(false);
+  const [houseFixed, setHouseFixed] = useState(true);
   const [isDraggingHouse, setIsDraggingHouse] = useState(false);
   const [houseDragStart, setHouseDragStart] = useState({ x: 0, y: 0 });
   const [hoveredElement, setHoveredElement] = useState(null);
+  const [isDrawingWall, setIsDrawingWall] = useState(false);
+  const [wallStart, setWallStart] = useState(null);
+  const [currentWall, setCurrentWall] = useState(null);
 
   const SCALE = 30;
+
+  const isPointInsideHouse = (x, y) => {
+    return elements.some(el => 
+      el.type === 'house' &&
+      x >= el.x && x <= el.x + el.width &&
+      y >= el.y && y <= el.y + el.height
+    );
+  };
+
+  const snapToHouseBounds = (x, y) => {
+    const snapDistance = 5;
+    let snappedX = x;
+    let snappedY = y;
+    
+    elements.forEach(el => {
+      if (el.type === 'house') {
+        // Привязка к границам дома
+        if (Math.abs(x - el.x) < snapDistance) snappedX = el.x;
+        if (Math.abs(x - (el.x + el.width)) < snapDistance) snappedX = el.x + el.width;
+        if (Math.abs(y - el.y) < snapDistance) snappedY = el.y;
+        if (Math.abs(y - (el.y + el.height)) < snapDistance) snappedY = el.y + el.height;
+      }
+    });
+    
+    return { x: snappedX, y: snappedY };
+  };
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -54,7 +83,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
   useEffect(() => {
     const timer = setTimeout(drawCanvas, 10);
     return () => clearTimeout(timer);
-  }, [zoom, panOffset, initialData, selectedElement, elements, walls, doors, windows]);
+  }, [zoom, panOffset, initialData, selectedElement, elements, walls, doors, windows, currentWall]);
   
   useEffect(() => {
     if (initialData) {
@@ -91,6 +120,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawGrid(ctx);
     drawLot(ctx);
     drawElements(ctx);
+    drawWalls(ctx);
+    drawCurrentWall(ctx);
     
     ctx.restore();
   };
@@ -186,6 +217,85 @@ export default function ConstructorInterface({ initialData, onBack }) {
     elements.forEach(element => {
       drawElement(ctx, element);
     });
+  };
+
+  const drawWalls = (ctx) => {
+    walls.forEach(wall => {
+      const isHovered = hoveredElement?.id === wall.id;
+      ctx.strokeStyle = isHovered ? '#df682b' : '#31323d';
+      ctx.lineWidth = isHovered ? Math.max(4, 5 * zoom) : Math.max(3, 4 * zoom);
+      ctx.beginPath();
+      ctx.moveTo(wall.start.x * zoom, wall.start.y * zoom);
+      ctx.lineTo(wall.end.x * zoom, wall.end.y * zoom);
+      ctx.stroke();
+      
+      // Размер стены
+      if (zoom >= 0.3) {
+        const length = Math.sqrt(
+          Math.pow(wall.end.x - wall.start.x, 2) + 
+          Math.pow(wall.end.y - wall.start.y, 2)
+        );
+        const centerX = (wall.start.x + wall.end.x) / 2 * zoom;
+        const centerY = (wall.start.y + wall.end.y) / 2 * zoom;
+        
+        ctx.fillStyle = '#31323d';
+        ctx.font = '11px Arial';
+        
+        if (Math.abs(wall.end.x - wall.start.x) > Math.abs(wall.end.y - wall.start.y)) {
+          // Горизонтальная стена - размер сверху по центру
+          ctx.textAlign = 'center';
+          ctx.fillText(`${(length * 1000 / 30).toFixed(0)}мм`, centerX, centerY - 10 * zoom);
+        } else {
+          // Вертикальная стена - размер слева по центру
+          ctx.save();
+          ctx.translate(centerX - 15 * zoom, centerY);
+          ctx.rotate(-Math.PI / 2);
+          ctx.textAlign = 'center';
+          ctx.fillText(`${(length * 1000 / 30).toFixed(0)}мм`, 0, 0);
+          ctx.restore();
+        }
+      }
+    });
+  };
+
+  const drawCurrentWall = (ctx) => {
+    if (currentWall) {
+      ctx.strokeStyle = '#df682b';
+      ctx.lineWidth = Math.max(3, 4 * zoom);
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(currentWall.start.x * zoom, currentWall.start.y * zoom);
+      ctx.lineTo(currentWall.end.x * zoom, currentWall.end.y * zoom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      
+      // Размер текущей стены
+      if (zoom >= 0.3) {
+        const length = Math.sqrt(
+          Math.pow(currentWall.end.x - currentWall.start.x, 2) + 
+          Math.pow(currentWall.end.y - currentWall.start.y, 2)
+        );
+        const centerX = (currentWall.start.x + currentWall.end.x) / 2 * zoom;
+        const centerY = (currentWall.start.y + currentWall.end.y) / 2 * zoom;
+        
+        ctx.fillStyle = '#df682b';
+        ctx.font = '12px Arial';
+        
+        if (Math.abs(currentWall.end.x - currentWall.start.x) > Math.abs(currentWall.end.y - currentWall.start.y)) {
+          // Горизонтальная стена - размер сверху по центру
+          ctx.textAlign = 'center';
+          ctx.fillText(`${(length * 1000 / 30).toFixed(0)}мм`, centerX, centerY - 12 * zoom);
+        } else {
+          // Вертикальная стена - размер слева по центру
+          ctx.save();
+          ctx.translate(centerX - 18 * zoom, centerY);
+          ctx.rotate(-Math.PI / 2);
+          ctx.textAlign = 'center';
+          ctx.fillText(`${(length * 1000 / 30).toFixed(0)}мм`, 0, 0);
+          ctx.restore();
+        }
+      }
+    }
   };
   
   const drawElement = (ctx, element) => {
@@ -304,16 +414,60 @@ export default function ConstructorInterface({ initialData, onBack }) {
       }
     }
     
+    // Начало рисования стены
+    if (selectedTool === 'wall' && isPointInsideHouse(worldX, worldY)) {
+      const snappedStart = snapToHouseBounds(worldX, worldY);
+      setIsDrawingWall(true);
+      setWallStart(snappedStart);
+      setCurrentWall({ start: snappedStart, end: snappedStart });
+      return;
+    }
+    
     // Клик по пустому месту - снимаем выделение
     if (selectedTool === 'select') {
       setSelectedElement(null);
     }
     
-    setIsDragging(true);
-    setDragStart({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
+    if (!isDrawingWall) {
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
+    }
   };
 
   const handleCanvasMouseMove = (e) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.clientX - rect.left;
+    const clientY = e.clientY - rect.top;
+    const worldX = (clientX - panOffset.x) / zoom;
+    const worldY = (clientY - panOffset.y) / zoom;
+    
+    // Рисование стены
+    if (isDrawingWall && wallStart) {
+      if (isPointInsideHouse(worldX, worldY)) {
+        const snappedEnd = snapToHouseBounds(worldX, worldY);
+        const deltaX = snappedEnd.x - wallStart.x;
+        const deltaY = snappedEnd.y - wallStart.y;
+        
+        // Определяем направление (90 градусов)
+        let endX, endY;
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Горизонтальная линия
+          endX = snappedEnd.x;
+          endY = wallStart.y;
+        } else {
+          // Вертикальная линия
+          endX = wallStart.x;
+          endY = snappedEnd.y;
+        }
+        
+        setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
+      }
+      return;
+    }
+    
     if (isDraggingHouse && !houseFixed) {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -352,6 +506,25 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
 
   const handleCanvasMouseUp = () => {
+    if (isDrawingWall && currentWall) {
+      const length = Math.sqrt(
+        Math.pow(currentWall.end.x - currentWall.start.x, 2) + 
+        Math.pow(currentWall.end.y - currentWall.start.y, 2)
+      );
+      
+      if (length > 5) { // Минимальная длина стены
+        setWalls(prev => [...prev, {
+          id: Date.now(),
+          start: currentWall.start,
+          end: currentWall.end
+        }]);
+      }
+      
+      setIsDrawingWall(false);
+      setWallStart(null);
+      setCurrentWall(null);
+    }
+    
     setIsDragging(false);
     setIsDraggingHouse(false);
   };
@@ -395,31 +568,43 @@ export default function ConstructorInterface({ initialData, onBack }) {
           <div className={styles.workspace}>
             <canvas 
               ref={canvasRef}
+              className={selectedTool === 'wall' ? styles.wallTool : ''}
               onMouseDown={handleCanvasMouseDown}
               onMouseMove={(e) => {
         handleCanvasMouseMove(e);
         
-        if (!isDragging && !isDraggingHouse && (selectedTool === 'select' || selectedTool === 'fix')) {
+        // Подсветка элементов при наведении
+        if (!isDragging && !isDraggingHouse && !isDrawingWall && selectedTool === 'select') {
           const canvas = canvasRef.current;
           if (!canvas) return;
           
           const rect = canvas.getBoundingClientRect();
           const clientX = e.clientX - rect.left;
           const clientY = e.clientY - rect.top;
+          const hoverWorldX = (clientX - panOffset.x) / zoom;
+          const hoverWorldY = (clientY - panOffset.y) / zoom;
           
-          const worldX = (clientX - panOffset.x) / zoom;
-          const worldY = (clientY - panOffset.y) / zoom;
+          // Подсвечиваем дом
+          const houseElement = elements.find(el => 
+            el.type === 'house' &&
+            hoverWorldX >= el.x && hoverWorldX <= el.x + el.width &&
+            hoverWorldY >= el.y && hoverWorldY <= el.y + el.height
+          );
           
-          const houseElement = elements.find(el => el.type === 'house');
-          
-          if (houseElement && 
-              worldX >= houseElement.x && worldX <= houseElement.x + houseElement.width &&
-              worldY >= houseElement.y && worldY <= houseElement.y + houseElement.height) {
-            setHoveredElement(houseElement);
-          } else {
-            setHoveredElement(null);
+          // Подсвечиваем стены
+          let hoveredWall = null;
+          if (!houseElement) {
+            hoveredWall = walls.find(wall => {
+              const dist = Math.abs((wall.end.y - wall.start.y) * hoverWorldX - (wall.end.x - wall.start.x) * hoverWorldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
+                          Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
+              return dist < 5 && 
+                     hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 5 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 5 &&
+                     hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 5 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 5;
+            });
           }
-        } else {
+          
+          setHoveredElement(houseElement || hoveredWall || null);
+        } else if (selectedTool !== 'select') {
           setHoveredElement(null);
         }
       }}

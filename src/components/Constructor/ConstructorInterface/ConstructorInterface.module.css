@@ -80,6 +80,14 @@
   cursor: grabbing;
 }
 
+.workspace canvas.wallTool {
+  cursor: crosshair;
+}
+
+.workspace canvas.wallTool:active {
+  cursor: crosshair;
+}
+
 .controlPanel {
   width: 280px;
   min-width: 280px;
