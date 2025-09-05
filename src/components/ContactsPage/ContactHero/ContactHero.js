@@ -11,7 +11,7 @@ export default function ContactHero() {
       setCurrentTime(now);
       const hour = now.getHours();
       const day = now.getDay();
-      setIsOpen((day >= 1 && day <= 5 && hour >= 8 && hour < 20) || (day === 6 && hour >= 10 && hour < 16));
+      setIsOpen(hour >= 8 && hour < 20);
     };
 
     updateTime();
