@@ -30,6 +30,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [houseFixed, setHouseFixed] = useState(false);
   const [isDraggingHouse, setIsDraggingHouse] = useState(false);
   const [houseDragStart, setHouseDragStart] = useState({ x: 0, y: 0 });
+  const [hoveredElement, setHoveredElement] = useState(null);
 
   const SCALE = 30;
 
@@ -189,6 +190,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
   
   const drawElement = (ctx, element) => {
     const isSelected = selectedElement?.id === element.id;
+    const isHovered = hoveredElement?.id === element.id;
     
     const scaledWidth = element.width * zoom;
     const scaledHeight = element.height * zoom;
@@ -196,15 +198,15 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const scaledY = element.y * zoom;
     
     if (element.type === 'house') {
-      ctx.fillStyle = isSelected ? '#d4c5e8' : '#eee8f4';
+      ctx.fillStyle = isSelected ? '#d4c5e8' : isHovered ? '#f0e8f8' : '#eee8f4';
     } else {
-      ctx.fillStyle = isSelected ? '#c5d4e8' : '#e8f4ee';
+      ctx.fillStyle = isSelected ? '#c5d4e8' : isHovered ? '#e0f0e8' : '#e8f4ee';
     }
     
     ctx.fillRect(scaledX, scaledY, scaledWidth, scaledHeight);
     
-    ctx.strokeStyle = isSelected ? '#df682b' : '#31323d';
-    ctx.lineWidth = isSelected ? Math.max(2, 3 * zoom) : Math.max(1, 2 * zoom);
+    ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#31323d';
+    ctx.lineWidth = (isSelected || isHovered) ? Math.max(2, 3 * zoom) : Math.max(1, 2 * zoom);
     ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
     
     // Иконка замка для зафиксированного дома
@@ -251,18 +253,29 @@ export default function ConstructorInterface({ initialData, onBack }) {
         worldX >= houseElement.x && worldX <= houseElement.x + 25 &&
         worldY >= houseElement.y && worldY <= houseElement.y + 25) {
       setHouseFixed(false);
-      setTimeout(() => setHouseFixed(false), 1000);
+      setSelectedElement(null);
+      setTimeout(() => drawCanvas(), 0);
       return;
     }
     
     // Проверяем клик по дому
-    if (selectedTool === 'select' && houseElement && !houseFixed &&
+    if (houseElement &&
         worldX >= houseElement.x && worldX <= houseElement.x + houseElement.width &&
         worldY >= houseElement.y && worldY <= houseElement.y + houseElement.height) {
-      setIsDraggingHouse(true);
-      setHouseDragStart({ x: worldX - houseElement.x, y: worldY - houseElement.y });
-      setSelectedElement(houseElement);
-      return;
+      
+      if (selectedTool === 'fix') {
+        setHouseFixed(true);
+        setSelectedElement(houseElement);
+        setSelectedTool('select');
+        return;
+      }
+      
+      if (selectedTool === 'select' && !houseFixed) {
+        setIsDraggingHouse(true);
+        setHouseDragStart({ x: worldX - houseElement.x, y: worldY - houseElement.y });
+        setSelectedElement(houseElement);
+        return;
+      }
     }
     
     setIsDragging(true);
@@ -352,7 +365,31 @@ export default function ConstructorInterface({ initialData, onBack }) {
             <canvas 
               ref={canvasRef}
               onMouseDown={handleCanvasMouseDown}
-              onMouseMove={handleCanvasMouseMove}
+              onMouseMove={(e) => {
+        handleCanvasMouseMove(e);
+        
+        if (!isDragging && !isDraggingHouse && (selectedTool === 'select' || selectedTool === 'fix')) {
+          const canvas = canvasRef.current;
+          if (!canvas) return;
+          
+          const rect = canvas.getBoundingClientRect();
+          const clientX = e.clientX - rect.left;
+          const clientY = e.clientY - rect.top;
+          
+          const worldX = (clientX - panOffset.x) / zoom;
+          const worldY = (clientY - panOffset.y) / zoom;
+          
+          const houseElement = elements.find(el => el.type === 'house');
+          
+          if (houseElement && 
+              worldX >= houseElement.x && worldX <= houseElement.x + houseElement.width &&
+              worldY >= houseElement.y && worldY <= houseElement.y + houseElement.height) {
+            setHoveredElement(houseElement);
+          } else {
+            setHoveredElement(null);
+          }
+        }
+      }}
               onMouseUp={handleCanvasMouseUp}
               onMouseLeave={handleCanvasMouseUp}
               onWheel={handleWheel}
@@ -409,13 +446,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
                   <button
                     key={tool.id}
                     className={`${styles.toolBtn} ${selectedTool === tool.id ? styles.active : ''}`}
-                    onClick={() => {
-                      if (tool.id === 'fix') {
-                        setHouseFixed(true);
-                      } else {
-                        setSelectedTool(tool.id);
-                      }
-                    }}
+                    onClick={() => setSelectedTool(tool.id)}
                   >
                     <span className={styles.toolIcon}>{tool.icon}</span>
                     <span className={styles.toolName}>{tool.name}</span>
