@@ -5,7 +5,7 @@ import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs';
 import ContactHero from '../components/ContactsPage/ContactHero/ContactHero';
 import QuickContacts from '../components/ContactsPage/QuickContacts/QuickContacts';
 import WorkingHours from '../components/ContactsPage/WorkingHours/WorkingHours';
-import ContactForm from '../components/ContactsPage/ContactForm/ContactForm';
+import ContactSection from '../components/ContactsPage/ContactSection/ContactSection';
 import MapSection from '../components/ContactsPage/MapSection/MapSection';
 import SocialLinks from '../components/ContactsPage/SocialLinks/SocialLinks';
 import CompanyInfo from '../components/ContactsPage/CompanyInfo/CompanyInfo';
@@ -54,7 +54,7 @@ export default function Contacts() {
         <ContactHero />
         <QuickContacts />
         <WorkingHours />
-        <ContactForm />
+        <ContactSection />
         <MapSection />
         <SocialLinks />
         <CompanyInfo />
