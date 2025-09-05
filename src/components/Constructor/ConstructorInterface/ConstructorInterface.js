@@ -620,21 +620,25 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     // Рисование стены
     if (isDrawingWall && wallStart) {
-      if (isPointInsideHouse(worldX, worldY)) {
-        const snappedEnd = snapToHouseBounds(worldX, worldY);
-        const deltaX = snappedEnd.x - wallStart.x;
-        const deltaY = snappedEnd.y - wallStart.y;
+      const houseElement = elements.find(el => el.type === 'house');
+      if (houseElement) {
+        // Ограничиваем координаты границами дома
+        const constrainedX = Math.max(houseElement.x, Math.min(houseElement.x + houseElement.width, worldX));
+        const constrainedY = Math.max(houseElement.y, Math.min(houseElement.y + houseElement.height, worldY));
+        
+        const deltaX = constrainedX - wallStart.x;
+        const deltaY = constrainedY - wallStart.y;
         
         // Определяем направление (90 градусов)
         let endX, endY;
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          // Горизонтальная линия
-          endX = snappedEnd.x;
+          // Горизонтальная линия - доводим до края дома
+          endX = constrainedX;
           endY = wallStart.y;
         } else {
-          // Вертикальная линия
+          // Вертикальная линия - доводим до края дома
           endX = wallStart.x;
-          endY = snappedEnd.y;
+          endY = constrainedY;
         }
         
         setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
