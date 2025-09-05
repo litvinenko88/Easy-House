@@ -95,6 +95,36 @@
   position: relative;
 }
 
+/* Кастомный скролл для панели конструктора */
+.controlPanel::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.controlPanel::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-radius: 3px !important;
+}
+
+.controlPanel::-webkit-scrollbar-thumb {
+  background: #df682b !important;
+  border-radius: 3px !important;
+  transition: background 0.2s ease !important;
+}
+
+.controlPanel::-webkit-scrollbar-thumb:hover {
+  background: #c55a24 !important;
+}
+
+.controlPanel::-webkit-scrollbar-thumb:active {
+  background: #b54f20 !important;
+}
+
+/* Для Firefox */
+.controlPanel {
+  scrollbar-width: thin !important;
+  scrollbar-color: #df682b rgba(255, 255, 255, 0.05) !important;
+}
+
 .controlPanel.collapsed {
   transform: translateX(100%);
   width: 0;

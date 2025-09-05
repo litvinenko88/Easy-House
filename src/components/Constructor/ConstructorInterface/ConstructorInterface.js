@@ -383,6 +383,38 @@ export default function ConstructorInterface({ initialData, onBack }) {
                 </div>
               </div>
             </div>
+
+            <div className={styles.panelSection}>
+              <h3>Материалы</h3>
+              <div className={styles.projectDetails}>
+                <div className={styles.detailItem}>
+                  <span>Стены:</span>
+                  <strong>СИП-панели</strong>
+                </div>
+                <div className={styles.detailItem}>
+                  <span>Кровля:</span>
+                  <strong>Металлочерепица</strong>
+                </div>
+                <div className={styles.detailItem}>
+                  <span>Фундамент:</span>
+                  <strong>Свайно-винтовой</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.panelSection}>
+              <h3>Расчеты</h3>
+              <div className={styles.projectDetails}>
+                <div className={styles.detailItem}>
+                  <span>Стоимость:</span>
+                  <strong>от 2 500 000 ₽</strong>
+                </div>
+                <div className={styles.detailItem}>
+                  <span>Срок строительства:</span>
+                  <strong>45-60 дней</strong>
+                </div>
+              </div>
+            </div>
           </div>
           
           {panelCollapsed && (
