@@ -34,6 +34,8 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-2xl);
   align-items: start;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .faqSection,
@@ -41,6 +43,7 @@
   min-height: 600px;
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 @media (max-width: 1024px) {
