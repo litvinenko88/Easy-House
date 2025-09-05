@@ -4,29 +4,28 @@ import styles from './ContactSection.module.css';
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    message: '',
+    phone: '',
     consent: false
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [phoneError, setPhoneError] = useState('');
   const [consentError, setConsentError] = useState(false);
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return '';
-    if (!emailRegex.test(email)) return 'Некорректный формат email';
+  const validatePhone = (phone) => {
+    const phoneRegex = /^[\+]?[7|8]?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+    if (!phone) return '';
+    if (!phoneRegex.test(phone)) return 'Некорректный формат телефона';
     return '';
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     
-    if (name === 'email') {
+    if (name === 'phone') {
       setFormData({ ...formData, [name]: value });
-      const error = validateEmail(value);
-      setEmailError(error);
+      const error = validatePhone(value);
+      setPhoneError(error);
     } else {
       setFormData({ 
         ...formData, 
@@ -41,9 +40,9 @@ export default function ContactSection() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const emailValidationError = validateEmail(formData.email);
-    if (emailValidationError) {
-      setEmailError(emailValidationError);
+    const phoneValidationError = validatePhone(formData.phone);
+    if (phoneValidationError) {
+      setPhoneError(phoneValidationError);
       return;
     }
     
@@ -52,7 +51,7 @@ export default function ContactSection() {
       return;
     }
     
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name || !formData.phone) {
       alert('Пожалуйста, заполните все поля');
       return;
     }
@@ -63,11 +62,8 @@ export default function ContactSection() {
     const message = `📬 Новое сообщение с сайта
 
 👤 Имя: ${formData.name}
-📧 Email: ${formData.email}
+📞 Телефон: ${formData.phone}
 📍 Источник: страница контактов
-
-💬 Сообщение:
-${formData.message}
 
 ⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
 
@@ -86,8 +82,8 @@ ${formData.message}
 
       if (response.ok) {
         setIsSuccess(true);
-        setFormData({ name: '', email: '', message: '', consent: false });
-        setEmailError('');
+        setFormData({ name: '', phone: '', consent: false });
+        setPhoneError('');
         setConsentError(false);
         setTimeout(() => setIsSuccess(false), 5000);
       } else {
@@ -134,29 +130,16 @@ ${formData.message}
                 
                 <div className={styles.inputGroup}>
                   <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleInputChange}
                     required
-                    className={`${styles.input} ${emailError ? styles.inputError : ''}`}
+                    className={`${styles.input} ${phoneError ? styles.inputError : ''}`}
                     placeholder=" "
                   />
-                  <label className={styles.label}>Email</label>
-                  {emailError && <div className={styles.errorText}>{emailError}</div>}
-                </div>
-                
-                <div className={styles.inputGroup}>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    className={styles.textarea}
-                    rows="3"
-                    placeholder=" "
-                  ></textarea>
-                  <label className={styles.label}>Сообщение</label>
+                  <label className={styles.label}>Телефон</label>
+                  {phoneError && <div className={styles.errorText}>{phoneError}</div>}
                 </div>
                 
                 <div className={styles.checkboxGroup}>
