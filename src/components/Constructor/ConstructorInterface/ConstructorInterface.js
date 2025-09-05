@@ -34,6 +34,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [isDrawingWall, setIsDrawingWall] = useState(false);
   const [wallStart, setWallStart] = useState(null);
   const [currentWall, setCurrentWall] = useState(null);
+  const [isDraggingWall, setIsDraggingWall] = useState(false);
+  const [wallDragStart, setWallDragStart] = useState({ x: 0, y: 0 });
 
   const SCALE = 30;
 
@@ -222,8 +224,9 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const drawWalls = (ctx) => {
     walls.forEach(wall => {
       const isHovered = hoveredElement?.id === wall.id;
-      ctx.strokeStyle = isHovered ? '#df682b' : '#31323d';
-      ctx.lineWidth = isHovered ? Math.max(4, 5 * zoom) : Math.max(3, 4 * zoom);
+      const isSelected = selectedElement?.id === wall.id;
+      ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#31323d';
+      ctx.lineWidth = (isSelected || isHovered) ? Math.max(4, 5 * zoom) : Math.max(3, 4 * zoom);
       ctx.beginPath();
       ctx.moveTo(wall.start.x * zoom, wall.start.y * zoom);
       ctx.lineTo(wall.end.x * zoom, wall.end.y * zoom);
@@ -389,6 +392,32 @@ export default function ConstructorInterface({ initialData, onBack }) {
       return;
     }
     
+    // Проверяем клик по стене (находим ближайшую)
+    let clickedWall = null;
+    let minClickDistance = Infinity;
+    
+    walls.forEach(wall => {
+      const dist = Math.abs((wall.end.y - wall.start.y) * worldX - (wall.end.x - wall.start.x) * worldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
+                  Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
+      
+      if (dist < 8 && dist < minClickDistance &&
+          worldX >= Math.min(wall.start.x, wall.end.x) - 8 && worldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
+          worldY >= Math.min(wall.start.y, wall.end.y) - 8 && worldY <= Math.max(wall.start.y, wall.end.y) + 8) {
+        minClickDistance = dist;
+        clickedWall = wall;
+      }
+    });
+    
+    if (clickedWall && selectedTool === 'select') {
+      setIsDraggingWall(true);
+      setWallDragStart({ 
+        x: worldX - (clickedWall.start.x + clickedWall.end.x) / 2, 
+        y: worldY - (clickedWall.start.y + clickedWall.end.y) / 2 
+      });
+      setSelectedElement(clickedWall);
+      return;
+    }
+    
     // Проверяем клик по дому
     if (houseElement &&
         worldX >= houseElement.x && worldX <= houseElement.x + houseElement.width &&
@@ -443,6 +472,40 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const clientY = e.clientY - rect.top;
     const worldX = (clientX - panOffset.x) / zoom;
     const worldY = (clientY - panOffset.y) / zoom;
+    
+    // Перетаскивание стены
+    if (isDraggingWall && selectedElement) {
+      const centerX = worldX - wallDragStart.x;
+      const centerY = worldY - wallDragStart.y;
+      
+      const wallLength = Math.sqrt(
+        Math.pow(selectedElement.end.x - selectedElement.start.x, 2) + 
+        Math.pow(selectedElement.end.y - selectedElement.start.y, 2)
+      );
+      
+      const isHorizontal = Math.abs(selectedElement.end.x - selectedElement.start.x) > Math.abs(selectedElement.end.y - selectedElement.start.y);
+      
+      let newStart, newEnd;
+      if (isHorizontal) {
+        newStart = { x: centerX - wallLength / 2, y: centerY };
+        newEnd = { x: centerX + wallLength / 2, y: centerY };
+      } else {
+        newStart = { x: centerX, y: centerY - wallLength / 2 };
+        newEnd = { x: centerX, y: centerY + wallLength / 2 };
+      }
+      
+      // Проверяем, что стена остается в пределах дома
+      if (isPointInsideHouse(newStart.x, newStart.y) && isPointInsideHouse(newEnd.x, newEnd.y)) {
+        setWalls(prev => prev.map(wall => 
+          wall.id === selectedElement.id 
+            ? { ...wall, start: newStart, end: newEnd }
+            : wall
+        ));
+        
+        setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
+      }
+      return;
+    }
     
     // Рисование стены
     if (isDrawingWall && wallStart) {
@@ -527,6 +590,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     setIsDragging(false);
     setIsDraggingHouse(false);
+    setIsDraggingWall(false);
   };
 
   const handleWheel = (e) => {
@@ -591,15 +655,21 @@ export default function ConstructorInterface({ initialData, onBack }) {
             hoverWorldY >= el.y && hoverWorldY <= el.y + el.height
           );
           
-          // Подсвечиваем стены
+          // Подсвечиваем стены (находим ближайшую)
           let hoveredWall = null;
+          let minDistance = Infinity;
+          
           if (!houseElement) {
-            hoveredWall = walls.find(wall => {
+            walls.forEach(wall => {
               const dist = Math.abs((wall.end.y - wall.start.y) * hoverWorldX - (wall.end.x - wall.start.x) * hoverWorldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
                           Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
-              return dist < 5 && 
-                     hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 5 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 5 &&
-                     hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 5 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 5;
+              
+              if (dist < 8 && dist < minDistance &&
+                  hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 8 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
+                  hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 8 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 8) {
+                minDistance = dist;
+                hoveredWall = wall;
+              }
             });
           }
           
