@@ -960,7 +960,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
                   { id: 'door', name: 'Дверь', icon: '🚪' },
                   { id: 'window', name: 'Окно', icon: '🪟' },
                   { id: 'fix', name: 'Фиксация', icon: '🔒' },
-                  { id: 'rotate', name: 'Поворот', icon: '🔄' }
+                  { id: 'rotate', name: 'Построение стен', icon: '📐' }
                 ].map(tool => (
                   <button
                     key={tool.id}
