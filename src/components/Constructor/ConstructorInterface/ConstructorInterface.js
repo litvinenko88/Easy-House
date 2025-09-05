@@ -494,15 +494,41 @@ export default function ConstructorInterface({ initialData, onBack }) {
         newEnd = { x: centerX, y: centerY + wallLength / 2 };
       }
       
-      // Проверяем, что стена остается в пределах дома
-      if (isPointInsideHouse(newStart.x, newStart.y) && isPointInsideHouse(newEnd.x, newEnd.y)) {
+      // Получаем границы дома
+      const houseElement = elements.find(el => el.type === 'house');
+      if (houseElement) {
+        const houseLeft = houseElement.x;
+        const houseRight = houseElement.x + houseElement.width;
+        const houseTop = houseElement.y;
+        const houseBottom = houseElement.y + houseElement.height;
+        
+        // Ограничиваем только центр стены, сохраняя её размер
+        let constrainedCenterX, constrainedCenterY;
+        if (isHorizontal) {
+          constrainedCenterX = Math.max(houseLeft + wallLength/2, Math.min(houseRight - wallLength/2, centerX));
+          constrainedCenterY = Math.max(houseTop, Math.min(houseBottom, centerY));
+        } else {
+          constrainedCenterX = Math.max(houseLeft, Math.min(houseRight, centerX));
+          constrainedCenterY = Math.max(houseTop + wallLength/2, Math.min(houseBottom - wallLength/2, centerY));
+        }
+        
+        // Пересчитываем координаты с ограниченным центром
+        let finalStart, finalEnd;
+        if (isHorizontal) {
+          finalStart = { x: constrainedCenterX - wallLength / 2, y: constrainedCenterY };
+          finalEnd = { x: constrainedCenterX + wallLength / 2, y: constrainedCenterY };
+        } else {
+          finalStart = { x: constrainedCenterX, y: constrainedCenterY - wallLength / 2 };
+          finalEnd = { x: constrainedCenterX, y: constrainedCenterY + wallLength / 2 };
+        }
+        
         setWalls(prev => prev.map(wall => 
           wall.id === selectedElement.id 
-            ? { ...wall, start: newStart, end: newEnd }
+            ? { ...wall, start: finalStart, end: finalEnd }
             : wall
         ));
         
-        setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
+        setSelectedElement(prev => ({ ...prev, start: finalStart, end: finalEnd }));
       }
       return;
     }
