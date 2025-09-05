@@ -123,9 +123,8 @@ export default function ContactSection() {
                     onChange={handleInputChange}
                     required
                     className={styles.input}
-                    placeholder=" "
+                    placeholder="Ваше имя"
                   />
-                  <label className={styles.label}>Ваше имя</label>
                 </div>
                 
                 <div className={styles.inputGroup}>
@@ -136,9 +135,8 @@ export default function ContactSection() {
                     onChange={handleInputChange}
                     required
                     className={`${styles.input} ${phoneError ? styles.inputError : ''}`}
-                    placeholder=" "
+                    placeholder="Телефон"
                   />
-                  <label className={styles.label}>Телефон</label>
                   {phoneError && <div className={styles.errorText}>{phoneError}</div>}
                 </div>
                 
