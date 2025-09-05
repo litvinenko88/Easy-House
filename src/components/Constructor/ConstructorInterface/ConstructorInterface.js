@@ -319,7 +319,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     ctx.fillRect(scaledX, scaledY, scaledWidth, scaledHeight);
     
     ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#31323d';
-    ctx.lineWidth = (isSelected || isHovered) ? Math.max(2, 3 * zoom) : Math.max(1, 2 * zoom);
+    ctx.lineWidth = (isSelected || isHovered) ? Math.max(4, 5 * zoom) : Math.max(3, 4 * zoom);
     ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
     
     // Иконка замка для зафиксированного дома
