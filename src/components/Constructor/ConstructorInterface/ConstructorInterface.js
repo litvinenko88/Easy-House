@@ -327,10 +327,10 @@ export default function ConstructorInterface({ initialData, onBack }) {
       ctx.fillStyle = '#007bff';
       ctx.fillText('🔄', rotateX, rotateY + 4);
       
-      // Сохраняем позиции иконок (в экранных координатах с учетом panOffset)
+      // Сохраняем позиции иконок (в экранных координатах)
       setWallIcons({
-        delete: { x: deleteX + panOffset.x, y: deleteY + panOffset.y, size: iconSize },
-        rotate: { x: rotateX + panOffset.x, y: rotateY + panOffset.y, size: iconSize }
+        delete: { x: deleteX, y: deleteY, size: iconSize },
+        rotate: { x: rotateX, y: rotateY, size: iconSize }
       });
     } else {
       setWallIcons({ delete: null, rotate: null });
@@ -416,10 +416,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const worldX = (clientX - panOffset.x) / zoom;
     const worldY = (clientY - panOffset.y) / zoom;
     
-    // Проверяем клик по иконкам стены (в экранных координатах)
+    // Проверяем клик по иконкам стены
+    const iconClickX = clientX - panOffset.x;
+    const iconClickY = clientY - panOffset.y;
+    
     if (selectedElement && selectedElement.start && wallIcons.delete && 
-        Math.abs(clientX - wallIcons.delete.x) <= wallIcons.delete.size/2 && 
-        Math.abs(clientY - wallIcons.delete.y) <= wallIcons.delete.size/2) {
+        Math.abs(iconClickX - wallIcons.delete.x) <= wallIcons.delete.size/2 && 
+        Math.abs(iconClickY - wallIcons.delete.y) <= wallIcons.delete.size/2) {
       e.preventDefault();
       e.stopPropagation();
       // Удаляем стену
@@ -429,8 +432,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
     }
     
     if (selectedElement && selectedElement.start && wallIcons.rotate && 
-        Math.abs(clientX - wallIcons.rotate.x) <= wallIcons.rotate.size/2 && 
-        Math.abs(clientY - wallIcons.rotate.y) <= wallIcons.rotate.size/2) {
+        Math.abs(iconClickX - wallIcons.rotate.x) <= wallIcons.rotate.size/2 && 
+        Math.abs(iconClickY - wallIcons.rotate.y) <= wallIcons.rotate.size/2) {
       e.preventDefault();
       e.stopPropagation();
       // Поворачиваем стену на 90 градусов
