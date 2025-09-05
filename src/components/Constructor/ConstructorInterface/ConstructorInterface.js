@@ -36,6 +36,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [currentWall, setCurrentWall] = useState(null);
   const [isDraggingWall, setIsDraggingWall] = useState(false);
   const [wallDragStart, setWallDragStart] = useState({ x: 0, y: 0 });
+  const [wallIcons, setWallIcons] = useState({ delete: null, rotate: null });
 
   const SCALE = 30;
 
@@ -124,6 +125,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawElements(ctx);
     drawWalls(ctx);
     drawCurrentWall(ctx);
+    drawWallIcons(ctx);
     
     ctx.restore();
   };
@@ -300,6 +302,40 @@ export default function ConstructorInterface({ initialData, onBack }) {
       }
     }
   };
+
+  const drawWallIcons = (ctx) => {
+    if (selectedElement && selectedElement.start && selectedElement.end && selectedTool === 'select') {
+      const centerX = (selectedElement.start.x + selectedElement.end.x) / 2 * zoom;
+      const centerY = (selectedElement.start.y + selectedElement.end.y) / 2 * zoom;
+      
+      const iconSize = Math.max(20, 25 * zoom);
+      const iconSpacing = Math.max(30, 35 * zoom);
+      
+      // Иконка удаления
+      const deleteX = centerX - iconSpacing / 2;
+      const deleteY = centerY - iconSize - 10;
+      
+      ctx.fillStyle = '#dc3545';
+      ctx.font = `${Math.max(16, 18 * zoom)}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.fillText('🗑️', deleteX, deleteY + 4);
+      
+      // Иконка поворота
+      const rotateX = centerX + iconSpacing / 2;
+      const rotateY = centerY - iconSize - 10;
+      
+      ctx.fillStyle = '#007bff';
+      ctx.fillText('🔄', rotateX, rotateY + 4);
+      
+      // Сохраняем позиции иконок (в экранных координатах с учетом panOffset)
+      setWallIcons({
+        delete: { x: deleteX + panOffset.x, y: deleteY + panOffset.y, size: iconSize },
+        rotate: { x: rotateX + panOffset.x, y: rotateY + panOffset.y, size: iconSize }
+      });
+    } else {
+      setWallIcons({ delete: null, rotate: null });
+    }
+  };
   
   const drawElement = (ctx, element) => {
     const isSelected = selectedElement?.id === element.id;
@@ -379,6 +415,55 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     const worldX = (clientX - panOffset.x) / zoom;
     const worldY = (clientY - panOffset.y) / zoom;
+    
+    // Проверяем клик по иконкам стены (в экранных координатах)
+    if (selectedElement && selectedElement.start && wallIcons.delete && 
+        Math.abs(clientX - wallIcons.delete.x) <= wallIcons.delete.size/2 && 
+        Math.abs(clientY - wallIcons.delete.y) <= wallIcons.delete.size/2) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Удаляем стену
+      setWalls(prev => prev.filter(wall => wall.id !== selectedElement.id));
+      setSelectedElement(null);
+      return;
+    }
+    
+    if (selectedElement && selectedElement.start && wallIcons.rotate && 
+        Math.abs(clientX - wallIcons.rotate.x) <= wallIcons.rotate.size/2 && 
+        Math.abs(clientY - wallIcons.rotate.y) <= wallIcons.rotate.size/2) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Поворачиваем стену на 90 градусов
+      const centerX = (selectedElement.start.x + selectedElement.end.x) / 2;
+      const centerY = (selectedElement.start.y + selectedElement.end.y) / 2;
+      const deltaX = selectedElement.end.x - selectedElement.start.x;
+      const deltaY = selectedElement.end.y - selectedElement.start.y;
+      
+      // Поворот на 90 градусов: (x,y) -> (-y,x)
+      const newDeltaX = -deltaY;
+      const newDeltaY = deltaX;
+      
+      const newStart = { x: centerX - newDeltaX/2, y: centerY - newDeltaY/2 };
+      const newEnd = { x: centerX + newDeltaX/2, y: centerY + newDeltaY/2 };
+      
+      // Проверяем, что повёрнутая стена остаётся в доме
+      const houseElement = elements.find(el => el.type === 'house');
+      if (houseElement && 
+          newStart.x >= houseElement.x && newStart.x <= houseElement.x + houseElement.width &&
+          newStart.y >= houseElement.y && newStart.y <= houseElement.y + houseElement.height &&
+          newEnd.x >= houseElement.x && newEnd.x <= houseElement.x + houseElement.width &&
+          newEnd.y >= houseElement.y && newEnd.y <= houseElement.y + houseElement.height) {
+        
+        setWalls(prev => prev.map(wall => 
+          wall.id === selectedElement.id 
+            ? { ...wall, start: newStart, end: newEnd }
+            : wall
+        ));
+        
+        setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
+      }
+      return;
+    }
     
     const houseElement = elements.find(el => el.type === 'house');
     
