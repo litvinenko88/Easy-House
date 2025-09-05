@@ -168,6 +168,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
       ctx.rotate(-Math.PI / 2);
       ctx.fillText(`${(initialData.lotSize.height * 1000).toFixed(0)}мм`, 0, 0);
       ctx.restore();
+      
+      // Количество соток под участком
+      ctx.fillText(
+        `${((initialData.lotSize.width * initialData.lotSize.height) / 100).toFixed(2)} соток`,
+        lotX + lotW / 2,
+        lotY + lotH + 25 * zoom
+      );
     }
   };
 
