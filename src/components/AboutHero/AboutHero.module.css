@@ -1,75 +1,80 @@
 .hero {
+  padding: var(--spacing-3xl) 0 var(--spacing-2xl);
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-gray-light) 100%);
   position: relative;
-  padding: 120px 0 80px;
-  background: linear-gradient(135deg, var(--color-white) 0%, #f8f9fa 100%);
   overflow: hidden;
 }
 
 .container {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--container-padding);
   position: relative;
   z-index: 2;
 }
 
 .content {
   text-align: center;
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
 .title {
-  font-size: var(--h1-size);
+  font-size: var(--font-h1);
   font-weight: 700;
   color: var(--color-primary);
-  margin-bottom: 20px;
+  margin-bottom: var(--spacing-sm);
   line-height: 1.2;
 }
 
 .subtitle {
-  font-size: var(--text-size-lg);
+  font-size: var(--font-text-lg);
   color: var(--color-gray);
-  margin-bottom: 60px;
+  margin-bottom: var(--spacing-2xl);
   line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: var(--spacing-sm);
 }
 
 .highlights {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  max-width: 600px;
+  gap: var(--spacing-lg);
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .highlight {
   text-align: center;
-  padding: 30px 20px;
+  padding: var(--spacing-lg) var(--spacing-md);
   background: var(--color-white);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition-normal);
   border: 1px solid rgba(223, 104, 43, 0.1);
 }
 
 .highlight:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .number {
   display: block;
-  font-size: 3rem;
+  font-size: var(--font-h2);
   font-weight: 700;
   color: var(--color-accent);
-  margin-bottom: 8px;
+  margin-bottom: var(--spacing-xs);
   line-height: 1;
 }
 
 .label {
-  font-size: var(--text-size-sm);
+  font-size: var(--font-text-sm);
   color: var(--color-gray);
   font-weight: 500;
+  line-height: 1.4;
 }
 
 .decorativeElements {
@@ -84,24 +89,24 @@
 
 .circle {
   position: absolute;
-  top: 20%;
-  right: 10%;
-  width: 200px;
-  height: 200px;
-  border: 2px solid rgba(223, 104, 43, 0.2);
+  top: 15%;
+  right: 8%;
+  width: 150px;
+  height: 150px;
+  border: 2px solid rgba(223, 104, 43, 0.15);
   border-radius: 50%;
-  animation: float 6s ease-in-out infinite;
+  animation: float 8s ease-in-out infinite;
 }
 
 .gradient {
   position: absolute;
-  bottom: -20%;
-  left: -10%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(223, 104, 43, 0.1) 0%, transparent 70%);
+  bottom: -15%;
+  left: -8%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(223, 104, 43, 0.08) 0%, transparent 70%);
   border-radius: 50%;
-  animation: pulse 8s ease-in-out infinite;
+  animation: pulse 10s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -109,47 +114,43 @@
     transform: translateY(0px) rotate(0deg); 
   }
   50% { 
-    transform: translateY(-20px) rotate(180deg); 
+    transform: translateY(-15px) rotate(180deg); 
   }
 }
 
 @keyframes pulse {
   0%, 100% { 
     transform: scale(1); 
-    opacity: 0.3; 
+    opacity: 0.4; 
   }
   50% { 
     transform: scale(1.1); 
-    opacity: 0.1; 
+    opacity: 0.2; 
   }
 }
 
 @media (max-width: 768px) {
   .hero {
-    padding: 100px 0 60px;
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
   }
   
   .highlights {
     grid-template-columns: 1fr;
-    gap: 20px;
-    max-width: 300px;
+    gap: var(--spacing-md);
+    max-width: 400px;
   }
   
   .highlight {
-    padding: 20px 15px;
-  }
-  
-  .number {
-    font-size: 2.5rem;
+    padding: var(--spacing-md) var(--spacing-sm);
   }
   
   .circle {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
   }
   
   .gradient {
-    width: 300px;
-    height: 300px;
+    width: 200px;
+    height: 200px;
   }
 }
