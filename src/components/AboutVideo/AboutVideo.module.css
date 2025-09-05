@@ -1,0 +1,150 @@
+.videoSection {
+  padding: var(--section-gap) 0;
+  background: var(--color-white);
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-3xl);
+  align-items: center;
+}
+
+.textContent {
+  padding: 0;
+}
+
+.title {
+  font-size: var(--font-h2);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.3;
+}
+
+.description {
+  font-size: var(--font-text);
+  color: var(--color-gray);
+  line-height: 1.7;
+  margin-bottom: var(--spacing-xl);
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-white);
+  border-radius: var(--border-radius-md);
+  border: 1px solid rgba(223, 104, 43, 0.1);
+  transition: var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.feature:hover {
+  transform: translateX(8px);
+  box-shadow: var(--shadow-md);
+}
+
+.featureIcon {
+  font-size: var(--font-text-lg);
+  flex-shrink: 0;
+}
+
+.featureText {
+  font-size: var(--font-text-sm);
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.videoContainer {
+  position: relative;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  background: #000;
+}
+
+.video {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  display: block;
+  transition: var(--transition-normal);
+}
+
+.video:hover {
+  transform: scale(1.02);
+}
+
+.playButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.videoContainer:hover .playButton {
+  opacity: 1;
+}
+
+.playButton:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.playButton svg {
+  filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.3));
+}
+
+@media (max-width: 1024px) {
+  .content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+  
+  .videoSection {
+    padding: var(--spacing-3xl) 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .videoSection {
+    padding: var(--spacing-2xl) 0;
+  }
+  
+  .content {
+    gap: var(--spacing-xl);
+  }
+  
+  .video {
+    height: 280px;
+  }
+  
+  .features {
+    gap: var(--spacing-sm);
+  }
+  
+  .feature {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .featureIcon {
+    font-size: var(--font-text);
+  }
+}
