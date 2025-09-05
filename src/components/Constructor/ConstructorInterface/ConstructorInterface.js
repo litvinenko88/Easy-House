@@ -976,18 +976,22 @@ export default function ConstructorInterface({ initialData, onBack }) {
 
             <div className={styles.panelSection}>
               <h3>Управление</h3>
-              <div className={styles.zoomControls}>
-                <button onClick={() => setZoom(prev => Math.min(5, prev * 1.2))}>
+              <div className={styles.zoomControls} style={{ display: 'flex', gap: '5px', width: '100%' }}>
+                <button onClick={() => setZoom(prev => Math.min(5, prev * 1.2))} style={{ flex: 1 }}>
                   🔍+
                 </button>
-                <span>{Math.round(zoom * 100)}%</span>
-                <button onClick={() => setZoom(prev => Math.max(0.3, prev / 1.2))}>
+                <span style={{ minWidth: '50px', textAlign: 'center', alignSelf: 'center' }}>{Math.round(zoom * 100)}%</span>
+                <button onClick={() => setZoom(prev => Math.max(0.3, prev / 1.2))} style={{ flex: 1 }}>
                   🔍-
                 </button>
-                <button onClick={() => { setZoom(1); setPanOffset({ x: 0, y: 0 }); }}>
-                  🎯 Сброс
-                </button>
               </div>
+              <button 
+                className={styles.resetBtn}
+                onClick={() => { setZoom(1); setPanOffset({ x: 0, y: 0 }); }}
+                style={{ width: '100%', marginTop: '10px' }}
+              >
+                🎯 Сброс
+              </button>
             </div>
 
             <div className={styles.panelSection}>
