@@ -37,6 +37,9 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [isDraggingWall, setIsDraggingWall] = useState(false);
   const [wallDragStart, setWallDragStart] = useState({ x: 0, y: 0 });
   const [wallIcons, setWallIcons] = useState({ delete: null, rotate: null });
+  const [wallResizePoints, setWallResizePoints] = useState({ start: null, end: null });
+  const [isDraggingResizePoint, setIsDraggingResizePoint] = useState(false);
+  const [resizePointType, setResizePointType] = useState(null);
 
   const SCALE = 30;
 
@@ -126,6 +129,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawWalls(ctx);
     drawCurrentWall(ctx);
     drawWallIcons(ctx);
+    drawWallResizePoints(ctx);
     
     ctx.restore();
   };
@@ -336,6 +340,43 @@ export default function ConstructorInterface({ initialData, onBack }) {
       setWallIcons({ delete: null, rotate: null });
     }
   };
+
+  const drawWallResizePoints = (ctx) => {
+    if (selectedElement && selectedElement.start && selectedElement.end && selectedTool === 'select') {
+      const startX = selectedElement.start.x * zoom;
+      const startY = selectedElement.start.y * zoom;
+      const endX = selectedElement.end.x * zoom;
+      const endY = selectedElement.end.y * zoom;
+      
+      const pointSize = Math.max(6, 8 * zoom);
+      
+      // Точка начала стены
+      ctx.fillStyle = '#007bff';
+      ctx.beginPath();
+      ctx.arc(startX, startY, pointSize, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Точка конца стены
+      ctx.fillStyle = '#007bff';
+      ctx.beginPath();
+      ctx.arc(endX, endY, pointSize, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      
+      // Сохраняем позиции точек
+      setWallResizePoints({
+        start: { x: startX, y: startY, size: pointSize },
+        end: { x: endX, y: endY, size: pointSize }
+      });
+    } else {
+      setWallResizePoints({ start: null, end: null });
+    }
+  };
   
   const drawElement = (ctx, element) => {
     const isSelected = selectedElement?.id === element.id;
@@ -415,6 +456,26 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     const worldX = (clientX - panOffset.x) / zoom;
     const worldY = (clientY - panOffset.y) / zoom;
+    
+    // Проверяем клик по точкам изменения размера
+    const resizeClickX = clientX - panOffset.x;
+    const resizeClickY = clientY - panOffset.y;
+    
+    if (selectedElement && selectedElement.start && wallResizePoints.start && 
+        Math.abs(resizeClickX - wallResizePoints.start.x) <= wallResizePoints.start.size && 
+        Math.abs(resizeClickY - wallResizePoints.start.y) <= wallResizePoints.start.size) {
+      setIsDraggingResizePoint(true);
+      setResizePointType('start');
+      return;
+    }
+    
+    if (selectedElement && selectedElement.start && wallResizePoints.end && 
+        Math.abs(resizeClickX - wallResizePoints.end.x) <= wallResizePoints.end.size && 
+        Math.abs(resizeClickY - wallResizePoints.end.y) <= wallResizePoints.end.size) {
+      setIsDraggingResizePoint(true);
+      setResizePointType('end');
+      return;
+    }
     
     // Проверяем клик по иконкам стены
     const iconClickX = clientX - panOffset.x;
@@ -560,6 +621,55 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const clientY = e.clientY - rect.top;
     const worldX = (clientX - panOffset.x) / zoom;
     const worldY = (clientY - panOffset.y) / zoom;
+    
+    // Изменение размера стены
+    if (isDraggingResizePoint && selectedElement && resizePointType) {
+      const houseElement = elements.find(el => el.type === 'house');
+      if (houseElement) {
+        const constrainedX = Math.max(houseElement.x, Math.min(houseElement.x + houseElement.width, worldX));
+        const constrainedY = Math.max(houseElement.y, Math.min(houseElement.y + houseElement.height, worldY));
+        
+        const isHorizontal = Math.abs(selectedElement.end.x - selectedElement.start.x) > Math.abs(selectedElement.end.y - selectedElement.start.y);
+        
+        let newStart = selectedElement.start;
+        let newEnd = selectedElement.end;
+        
+        if (resizePointType === 'start') {
+          if (isHorizontal) {
+            // Горизонтальная стена - двигаем только по X
+            newStart = { x: constrainedX, y: selectedElement.start.y };
+          } else {
+            // Вертикальная стена - двигаем только по Y
+            newStart = { x: selectedElement.start.x, y: constrainedY };
+          }
+        } else if (resizePointType === 'end') {
+          if (isHorizontal) {
+            // Горизонтальная стена - двигаем только по X
+            newEnd = { x: constrainedX, y: selectedElement.end.y };
+          } else {
+            // Вертикальная стена - двигаем только по Y
+            newEnd = { x: selectedElement.end.x, y: constrainedY };
+          }
+        }
+        
+        // Проверяем минимальную длину стены
+        const newLength = Math.sqrt(
+          Math.pow(newEnd.x - newStart.x, 2) + 
+          Math.pow(newEnd.y - newStart.y, 2)
+        );
+        
+        if (newLength > 10) { // Минимальная длина
+          setWalls(prev => prev.map(wall => 
+            wall.id === selectedElement.id 
+              ? { ...wall, start: newStart, end: newEnd }
+              : wall
+          ));
+          
+          setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
+        }
+      }
+      return;
+    }
     
     // Перетаскивание стены
     if (isDraggingWall && selectedElement) {
@@ -709,6 +819,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
     setIsDragging(false);
     setIsDraggingHouse(false);
     setIsDraggingWall(false);
+    setIsDraggingResizePoint(false);
+    setResizePointType(null);
   };
 
   const handleWheel = (e) => {
