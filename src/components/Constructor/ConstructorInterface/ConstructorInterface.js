@@ -212,9 +212,9 @@ export default function ConstructorInterface({ initialData, onBack }) {
     // Иконка замка для зафиксированного дома
     if (element.type === 'house' && houseFixed) {
       ctx.fillStyle = '#dc3545';
-      ctx.font = `${Math.max(16, 20 * zoom)}px Arial`;
+      ctx.font = `${Math.max(12, 14 * zoom)}px Arial`;
       ctx.textAlign = 'left';
-      ctx.fillText('🔒', scaledX + 5 * zoom, scaledY + 20 * zoom);
+      ctx.fillText('🔒', scaledX + 5 * zoom, scaledY + 16 * zoom);
     }
     
     if (zoom >= 0.3 && element.type !== 'house') {
@@ -276,6 +276,16 @@ export default function ConstructorInterface({ initialData, onBack }) {
         setSelectedElement(houseElement);
         return;
       }
+      
+      if (selectedTool === 'select') {
+        setSelectedElement(houseElement);
+        return;
+      }
+    }
+    
+    // Клик по пустому месту - снимаем выделение
+    if (selectedTool === 'select') {
+      setSelectedElement(null);
     }
     
     setIsDragging(true);
@@ -388,6 +398,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
           } else {
             setHoveredElement(null);
           }
+        } else {
+          setHoveredElement(null);
         }
       }}
               onMouseUp={handleCanvasMouseUp}
