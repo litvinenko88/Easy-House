@@ -1,0 +1,55 @@
+.specs {
+  margin-bottom: var(--spacing-md);
+}
+
+.specs h2 {
+  font-size: var(--font-text-lg);
+  font-weight: 600;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary);
+  position: relative;
+  padding-bottom: var(--spacing-xs);
+}
+
+.specs h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--color-accent);
+  border-radius: 1px;
+}
+
+.specs dl {
+  list-style: none;
+  padding: 0;
+  background: var(--color-gray-light);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  border-left: 3px solid var(--color-accent);
+}
+
+.specs dt {
+  font-weight: 500;
+  color: var(--color-primary);
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-text-xs);
+}
+
+.specs dt:first-child {
+  margin-top: 0;
+}
+
+.specs dd {
+  margin: 0;
+  padding: 2px 0 var(--spacing-xs);
+  color: var(--color-gray);
+  font-size: var(--font-text-xs);
+  border-bottom: 1px solid var(--border-gray);
+}
+
+.specs dd:last-child {
+  border-bottom: none;
+}

@@ -1,0 +1,30 @@
+.sizeSelector {
+  margin-bottom: var(--spacing-md);
+}
+
+.sizeSelector label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-primary);
+  font-size: var(--font-text-sm);
+}
+
+.sizeSelector select {
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--border-gray);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-text-sm);
+  font-family: var(--font-family);
+  background: var(--color-white);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  color: var(--color-primary);
+}
+
+.sizeSelector select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(223, 104, 43, 0.1);
+}
