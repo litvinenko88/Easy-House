@@ -164,13 +164,13 @@ const Header = ({ onConstructorOpen }) => {
               
               if (item === 'Конструктор') {
                 return (
-                  <button
+                  <a
                     key={index}
-                    onClick={onConstructorOpen}
+                    href="/konstruktor"
                     className={styles.navLink}
                     title={`Открыть конструктор`}>
                     {item}
-                  </button>
+                  </a>
                 );
               }
               
@@ -322,16 +322,14 @@ const Header = ({ onConstructorOpen }) => {
               
               if (item === 'Конструктор') {
                 return (
-                  <button
+                  <a
                     key={index}
-                    onClick={() => {
-                      onConstructorOpen();
-                      closeMobileMenu();
-                    }}
+                    href="/konstruktor"
                     className={styles.mobileNavLink}
-                    style={{ animationDelay: `${index * 0.1}s`, textAlign: 'left', width: '100%' }}>
+                    onClick={closeMobileMenu}
+                    style={{ animationDelay: `${index * 0.1}s` }}>
                     {item}
-                  </button>
+                  </a>
                 );
               }
               
