@@ -27,7 +27,7 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
     { video: '/videos/11.mp4', title: 'Обзор дома 11' },
     { video: '/videos/12.mp4', title: 'Обзор дома 12' },
     { video: '/videos/13.mp4', title: 'Обзор дома 13' },
-    { video: '/videos/14.mp4', title: 'Обзор дома 14' },
+    { video: '/videos/14.mp4', audio: '/audio/3.1.mp4', title: 'Обзор дома 14' },
     { video: '/videos/15.mp4', title: 'Обзор дома 15' },
     { video: '/videos/16.mp4', title: 'Обзор дома 16' }
   ]
