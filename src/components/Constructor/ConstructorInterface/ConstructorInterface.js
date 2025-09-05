@@ -674,32 +674,33 @@ export default function ConstructorInterface({ initialData, onBack }) {
           const hoverWorldX = (clientX - panOffset.x) / zoom;
           const hoverWorldY = (clientY - panOffset.y) / zoom;
           
-          // Подсвечиваем дом
-          const houseElement = elements.find(el => 
-            el.type === 'house' &&
-            hoverWorldX >= el.x && hoverWorldX <= el.x + el.width &&
-            hoverWorldY >= el.y && hoverWorldY <= el.y + el.height
-          );
-          
-          // Подсвечиваем стены (находим ближайшую)
+          // Сначала проверяем стены (приоритет)
           let hoveredWall = null;
           let minDistance = Infinity;
           
-          if (!houseElement) {
-            walls.forEach(wall => {
-              const dist = Math.abs((wall.end.y - wall.start.y) * hoverWorldX - (wall.end.x - wall.start.x) * hoverWorldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
-                          Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
-              
-              if (dist < 8 && dist < minDistance &&
-                  hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 8 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
-                  hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 8 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 8) {
-                minDistance = dist;
-                hoveredWall = wall;
-              }
-            });
+          walls.forEach(wall => {
+            const dist = Math.abs((wall.end.y - wall.start.y) * hoverWorldX - (wall.end.x - wall.start.x) * hoverWorldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
+                        Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
+            
+            if (dist < 8 && dist < minDistance &&
+                hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 8 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
+                hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 8 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 8) {
+              minDistance = dist;
+              hoveredWall = wall;
+            }
+          });
+          
+          // Если стена не найдена, проверяем дом
+          let houseElement = null;
+          if (!hoveredWall) {
+            houseElement = elements.find(el => 
+              el.type === 'house' &&
+              hoverWorldX >= el.x && hoverWorldX <= el.x + el.width &&
+              hoverWorldY >= el.y && hoverWorldY <= el.y + el.height
+            );
           }
           
-          setHoveredElement(houseElement || hoveredWall || null);
+          setHoveredElement(hoveredWall || houseElement || null);
         } else if (selectedTool !== 'select') {
           setHoveredElement(null);
         }
