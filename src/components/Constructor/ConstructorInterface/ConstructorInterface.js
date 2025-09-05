@@ -217,6 +217,27 @@ export default function ConstructorInterface({ initialData, onBack }) {
       ctx.fillText('🔒', scaledX + 5 * zoom, scaledY + 16 * zoom);
     }
     
+    // Маркеры размеров дома
+    if (element.type === 'house' && zoom >= 0.3) {
+      ctx.fillStyle = '#df682b';
+      ctx.font = '12px Arial';
+      ctx.textAlign = 'center';
+      
+      // Размер сверху
+      ctx.fillText(
+        `${(element.realWidth * 1000).toFixed(0)}мм`,
+        scaledX + scaledWidth / 2,
+        scaledY - 10 * zoom
+      );
+      
+      // Размер слева
+      ctx.save();
+      ctx.translate(scaledX - 15 * zoom, scaledY + scaledHeight / 2);
+      ctx.rotate(-Math.PI / 2);
+      ctx.fillText(`${(element.realHeight * 1000).toFixed(0)}мм`, 0, 0);
+      ctx.restore();
+    }
+    
     if (zoom >= 0.3 && element.type !== 'house') {
       ctx.fillStyle = '#31323d';
       ctx.font = '10px Arial';
