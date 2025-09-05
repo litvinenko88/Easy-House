@@ -1,0 +1,275 @@
+.mapSection {
+  padding: 80px 0;
+  background: linear-gradient(135deg, var(--color-white) 0%, #f8fafc 100%);
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.title {
+  font-size: var(--font-h2);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 50px;
+  color: var(--color-primary);
+}
+
+.mapContainer {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  height: 500px;
+  margin-bottom: 50px;
+  background: var(--color-white);
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  position: relative;
+}
+
+.placeholderContent {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.placeholderIcon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
+}
+
+.placeholderContent h3 {
+  font-size: var(--font-h4);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 15px;
+}
+
+.placeholderContent p {
+  color: var(--color-gray);
+  margin-bottom: 10px;
+  font-size: var(--font-text);
+}
+
+.loadingText {
+  color: var(--color-accent);
+  font-weight: 600;
+  margin-top: 20px;
+  animation: pulse 1.5s infinite;
+}
+
+.errorText {
+  color: #ef4444;
+  font-weight: 600;
+  margin-top: 20px;
+  font-size: var(--font-text-sm);
+}
+
+.mapInfo {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  z-index: 1000;
+  max-width: 320px;
+}
+
+.infoCard {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+.infoHeader {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.infoIcon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #e8763a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 8px 20px rgba(223, 104, 43, 0.3);
+}
+
+.infoHeader h3 {
+  font-size: var(--font-h5);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.infoContent p {
+  margin: 8px 0;
+  color: var(--color-gray);
+  line-height: 1.5;
+  font-size: var(--font-text-sm);
+}
+
+.infoContent p strong {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.infoActions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.routeBtn {
+  background: linear-gradient(135deg, var(--color-accent) 0%, #e8763a 100%);
+  color: var(--color-white);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: var(--font-text-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex: 1;
+  font-family: var(--font-family);
+}
+
+.routeBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(223, 104, 43, 0.4);
+}
+
+.additionalInfo {
+  margin-top: 50px;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.infoItem {
+  background: var(--color-white);
+  padding: 30px 25px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(223, 104, 43, 0.1);
+}
+
+.infoItem:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.itemIcon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #e8763a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 24px;
+  box-shadow: 0 10px 25px rgba(223, 104, 43, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.infoItem:hover .itemIcon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.infoItem h4 {
+  font-size: var(--font-h5);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 12px;
+}
+
+.infoItem p {
+  color: var(--color-gray);
+  line-height: 1.6;
+  font-size: var(--font-text);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media (max-width: 768px) {
+  .mapSection {
+    padding: 60px 0;
+  }
+  
+  .mapContainer {
+    height: 400px;
+    margin-bottom: 40px;
+  }
+  
+  .mapInfo {
+    position: static;
+    margin-top: 20px;
+    max-width: none;
+  }
+  
+  .infoCard {
+    padding: 20px;
+  }
+  
+  .infoActions {
+    flex-direction: column;
+  }
+  
+  .infoGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .infoItem {
+    padding: 25px 20px;
+  }
+  
+  .additionalInfo {
+    margin-top: 40px;
+  }
+}

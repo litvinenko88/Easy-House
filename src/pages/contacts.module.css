@@ -1,0 +1,11 @@
+.contactsPage {
+  padding-top: 80px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+  .contactsPage {
+    padding-top: 60px;
+  }
+}

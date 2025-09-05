@@ -1,0 +1,119 @@
+.workingHours {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #334155 100%);
+  padding: 80px 0;
+  color: var(--color-white);
+  position: relative;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.sectionTitle {
+  font-size: var(--font-h2);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 50px;
+  background: linear-gradient(45deg, #fff, var(--color-accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.clockContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.digitalClock {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px 40px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.timeDisplay {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin-bottom: 10px;
+  font-family: "Courier New", monospace;
+}
+
+.dateDisplay {
+  font-size: var(--font-text-lg);
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: capitalize;
+}
+
+.hoursGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.hoursCard {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.hoursCard:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.hoursIcon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.hoursTitle {
+  font-size: var(--font-h4);
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--color-white);
+}
+
+.hoursInfo {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.8;
+}
+
+.hoursInfo p {
+  margin-bottom: 8px;
+  font-size: var(--font-text);
+}
+
+@media (max-width: 768px) {
+  .workingHours {
+    padding: 60px 0;
+  }
+
+  .timeDisplay {
+    font-size: 2.5rem;
+  }
+
+  .digitalClock {
+    padding: 25px 30px;
+  }
+
+  .hoursGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .hoursCard {
+    padding: 30px 20px;
+  }
+}

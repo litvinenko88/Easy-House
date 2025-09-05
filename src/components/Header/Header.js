@@ -160,7 +160,7 @@ const Header = ({ onConstructorOpen }) => {
               if (item === 'Для бизнеса') href = '/dlya-biznesa';
               if (item === 'Отзывы') href = '/otzyvy';
               if (item === 'О компании') href = '/o-kompanii';
-              if (item === 'Контакты') href = '/kontakty';
+              if (item === 'Контакты') href = '/contacts';
               
               if (item === 'Конструктор') {
                 return (
@@ -318,7 +318,7 @@ const Header = ({ onConstructorOpen }) => {
               if (item === 'Для бизнеса') href = '/dlya-biznesa';
               if (item === 'Отзывы') href = '/otzyvy';
               if (item === 'О компании') href = '/o-kompanii';
-              if (item === 'Контакты') href = '/kontakty';
+              if (item === 'Контакты') href = '/contacts';
               
               if (item === 'Конструктор') {
                 return (
