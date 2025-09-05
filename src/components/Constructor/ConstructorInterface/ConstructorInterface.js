@@ -27,6 +27,9 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [doors, setDoors] = useState([]);
   const [windows, setWindows] = useState([]);
   const [panelCollapsed, setPanelCollapsed] = useState(false);
+  const [houseFixed, setHouseFixed] = useState(false);
+  const [isDraggingHouse, setIsDraggingHouse] = useState(false);
+  const [houseDragStart, setHouseDragStart] = useState({ x: 0, y: 0 });
 
   const SCALE = 30;
 
@@ -204,6 +207,14 @@ export default function ConstructorInterface({ initialData, onBack }) {
     ctx.lineWidth = isSelected ? Math.max(2, 3 * zoom) : Math.max(1, 2 * zoom);
     ctx.strokeRect(scaledX, scaledY, scaledWidth, scaledHeight);
     
+    // Иконка замка для зафиксированного дома
+    if (element.type === 'house' && houseFixed) {
+      ctx.fillStyle = '#dc3545';
+      ctx.font = `${Math.max(16, 20 * zoom)}px Arial`;
+      ctx.textAlign = 'left';
+      ctx.fillText('🔒', scaledX + 5 * zoom, scaledY + 20 * zoom);
+    }
+    
     if (zoom >= 0.3 && element.type !== 'house') {
       ctx.fillStyle = '#31323d';
       ctx.font = '10px Arial';
@@ -230,12 +241,65 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const clientX = e.clientX - rect.left;
     const clientY = e.clientY - rect.top;
     
+    const worldX = (clientX - panOffset.x) / zoom;
+    const worldY = (clientY - panOffset.y) / zoom;
+    
+    const houseElement = elements.find(el => el.type === 'house');
+    
+    // Проверяем клик по замку
+    if (houseElement && houseFixed && 
+        worldX >= houseElement.x && worldX <= houseElement.x + 25 &&
+        worldY >= houseElement.y && worldY <= houseElement.y + 25) {
+      setHouseFixed(false);
+      setTimeout(() => setHouseFixed(false), 1000);
+      return;
+    }
+    
+    // Проверяем клик по дому
+    if (selectedTool === 'select' && houseElement && !houseFixed &&
+        worldX >= houseElement.x && worldX <= houseElement.x + houseElement.width &&
+        worldY >= houseElement.y && worldY <= houseElement.y + houseElement.height) {
+      setIsDraggingHouse(true);
+      setHouseDragStart({ x: worldX - houseElement.x, y: worldY - houseElement.y });
+      setSelectedElement(houseElement);
+      return;
+    }
+    
     setIsDragging(true);
     setDragStart({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
   };
 
   const handleCanvasMouseMove = (e) => {
-    if (isDragging) {
+    if (isDraggingHouse && !houseFixed) {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.clientX - rect.left;
+      const clientY = e.clientY - rect.top;
+      
+      const worldX = (clientX - panOffset.x) / zoom;
+      const worldY = (clientY - panOffset.y) / zoom;
+      
+      const houseElement = elements.find(el => el.type === 'house');
+      if (!houseElement) return;
+      
+      const newX = worldX - houseDragStart.x;
+      const newY = worldY - houseDragStart.y;
+      
+      // Ограничения по участку
+      const lotX = 100;
+      const lotY = 100;
+      const lotW = initialData.lotSize.width * 30;
+      const lotH = initialData.lotSize.height * 30;
+      
+      const constrainedX = Math.max(lotX, Math.min(newX, lotX + lotW - houseElement.width));
+      const constrainedY = Math.max(lotY, Math.min(newY, lotY + lotH - houseElement.height));
+      
+      setElements(prev => prev.map(el => 
+        el.type === 'house' ? { ...el, x: constrainedX, y: constrainedY } : el
+      ));
+    } else if (isDragging) {
       setPanOffset({
         x: e.clientX - dragStart.x,
         y: e.clientY - dragStart.y
@@ -245,6 +309,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
 
   const handleCanvasMouseUp = () => {
     setIsDragging(false);
+    setIsDraggingHouse(false);
   };
 
   const handleWheel = (e) => {
@@ -344,7 +409,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
                   <button
                     key={tool.id}
                     className={`${styles.toolBtn} ${selectedTool === tool.id ? styles.active : ''}`}
-                    onClick={() => setSelectedTool(tool.id)}
+                    onClick={() => {
+                      if (tool.id === 'fix') {
+                        setHouseFixed(true);
+                      } else {
+                        setSelectedTool(tool.id);
+                      }
+                    }}
                   >
                     <span className={styles.toolIcon}>{tool.icon}</span>
                     <span className={styles.toolName}>{tool.name}</span>
