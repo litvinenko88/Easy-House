@@ -1,6 +1,6 @@
 .videoReviews {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  padding: var(--spacing-xl) 0;
+  background: linear-gradient(135deg, var(--color-primary) 0%, #16213e 50%, #0f3460 100%);
+  padding: var(--spacing-2xl) 0;
   position: relative;
   overflow: hidden;
   color: var(--color-white);
@@ -110,8 +110,7 @@
 }
 
 @keyframes float {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0px) translateX(0px);
     opacity: 0.7;
   }
@@ -133,8 +132,7 @@
 }
 
 @keyframes twinkle {
-  0%,
-  100% {
+  0%, 100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -145,8 +143,7 @@
 }
 
 @keyframes pulse {
-  0%,
-  100% {
+  0%, 100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.3;
   }
@@ -156,38 +153,13 @@
   }
 }
 
-.backgroundImage {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-      circle at 30% 70%,
-      rgba(223, 104, 43, 0.05) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 70% 30%,
-      rgba(238, 232, 244, 0.05) 0%,
-      transparent 50%
-    );
-  z-index: 2;
-}
-
-.container {
-  max-width: var(--container-max-width);
-  margin: 0 auto;
-  padding: 0 var(--container-padding);
-  position: relative;
-  z-index: 3;
-}
-
 .content {
   text-align: center;
   opacity: 0;
   transform: translateY(50px);
-  transition: all 0.8s ease;
+  transition: var(--transition-slow);
+  position: relative;
+  z-index: 3;
 }
 
 .content.visible {
@@ -195,15 +167,8 @@
   transform: translateY(0);
 }
 
-.title {
-  font-size: var(--font-h2);
-  font-weight: 700;
-  margin-bottom: var(--spacing-sm);
-  background: linear-gradient(
-    135deg,
-    var(--color-white) 0%,
-    var(--color-accent) 100%
-  );
+.content h2 {
+  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-accent) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -213,7 +178,8 @@
 .description {
   font-size: var(--font-text-lg);
   color: rgba(255, 255, 255, 0.8);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
@@ -222,8 +188,8 @@
 .videoGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-lg);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
 }
 
 .videoItem {
@@ -233,12 +199,12 @@
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all var(--transition-normal);
+  transition: var(--transition-normal);
 }
 
 .videoItem:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   border-color: rgba(255, 255, 255, 0.2);
 }
 
@@ -246,29 +212,6 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--border-radius-lg);
-}
-
-.videoContainer:fullscreen {
-  background: var(--color-black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.videoContainer:fullscreen .video {
-  width: 100vw;
-  height: 100vh;
-  object-fit: contain;
-  border-radius: 0;
-}
-
-.videoContainer:fullscreen .customControls {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  right: 20px;
-  opacity: 1;
-  z-index: 1000;
 }
 
 .video {
@@ -289,7 +232,7 @@
   align-items: center;
   gap: 8px;
   opacity: 0;
-  transition: all var(--transition-fast);
+  transition: var(--transition-normal);
 }
 
 .videoContainer:hover .customControls {
@@ -308,37 +251,13 @@
   justify-content: center;
   cursor: pointer;
   color: var(--color-white);
-  transition: all var(--transition-fast);
+  transition: var(--transition-fast);
   flex-shrink: 0;
   backdrop-filter: blur(10px);
 }
 
 .playButton:hover {
-  background: rgba(223, 104, 43, 0.8);
-  transform: scale(1.05);
-}
-
-.playButton:active {
-  transform: scale(0.95);
-}
-
-.fullscreenButton {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  border-radius: var(--border-radius-sm);
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--color-white);
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
-}
-
-.fullscreenButton:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--color-accent);
   transform: scale(1.05);
 }
 
@@ -359,7 +278,7 @@
 
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--color-accent), #e8763a);
+  background: linear-gradient(90deg, var(--color-accent), #ff8533);
   border-radius: 3px;
   transition: width 0.1s ease;
 }
@@ -372,7 +291,7 @@
   background: var(--color-white);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   transition: left 0.1s ease;
   opacity: 0;
 }
@@ -386,7 +305,7 @@
   font-size: var(--font-text-xs);
   font-weight: 400;
   white-space: nowrap;
-  font-family: "SF Mono", "Monaco", "Consolas", monospace;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
 }
 
 .centerPlayButton {
@@ -408,20 +327,16 @@
   justify-content: center;
   cursor: pointer;
   color: var(--color-white);
-  transition: all var(--transition-fast);
+  transition: var(--transition-normal);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .centerPlay:hover {
-  background: rgba(223, 104, 43, 0.8);
+  background: var(--color-accent);
   border-color: rgba(223, 104, 43, 0.5);
   transform: scale(1.1);
   box-shadow: 0 8px 25px rgba(223, 104, 43, 0.3);
-}
-
-.centerPlay:active {
-  transform: scale(0.95);
 }
 
 .centerPlay svg {
@@ -431,7 +346,7 @@
 .buttonContainer {
   display: flex;
   justify-content: center;
-  margin-top: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
 }
 
 .viewAllButton {
@@ -441,7 +356,7 @@
   font-size: var(--font-text);
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: var(--transition-normal);
   font-family: var(--font-family);
   position: relative;
   overflow: hidden;
@@ -478,122 +393,46 @@
   box-shadow: 0 15px 35px rgba(223, 104, 43, 0.6);
 }
 
-@media (max-width: 1024px) {
-  .title {
-    font-size: var(--font-h3);
-  }
-
-  .description {
-    font-size: var(--font-text);
-  }
-
-  .videoGrid {
-    gap: var(--spacing-sm);
-  }
-
-  .video {
-    height: 200px;
-  }
-
-  .playButton {
-    width: 32px;
-    height: 32px;
-  }
-
-  .playButton svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .timeDisplay {
-    font-size: var(--font-text-xs);
-  }
-}
-
 @media (max-width: 768px) {
   .videoReviews {
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-xl) 0;
   }
-
-  .title {
-    font-size: var(--font-h2);
-  }
-
-  .description {
-    font-size: var(--font-text-sm);
-    margin-bottom: var(--spacing-md);
-  }
-
+  
   .videoGrid {
     grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
   }
-
+  
   .video {
     height: 180px;
   }
-
-  .customControls {
-    padding: 16px 12px 10px;
-    gap: 8px;
-  }
-
-  .playButton {
-    width: 30px;
-    height: 30px;
-  }
-
-  .playButton svg {
-    width: 10px;
-    height: 10px;
-  }
-
-  .fullscreenButton {
-    width: 24px;
-    height: 24px;
-  }
-
-  .fullscreenButton svg {
-    width: 10px;
-    height: 10px;
-  }
-
+  
   .customControls {
     padding: 12px 8px 6px;
     gap: 6px;
   }
-
-  .timeDisplay {
-    font-size: var(--font-text-xs);
+  
+  .playButton {
+    width: 30px;
+    height: 30px;
   }
-
+  
   .centerPlay {
     width: 50px;
     height: 50px;
   }
-
+  
   .centerPlay svg {
     width: 20px;
     height: 20px;
   }
-
-  .container {
-    padding: 0 var(--container-padding);
-  }
-
+  
   .buttonContainer {
-    margin-top: var(--spacing-md);
+    margin-top: var(--spacing-lg);
   }
-
+  
   .viewAllButton {
     padding: 16px 28px;
-    font-size: var(--font-text-sm);
-  }
-}
-
-@media (max-width: 480px) {
-  .viewAllButton {
-    padding: 14px 24px;
     font-size: var(--font-text-sm);
   }
 }

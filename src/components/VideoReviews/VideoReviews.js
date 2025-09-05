@@ -27,7 +27,7 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
     { video: '/videos/11.mp4', title: 'Обзор дома 11' },
     { video: '/videos/12.mp4', title: 'Обзор дома 12' },
     { video: '/videos/13.mp4', title: 'Обзор дома 13' },
-    { video: '/videos/14.mp4', title: 'Обзор дома 14' },
+    { video: '/videos/14.mp4', audio: '/audio/3.1.mp4', title: 'Обзор дома 14' },
     { video: '/videos/15.mp4', title: 'Обзор дома 15' },
     { video: '/videos/16.mp4', title: 'Обзор дома 16' }
   ]
@@ -105,26 +105,6 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
     }
   }
 
-  const handleCanPlay = (index) => {
-    const video = videoRefs.current[index]
-    if (video && video.duration && !duration[index]) {
-      setDuration(prev => ({ ...prev, [index]: video.duration }))
-    }
-  }
-
-  const handleSeek = (index, value) => {
-    const video = videoRefs.current[index]
-    const audio = audioRefs.current[index]
-    if (video) {
-      const seekTime = Math.max(0, Math.min(value, video.duration || 0))
-      video.currentTime = seekTime
-      if (audio && videos[index].audio) {
-        audio.currentTime = seekTime
-      }
-      setCurrentTime(prev => ({ ...prev, [index]: seekTime }))
-    }
-  }
-
   const handleProgressClick = (index, e) => {
     const video = videoRefs.current[index]
     if (!video) return
@@ -137,7 +117,12 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
     
     if (videoDuration > 0) {
       const newTime = Math.max(0, Math.min((clickX / width) * videoDuration, videoDuration))
-      handleSeek(index, newTime)
+      video.currentTime = newTime
+      const audio = audioRefs.current[index]
+      if (audio && videos[index].audio) {
+        audio.currentTime = newTime
+      }
+      setCurrentTime(prev => ({ ...prev, [index]: newTime }))
     }
   }
 
@@ -146,21 +131,6 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
     const minutes = Math.floor(time / 60)
     const seconds = Math.floor(time % 60)
     return `${minutes}:${seconds.toString().padStart(2, '0')}`
-  }
-
-  const toggleFullscreen = (index) => {
-    if (typeof window === 'undefined') return
-    
-    const videoContainer = videoRefs.current[index]?.parentElement
-    if (!videoContainer) return
-
-    if (!document.fullscreenElement) {
-      videoContainer.requestFullscreen().catch(err => {
-        console.log('Error attempting to enable fullscreen:', err)
-      })
-    } else {
-      document.exitFullscreen()
-    }
   }
 
   return (
@@ -178,11 +148,9 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
         <div className={styles.pulseRing}></div>
       </div>
       
-      <div className={styles.backgroundImage}></div>
-      
-      <div className={styles.container}>
+      <div className="container">
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
-          <h2 id="video-reviews-title" className={styles.title}>
+          <h2 id="video-reviews-title">
             Видеообзоры наших домов
           </h2>
           
@@ -203,8 +171,6 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
                     onPause={() => handleVideoPause(index)}
                     onTimeUpdate={() => handleTimeUpdate(index)}
                     onLoadedMetadata={() => handleLoadedMetadata(index)}
-                    onCanPlay={() => handleCanPlay(index)}
-                    onDurationChange={() => handleLoadedMetadata(index)}
                     className={styles.video}
                     aria-label={`Видеообзор модульного дома ${index + 1}`}
                     title={item.title}
@@ -276,16 +242,6 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
                     <div className={styles.timeDisplay}>
                       {formatTime(currentTime[index])} / {formatTime(videoRefs.current[index]?.duration)}
                     </div>
-                    
-                    <button 
-                      className={styles.fullscreenButton}
-                      onClick={() => toggleFullscreen(index)}
-                      title="Полный экран"
-                    >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                        <path d="M7 14H5v5h5v-2H7v-3zM5 10h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" fill="currentColor"/>
-                      </svg>
-                    </button>
                   </div>
                 </div>
               </div>
