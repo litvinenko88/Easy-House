@@ -2,6 +2,7 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  distDir: 'out',
   images: {
     unoptimized: true,
     formats: ['image/webp', 'image/avif']
@@ -9,6 +10,12 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.cache = false;
+    }
+    return config;
+  },
   async headers() {
     return [
       {
