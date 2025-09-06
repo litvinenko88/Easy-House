@@ -725,20 +725,9 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     // Начало рисования стены
     if (selectedTool === 'wall' && isPointInsideHouse(worldX, worldY)) {
-      // Проверяем, не начинаем ли на существующей стене
-      const isOnExistingWall = walls.some(wall => {
-        const dist = Math.abs((wall.end.y - wall.start.y) * worldX - (wall.end.x - wall.start.x) * worldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
-                    Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
-        return dist < 5 && 
-               worldX >= Math.min(wall.start.x, wall.end.x) - 5 && worldX <= Math.max(wall.start.x, wall.end.x) + 5 &&
-               worldY >= Math.min(wall.start.y, wall.end.y) - 5 && worldY <= Math.max(wall.start.y, wall.end.y) + 5;
-      });
-      
-      if (!isOnExistingWall) {
-        setIsDrawingWall(true);
-        setWallStart({ x: worldX, y: worldY }); // Используем точную позицию клика
-        setCurrentWall({ start: { x: worldX, y: worldY }, end: { x: worldX, y: worldY } });
-      }
+      setIsDrawingWall(true);
+      setWallStart({ x: worldX, y: worldY }); // Используем точную позицию клика
+      setCurrentWall({ start: { x: worldX, y: worldY }, end: { x: worldX, y: worldY } });
       return;
     }
     
@@ -796,25 +785,49 @@ export default function ConstructorInterface({ initialData, onBack }) {
       );
       
       if (newLength > 10 && isPointInsideHouse(newStart.x, newStart.y) && isPointInsideHouse(newEnd.x, newEnd.y)) {
-        // Проверяем пересечение с другими стенами
-        const hasIntersection = walls.some(wall => {
+        // Определяем направление изменяемой стены
+        const isNewWallHorizontal = Math.abs(newEnd.x - newStart.x) > Math.abs(newEnd.y - newStart.y);
+        
+        // Проверяем наложение только с стенами того же направления
+        const hasOverlap = walls.some(wall => {
           if (wall.id === selectedElement.id) return false; // Не проверяем саму себя
           
-          const x1 = newStart.x, y1 = newStart.y;
-          const x2 = newEnd.x, y2 = newEnd.y;
-          const x3 = wall.start.x, y3 = wall.start.y;
-          const x4 = wall.end.x, y4 = wall.end.y;
+          const isExistingWallHorizontal = Math.abs(wall.end.x - wall.start.x) > Math.abs(wall.end.y - wall.start.y);
           
-          const denom = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
-          if (Math.abs(denom) < 0.001) return false;
+          // Проверяем наложение только если стены одного направления
+          if (isNewWallHorizontal !== isExistingWallHorizontal) {
+            return false; // Разрешаем пересечение перпендикулярных стен
+          }
           
-          const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / denom;
-          const u = -((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3)) / denom;
+          // Проверяем наложение стен одного направления
+          if (isNewWallHorizontal) {
+            // Горизонтальные стены - проверяем совпадение по Y и пересечение по X
+            const yDiff = Math.abs(newStart.y - wall.start.y);
+            if (yDiff < 10) { // Стены на одной линии по Y
+              const newMinX = Math.min(newStart.x, newEnd.x);
+              const newMaxX = Math.max(newStart.x, newEnd.x);
+              const existingMinX = Math.min(wall.start.x, wall.end.x);
+              const existingMaxX = Math.max(wall.start.x, wall.end.x);
+              
+              return !(newMaxX < existingMinX || newMinX > existingMaxX); // Есть пересечение
+            }
+          } else {
+            // Вертикальные стены - проверяем совпадение по X и пересечение по Y
+            const xDiff = Math.abs(newStart.x - wall.start.x);
+            if (xDiff < 10) { // Стены на одной линии по X
+              const newMinY = Math.min(newStart.y, newEnd.y);
+              const newMaxY = Math.max(newStart.y, newEnd.y);
+              const existingMinY = Math.min(wall.start.y, wall.end.y);
+              const existingMaxY = Math.max(wall.start.y, wall.end.y);
+              
+              return !(newMaxY < existingMinY || newMinY > existingMaxY); // Есть пересечение
+            }
+          }
           
-          return t > 0.1 && t < 0.9 && u > 0.1 && u < 0.9;
+          return false;
         });
         
-        if (!hasIntersection) {
+        if (!hasOverlap) {
           setWalls(prev => prev.map(wall => 
             wall.id === selectedElement.id 
               ? { ...wall, start: newStart, end: newEnd }
@@ -877,23 +890,47 @@ export default function ConstructorInterface({ initialData, onBack }) {
       }
       
       if (isPointInsideHouse(endX, endY)) {
-        // Проверяем пересечение с существующими стенами
-        const wouldIntersect = walls.some(wall => {
-          const x1 = wallStart.x, y1 = wallStart.y;
-          const x2 = endX, y2 = endY;
-          const x3 = wall.start.x, y3 = wall.start.y;
-          const x4 = wall.end.x, y4 = wall.end.y;
+        // Определяем направление новой стены
+        const isNewWallHorizontal = Math.abs(endX - wallStart.x) > Math.abs(endY - wallStart.y);
+        
+        // Проверяем наложение только с стенами того же направления
+        const wouldOverlap = walls.some(wall => {
+          const isExistingWallHorizontal = Math.abs(wall.end.x - wall.start.x) > Math.abs(wall.end.y - wall.start.y);
           
-          const denom = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
-          if (Math.abs(denom) < 0.001) return false;
+          // Проверяем наложение только если стены одного направления
+          if (isNewWallHorizontal !== isExistingWallHorizontal) {
+            return false; // Разрешаем пересечение перпендикулярных стен
+          }
           
-          const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / denom;
-          const u = -((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3)) / denom;
+          // Проверяем наложение стен одного направления
+          if (isNewWallHorizontal) {
+            // Горизонтальные стены - проверяем совпадение по Y и пересечение по X
+            const yDiff = Math.abs(wallStart.y - wall.start.y);
+            if (yDiff < 10) { // Стены на одной линии по Y
+              const newMinX = Math.min(wallStart.x, endX);
+              const newMaxX = Math.max(wallStart.x, endX);
+              const existingMinX = Math.min(wall.start.x, wall.end.x);
+              const existingMaxX = Math.max(wall.start.x, wall.end.x);
+              
+              return !(newMaxX < existingMinX || newMinX > existingMaxX); // Есть пересечение
+            }
+          } else {
+            // Вертикальные стены - проверяем совпадение по X и пересечение по Y
+            const xDiff = Math.abs(wallStart.x - wall.start.x);
+            if (xDiff < 10) { // Стены на одной линии по X
+              const newMinY = Math.min(wallStart.y, endY);
+              const newMaxY = Math.max(wallStart.y, endY);
+              const existingMinY = Math.min(wall.start.y, wall.end.y);
+              const existingMaxY = Math.max(wall.start.y, wall.end.y);
+              
+              return !(newMaxY < existingMinY || newMinY > existingMaxY); // Есть пересечение
+            }
+          }
           
-          return t > 0.1 && t < 0.9 && u > 0.1 && u < 0.9;
+          return false;
         });
         
-        if (!wouldIntersect) {
+        if (!wouldOverlap) {
           setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
         }
       }
@@ -950,24 +987,47 @@ export default function ConstructorInterface({ initialData, onBack }) {
       );
       
       if (length > 5) { // Минимальная длина стены
-        // Проверяем пересечение с существующими стенами
-        const hasIntersection = walls.some(wall => {
-          // Простая проверка пересечения линий
-          const x1 = currentWall.start.x, y1 = currentWall.start.y;
-          const x2 = currentWall.end.x, y2 = currentWall.end.y;
-          const x3 = wall.start.x, y3 = wall.start.y;
-          const x4 = wall.end.x, y4 = wall.end.y;
+        // Определяем направление новой стены
+        const isNewWallHorizontal = Math.abs(currentWall.end.x - currentWall.start.x) > Math.abs(currentWall.end.y - currentWall.start.y);
+        
+        // Проверяем наложение только с стенами того же направления
+        const hasOverlap = walls.some(wall => {
+          const isExistingWallHorizontal = Math.abs(wall.end.x - wall.start.x) > Math.abs(wall.end.y - wall.start.y);
           
-          const denom = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
-          if (Math.abs(denom) < 0.001) return false; // Параллельные линии
+          // Проверяем наложение только если стены одного направления
+          if (isNewWallHorizontal !== isExistingWallHorizontal) {
+            return false; // Разрешаем пересечение перпендикулярных стен
+          }
           
-          const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / denom;
-          const u = -((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3)) / denom;
+          // Проверяем наложение стен одного направления
+          if (isNewWallHorizontal) {
+            // Горизонтальные стены - проверяем совпадение по Y и пересечение по X
+            const yDiff = Math.abs(currentWall.start.y - wall.start.y);
+            if (yDiff < 10) { // Стены на одной линии по Y
+              const newMinX = Math.min(currentWall.start.x, currentWall.end.x);
+              const newMaxX = Math.max(currentWall.start.x, currentWall.end.x);
+              const existingMinX = Math.min(wall.start.x, wall.end.x);
+              const existingMaxX = Math.max(wall.start.x, wall.end.x);
+              
+              return !(newMaxX < existingMinX || newMinX > existingMaxX); // Есть пересечение
+            }
+          } else {
+            // Вертикальные стены - проверяем совпадение по X и пересечение по Y
+            const xDiff = Math.abs(currentWall.start.x - wall.start.x);
+            if (xDiff < 10) { // Стены на одной линии по X
+              const newMinY = Math.min(currentWall.start.y, currentWall.end.y);
+              const newMaxY = Math.max(currentWall.start.y, currentWall.end.y);
+              const existingMinY = Math.min(wall.start.y, wall.end.y);
+              const existingMaxY = Math.max(wall.start.y, wall.end.y);
+              
+              return !(newMaxY < existingMinY || newMinY > existingMaxY); // Есть пересечение
+            }
+          }
           
-          return t > 0.1 && t < 0.9 && u > 0.1 && u < 0.9; // Пересечение в середине
+          return false;
         });
         
-        if (!hasIntersection) {
+        if (!hasOverlap) {
           setWalls(prev => [...prev, {
             id: Date.now(),
             start: currentWall.start,
