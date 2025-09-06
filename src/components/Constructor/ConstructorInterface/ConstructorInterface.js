@@ -236,6 +236,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawCurrentWall(ctx);
     drawWallIcons(ctx);
     drawWallResizePoints(ctx);
+    drawHouseArea(ctx);
     
     // Отрисовка периметра для инструмента "Построение стен"
     if (wallBuilder) {
@@ -554,6 +555,78 @@ export default function ConstructorInterface({ initialData, onBack }) {
       setWindowDeleteIcon({ x: iconX, y: iconY, size: iconSize });
     } else {
       setWindowDeleteIcon(null);
+    }
+  };
+  
+  const calculateHouseArea = () => {
+    if (perimeterPoints.length >= 3) {
+      // Вычисляем площадь полигона по формуле шнурков
+      let area = 0;
+      for (let i = 0; i < perimeterPoints.length; i++) {
+        const j = (i + 1) % perimeterPoints.length;
+        area += perimeterPoints[i].x * perimeterPoints[j].y;
+        area -= perimeterPoints[j].x * perimeterPoints[i].y;
+      }
+      area = Math.abs(area) / 2;
+      // Переводим из пикселей в квадратные метры (30 пикселей = 1 метр)
+      return area / (30 * 30);
+    } else {
+      // Обычный прямоугольный дом
+      const houseElement = elements.find(el => el.type === 'house');
+      if (houseElement) {
+        return (houseElement.width * houseElement.height) / (30 * 30);
+      }
+    }
+    return 0;
+  };
+  
+  const drawHouseArea = (ctx) => {
+    const area = calculateHouseArea();
+    if (area > 0 && zoom >= 0.4) {
+      // Позиция справа от участка
+      const lotX = 100 * zoom;
+      const lotY = 100 * zoom;
+      const lotW = initialData.lotSize.width * 30 * zoom;
+      const lotH = initialData.lotSize.height * 30 * zoom;
+      
+      const textX = lotX + lotW + 30 * zoom;
+      const textY = lotY + lotH / 2;
+      
+      // Фон для текста
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.strokeStyle = '#df682b';
+      ctx.lineWidth = 2;
+      
+      const fontSize = Math.max(16, 18 * zoom);
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      
+      const text = `Площадь дома: ${area.toFixed(1)} м²`;
+      const textWidth = ctx.measureText(text).width;
+      const padding = Math.max(10, 12 * zoom);
+      
+      // Прямоугольник фона
+      const rectWidth = textWidth + padding * 2;
+      const rectHeight = fontSize + padding;
+      
+      ctx.fillRect(
+        textX - padding,
+        textY - rectHeight / 2,
+        rectWidth,
+        rectHeight
+      );
+      
+      ctx.strokeRect(
+        textX - padding,
+        textY - rectHeight / 2,
+        rectWidth,
+        rectHeight
+      );
+      
+      // Текст
+      ctx.fillStyle = '#df682b';
+      ctx.fillText(text, textX, textY);
     }
   };
   
