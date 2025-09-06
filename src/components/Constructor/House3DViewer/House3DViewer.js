@@ -190,16 +190,8 @@ export default function House3DViewer({
       const openingCenter = startPos.clone().add(wallVector.clone().multiplyScalar(distFromStart));
       
       if (isDoor) {
-        // Перемычка над дверью
-        const lintelHeight = wallHeight - openingHeight;
-        const lintelGeometry = new THREE.BoxGeometry(openingWidth, lintelHeight, wallThickness);
-        const lintel = new THREE.Mesh(lintelGeometry, wallMaterial);
-        lintel.position.copy(openingCenter);
-        lintel.position.y = openingHeight + lintelHeight/2;
-        lintel.rotation.y = -wallAngle;
-        lintel.castShadow = true;
-        lintel.receiveShadow = true;
-        scene.add(lintel);
+        // Для двери не создаем перемычку - оставляем полный проем
+        // Проем остается пустым
       } else {
         // Перемычка над окном
         const topLintelGeometry = new THREE.BoxGeometry(openingWidth, 10, wallThickness);
@@ -367,31 +359,45 @@ export default function House3DViewer({
       });
     }
 
-    // Внутренние стены
+    // Внутренние стены с проемами
     const internalWallMaterial = new THREE.MeshLambertMaterial({ color: 0xE6E6FA });
     walls.forEach(wall => {
-      const wallLengthPixels = Math.sqrt(
-        Math.pow(wall.end.x - wall.start.x, 2) + Math.pow(wall.end.y - wall.start.y, 2)
-      );
-      const wallLength = wallLengthPixels * scale;
-      const centerX = ((wall.start.x + wall.end.x) / 2 - (houseElement.x + houseElement.width / 2)) * scale;
-      const centerZ = ((wall.start.y + wall.end.y) / 2 - (houseElement.y + houseElement.height / 2)) * scale;
+      const startX = (wall.start.x - (houseElement.x + houseElement.width / 2)) * scale;
+      const startZ = (wall.start.y - (houseElement.y + houseElement.height / 2)) * scale;
+      const endX = (wall.end.x - (houseElement.x + houseElement.width / 2)) * scale;
+      const endZ = (wall.end.y - (houseElement.y + houseElement.height / 2)) * scale;
       const angle = Math.atan2(wall.end.y - wall.start.y, wall.end.x - wall.start.x);
       
-      const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, 3);
-      const wallMesh = new THREE.Mesh(wallGeometry, internalWallMaterial);
-      wallMesh.position.set(centerX, wallHeight/2, centerZ);
-      wallMesh.rotation.y = -angle;
-      wallMesh.castShadow = true;
-      wallMesh.receiveShadow = true;
-      scene.add(wallMesh);
+      // Находим проемы на этой стене
+      const wallOpenings = [...(doors || []), ...(windows || [])].filter(opening => 
+        opening.wallId === wall.id && opening.type === 'internal'
+      );
+      
+      if (wallOpenings.length === 0) {
+        // Обычная стена без проемов
+        const wallLengthPixels = Math.sqrt(
+          Math.pow(wall.end.x - wall.start.x, 2) + Math.pow(wall.end.y - wall.start.y, 2)
+        );
+        const wallLength = wallLengthPixels * scale;
+        const centerX = (startX + endX) / 2;
+        const centerZ = (startZ + endZ) / 2;
+        
+        const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, 3);
+        const wallMesh = new THREE.Mesh(wallGeometry, internalWallMaterial);
+        wallMesh.position.set(centerX, wallHeight/2, centerZ);
+        wallMesh.rotation.y = -angle;
+        wallMesh.castShadow = true;
+        wallMesh.receiveShadow = true;
+        scene.add(wallMesh);
+      } else {
+        // Создаем стену с проемами
+        createWallWithOpenings(scene, internalWallMaterial, startX, startZ, endX, endZ, angle, wallHeight, 3, wallOpenings, houseElement, scale);
+      }
     });
 
-    // Двери в 3D - только для стен периметра
+    // Двери в 3D - для всех типов стен
     if (doors && doors.length > 0) {
       doors.forEach(door => {
-        // Пропускаем двери на внутренних стенах - они уже обработаны в createWallWithOpenings
-        if (door.type === 'internal') return;
         
         const doorWidth = (door.width || 30) * scale;
         const doorHeight = 60; // 2м стандартная высота двери
@@ -485,11 +491,9 @@ export default function House3DViewer({
       });
     }
     
-    // Окна в 3D - только для стен периметра
+    // Окна в 3D - для всех типов стен
     if (windows && windows.length > 0) {
       windows.forEach(window => {
-        // Пропускаем окна на внутренних стенах
-        if (window.type === 'internal') return;
         
         const windowWidth = (window.width || 30) * scale;
         const windowHeight = 36; // 1.2м стандартная высота окна
