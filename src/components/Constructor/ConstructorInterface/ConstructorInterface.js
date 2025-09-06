@@ -974,7 +974,14 @@ export default function ConstructorInterface({ initialData, onBack }) {
           return distance < doorWidth + 10; // Минимальное расстояние между дверями
         });
         
-        if (canPlaceDoor) {
+        // Проверяем, что дверь не ставится на пересечение стен
+        const isAtIntersection = walls.some(wall => {
+          if (wall.id === clickedWall.wallId) return false; // Не проверяем саму стену
+          const distToWall = getDistanceToLine(projectedPoint.x, projectedPoint.y, wall.start, wall.end);
+          return distToWall < 15; // Минимальное расстояние до пересекающейся стены
+        });
+        
+        if (canPlaceDoor && !isAtIntersection) {
           const newDoor = {
             id: Date.now(),
             x: projectedPoint.x,
@@ -1146,7 +1153,14 @@ export default function ConstructorInterface({ initialData, onBack }) {
         return distance < 40; // Минимальное расстояние
       });
       
-      if (canMoveDoor) {
+      // Проверяем, что дверь не перемещается на пересечение стен
+      const isAtIntersection = walls.some(wall => {
+        if (wall.id === selectedElement.wallId) return false;
+        const distToWall = getDistanceToLine(projectedPoint.x, projectedPoint.y, wall.start, wall.end);
+        return distToWall < 15;
+      });
+      
+      if (canMoveDoor && !isAtIntersection) {
         setDoors(prev => prev.map(door => 
           door.id === selectedElement.id 
             ? { ...door, x: projectedPoint.x, y: projectedPoint.y }
