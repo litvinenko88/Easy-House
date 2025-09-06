@@ -577,7 +577,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
         const centerX = (wall.start.x + wall.end.x) / 2 * zoom;
         const centerY = (wall.start.y + wall.end.y) / 2 * zoom;
         
-        ctx.fillStyle = '#31323d';
+        ctx.fillStyle = '#df682b';
         ctx.font = '11px Arial';
         
         if (Math.abs(wall.end.x - wall.start.x) > Math.abs(wall.end.y - wall.start.y)) {
