@@ -725,10 +725,20 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     // Начало рисования стены
     if (selectedTool === 'wall' && isPointInsideHouse(worldX, worldY)) {
-      const snappedStart = snapToHouseBounds(worldX, worldY);
-      setIsDrawingWall(true);
-      setWallStart(snappedStart);
-      setCurrentWall({ start: snappedStart, end: snappedStart });
+      // Проверяем, не начинаем ли на существующей стене
+      const isOnExistingWall = walls.some(wall => {
+        const dist = Math.abs((wall.end.y - wall.start.y) * worldX - (wall.end.x - wall.start.x) * worldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
+                    Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
+        return dist < 5 && 
+               worldX >= Math.min(wall.start.x, wall.end.x) - 5 && worldX <= Math.max(wall.start.x, wall.end.x) + 5 &&
+               worldY >= Math.min(wall.start.y, wall.end.y) - 5 && worldY <= Math.max(wall.start.y, wall.end.y) + 5;
+      });
+      
+      if (!isOnExistingWall) {
+        setIsDrawingWall(true);
+        setWallStart({ x: worldX, y: worldY }); // Используем точную позицию клика
+        setCurrentWall({ start: { x: worldX, y: worldY }, end: { x: worldX, y: worldY } });
+      }
       return;
     }
     
@@ -760,41 +770,51 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     // Изменение размера стены
     if (isDraggingResizePoint && selectedElement && resizePointType) {
-      const houseElement = elements.find(el => el.type === 'house');
-      if (houseElement) {
-        const constrainedX = Math.max(houseElement.x, Math.min(houseElement.x + houseElement.width, worldX));
-        const constrainedY = Math.max(houseElement.y, Math.min(houseElement.y + houseElement.height, worldY));
-        
-        const isHorizontal = Math.abs(selectedElement.end.x - selectedElement.start.x) > Math.abs(selectedElement.end.y - selectedElement.start.y);
-        
-        let newStart = selectedElement.start;
-        let newEnd = selectedElement.end;
-        
-        if (resizePointType === 'start') {
-          if (isHorizontal) {
-            // Горизонтальная стена - двигаем только по X
-            newStart = { x: constrainedX, y: selectedElement.start.y };
-          } else {
-            // Вертикальная стена - двигаем только по Y
-            newStart = { x: selectedElement.start.x, y: constrainedY };
-          }
-        } else if (resizePointType === 'end') {
-          if (isHorizontal) {
-            // Горизонтальная стена - двигаем только по X
-            newEnd = { x: constrainedX, y: selectedElement.end.y };
-          } else {
-            // Вертикальная стена - двигаем только по Y
-            newEnd = { x: selectedElement.end.x, y: constrainedY };
-          }
+      const isHorizontal = Math.abs(selectedElement.end.x - selectedElement.start.x) > Math.abs(selectedElement.end.y - selectedElement.start.y);
+      
+      let newStart = selectedElement.start;
+      let newEnd = selectedElement.end;
+      
+      if (resizePointType === 'start') {
+        if (isHorizontal) {
+          newStart = { x: worldX, y: selectedElement.start.y };
+        } else {
+          newStart = { x: selectedElement.start.x, y: worldY };
         }
+      } else if (resizePointType === 'end') {
+        if (isHorizontal) {
+          newEnd = { x: worldX, y: selectedElement.end.y };
+        } else {
+          newEnd = { x: selectedElement.end.x, y: worldY };
+        }
+      }
+      
+      // Проверяем минимальную длину и что обе точки внутри дома
+      const newLength = Math.sqrt(
+        Math.pow(newEnd.x - newStart.x, 2) + 
+        Math.pow(newEnd.y - newStart.y, 2)
+      );
+      
+      if (newLength > 10 && isPointInsideHouse(newStart.x, newStart.y) && isPointInsideHouse(newEnd.x, newEnd.y)) {
+        // Проверяем пересечение с другими стенами
+        const hasIntersection = walls.some(wall => {
+          if (wall.id === selectedElement.id) return false; // Не проверяем саму себя
+          
+          const x1 = newStart.x, y1 = newStart.y;
+          const x2 = newEnd.x, y2 = newEnd.y;
+          const x3 = wall.start.x, y3 = wall.start.y;
+          const x4 = wall.end.x, y4 = wall.end.y;
+          
+          const denom = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
+          if (Math.abs(denom) < 0.001) return false;
+          
+          const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / denom;
+          const u = -((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3)) / denom;
+          
+          return t > 0.1 && t < 0.9 && u > 0.1 && u < 0.9;
+        });
         
-        // Проверяем минимальную длину стены и что обе точки внутри дома
-        const newLength = Math.sqrt(
-          Math.pow(newEnd.x - newStart.x, 2) + 
-          Math.pow(newEnd.y - newStart.y, 2)
-        );
-        
-        if (newLength > 10 && isPointInsideHouse(newStart.x, newStart.y) && isPointInsideHouse(newEnd.x, newEnd.y)) {
+        if (!hasIntersection) {
           setWalls(prev => prev.map(wall => 
             wall.id === selectedElement.id 
               ? { ...wall, start: newStart, end: newEnd }
@@ -849,18 +869,33 @@ export default function ConstructorInterface({ initialData, onBack }) {
       // Определяем направление (90 градусов)
       let endX, endY;
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
-        // Горизонтальная линия
         endX = worldX;
         endY = wallStart.y;
       } else {
-        // Вертикальная линия
         endX = wallStart.x;
         endY = worldY;
       }
       
-      // Проверяем, что конечная точка внутри дома
       if (isPointInsideHouse(endX, endY)) {
-        setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
+        // Проверяем пересечение с существующими стенами
+        const wouldIntersect = walls.some(wall => {
+          const x1 = wallStart.x, y1 = wallStart.y;
+          const x2 = endX, y2 = endY;
+          const x3 = wall.start.x, y3 = wall.start.y;
+          const x4 = wall.end.x, y4 = wall.end.y;
+          
+          const denom = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
+          if (Math.abs(denom) < 0.001) return false;
+          
+          const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / denom;
+          const u = -((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3)) / denom;
+          
+          return t > 0.1 && t < 0.9 && u > 0.1 && u < 0.9;
+        });
+        
+        if (!wouldIntersect) {
+          setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
+        }
       }
       return;
     }
@@ -915,11 +950,30 @@ export default function ConstructorInterface({ initialData, onBack }) {
       );
       
       if (length > 5) { // Минимальная длина стены
-        setWalls(prev => [...prev, {
-          id: Date.now(),
-          start: currentWall.start,
-          end: currentWall.end
-        }]);
+        // Проверяем пересечение с существующими стенами
+        const hasIntersection = walls.some(wall => {
+          // Простая проверка пересечения линий
+          const x1 = currentWall.start.x, y1 = currentWall.start.y;
+          const x2 = currentWall.end.x, y2 = currentWall.end.y;
+          const x3 = wall.start.x, y3 = wall.start.y;
+          const x4 = wall.end.x, y4 = wall.end.y;
+          
+          const denom = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
+          if (Math.abs(denom) < 0.001) return false; // Параллельные линии
+          
+          const t = ((x1-x3)*(y3-y4) - (y1-y3)*(x3-x4)) / denom;
+          const u = -((x1-x2)*(y1-y3) - (y1-y2)*(x1-x3)) / denom;
+          
+          return t > 0.1 && t < 0.9 && u > 0.1 && u < 0.9; // Пересечение в середине
+        });
+        
+        if (!hasIntersection) {
+          setWalls(prev => [...prev, {
+            id: Date.now(),
+            start: currentWall.start,
+            end: currentWall.end
+          }]);
+        }
       }
       
       setIsDrawingWall(false);
