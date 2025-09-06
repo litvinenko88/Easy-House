@@ -35,6 +35,9 @@ export default function useWallBuilder({
       setPerimeterPoints(initialPerimeter);
       initializedRef.current = true;
     }
+    
+    // Мгновенная перерисовка при смене инструмента
+    if (drawCanvas) drawCanvas();
   }, [houseElement, selectedTool]);
 
   // Проверка клика по стене периметра
@@ -359,7 +362,7 @@ export default function useWallBuilder({
       perimeterPoints.forEach(point => {
         const screenX = point.x * zoom;
         const screenY = point.y * zoom;
-        const pointSize = Math.max(6, 8 * zoom);
+        const pointSize = Math.max(4, 5 * zoom);
 
         if (point.isCorner) {
           // Угловые точки (красные, неподвижные)
