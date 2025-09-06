@@ -336,6 +336,10 @@ export default function useWallBuilder({
     handleMouseMove,
     handleMouseUp,
     drawPerimeter,
-    perimeterPoints
+    perimeterPoints,
+    resetInitialized: () => {
+      initializedRef.current = false;
+      setPerimeterPoints([]);
+    }
   };
 }

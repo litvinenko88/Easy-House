@@ -1217,6 +1217,9 @@ export default function ConstructorInterface({ initialData, onBack }) {
                   setPerimeterPoints([]);
                   setSelectedElement(null);
                   setSelectedTool('select');
+                  if (wallBuilder && wallBuilder.resetInitialized) {
+                    wallBuilder.resetInitialized();
+                  }
                 }}
               >
                 🗑️ Сбросить планировку
