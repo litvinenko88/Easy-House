@@ -333,13 +333,13 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
   const createDoors = () => {
     const scene = sceneRef.current;
     const doorHeight = 25;
-    const doorWidth = 1;
-    const doorThickness = 0.3;
+    const doorWidth = 15;
+    const doorThickness = 2;
     const houseElement = elements.find(el => el.type === 'house');
     const scale = 0.5;
 
     doors.forEach(door => {
-      const frameGeometry = new THREE.BoxGeometry(doorWidth + 0.1, doorHeight + 2, doorThickness + 0.1);
+      const frameGeometry = new THREE.BoxGeometry(doorWidth + 2, doorHeight + 2, doorThickness + 0.5);
       const frameMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
       const frame = new THREE.Mesh(frameGeometry, frameMaterial);
       
@@ -347,11 +347,19 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
       const doorMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
       const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
       
-      const posX = (door.x - (houseElement.x + houseElement.width / 2)) * scale / 30;
-      const posZ = (door.y - (houseElement.y + houseElement.height / 2)) * scale / 30;
+      const posX = (door.x - (houseElement.x + houseElement.width / 2)) * scale;
+      const posZ = (door.y - (houseElement.y + houseElement.height / 2)) * scale;
+      
+      let doorAngle = 0;
+      if (door.wallStart && door.wallEnd) {
+        doorAngle = Math.atan2(door.wallEnd.y - door.wallStart.y, door.wallEnd.x - door.wallStart.x);
+      }
       
       frame.position.set(posX, doorHeight/2, posZ);
       doorMesh.position.set(posX, doorHeight/2, posZ);
+      
+      frame.rotation.y = doorAngle;
+      doorMesh.rotation.y = doorAngle;
       
       frame.castShadow = true;
       doorMesh.castShadow = true;
@@ -363,13 +371,13 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
   const createWindows = () => {
     const scene = sceneRef.current;
     const windowHeight = 15;
-    const windowWidth = 1;
-    const windowThickness = 0.2;
+    const windowWidth = 12;
+    const windowThickness = 2;
     const houseElement = elements.find(el => el.type === 'house');
     const scale = 0.5;
 
     windows.forEach(window => {
-      const frameGeometry = new THREE.BoxGeometry(windowWidth + 0.1, windowHeight + 1, windowThickness + 0.1);
+      const frameGeometry = new THREE.BoxGeometry(windowWidth + 2, windowHeight + 2, windowThickness + 0.5);
       const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
       const frame = new THREE.Mesh(frameGeometry, frameMaterial);
       
@@ -381,11 +389,19 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
       });
       const glass = new THREE.Mesh(glassGeometry, glassMaterial);
       
-      const posX = (window.x - (houseElement.x + houseElement.width / 2)) * scale / 30;
-      const posZ = (window.y - (houseElement.y + houseElement.height / 2)) * scale / 30;
+      const posX = (window.x - (houseElement.x + houseElement.width / 2)) * scale;
+      const posZ = (window.y - (houseElement.y + houseElement.height / 2)) * scale;
+      
+      let windowAngle = 0;
+      if (window.wallStart && window.wallEnd) {
+        windowAngle = Math.atan2(window.wallEnd.y - window.wallStart.y, window.wallEnd.x - window.wallStart.x);
+      }
       
       frame.position.set(posX, 18, posZ);
       glass.position.set(posX, 18, posZ);
+      
+      frame.rotation.y = windowAngle;
+      glass.rotation.y = windowAngle;
       
       frame.castShadow = true;
       scene.add(frame);
