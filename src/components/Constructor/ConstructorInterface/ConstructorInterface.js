@@ -91,17 +91,25 @@ export default function ConstructorInterface({ initialData, onBack }) {
         drawCanvas();
       };
       
+      const handleRedraw = () => {
+        drawCanvas();
+      };
+      
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
+      canvas.addEventListener('redraw', handleRedraw);
       
-      return () => window.removeEventListener('resize', resizeCanvas);
+      return () => {
+        window.removeEventListener('resize', resizeCanvas);
+        canvas.removeEventListener('redraw', handleRedraw);
+      };
     }
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(drawCanvas, 10);
     return () => clearTimeout(timer);
-  }, [zoom, panOffset, initialData, selectedElement, elements, walls, doors, windows, currentWall]);
+  }, [zoom, panOffset, initialData, selectedElement, elements, walls, doors, windows, currentWall, perimeterPoints]);
   
   // Сброс курсора при смене инструмента
   useEffect(() => {

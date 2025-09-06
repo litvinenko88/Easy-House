@@ -30,7 +30,7 @@ export default function useWallBuilder({
         { id: 'bottom-right', x: houseElement.x + houseElement.width, y: houseElement.y + houseElement.height, isCorner: true },
         { id: 'bottom-left', x: houseElement.x, y: houseElement.y + houseElement.height, isCorner: true }
       ];
-      console.log('Initializing perimeter points:', initialPerimeter);
+
       setPerimeterPoints(initialPerimeter);
       initializedRef.current = true;
     } else if (selectedTool !== 'rotate') {
@@ -146,6 +146,14 @@ export default function useWallBuilder({
     const newPoints = [...perimeterPoints];
     newPoints.splice(wallIndex + 1, 0, newPoint);
     setPerimeterPoints(newPoints);
+    
+    // Принудительно перерисовываем canvas
+    setTimeout(() => {
+      if (canvasRef.current) {
+        const event = new Event('redraw');
+        canvasRef.current.dispatchEvent(event);
+      }
+    }, 0);
   };
 
   // Обработка перетаскивания точки
@@ -176,11 +184,7 @@ export default function useWallBuilder({
       newY = worldY;
     }
 
-    // Ограничиваем движение границами исходного дома
-    if (houseElement) {
-      newX = Math.max(houseElement.x, Math.min(houseElement.x + houseElement.width, newX));
-      newY = Math.max(houseElement.y, Math.min(houseElement.y + houseElement.height, newY));
-    }
+    // Убираем ограничения - точки могут двигаться в любом направлении
 
     // Проверяем минимальное расстояние до других точек
     let canMove = true;
@@ -201,6 +205,12 @@ export default function useWallBuilder({
       newPoints[pointIndex] = { ...selectedPoint, x: newX, y: newY };
       setPerimeterPoints(newPoints);
       setSelectedPoint({ ...selectedPoint, x: newX, y: newY });
+      
+      // Принудительно перерисовываем canvas
+      if (canvasRef.current) {
+        const event = new Event('redraw');
+        canvasRef.current.dispatchEvent(event);
+      }
     }
   };
 
@@ -217,12 +227,9 @@ export default function useWallBuilder({
     const worldX = (clientX - panOffset.x) / zoom;
     const worldY = (clientY - panOffset.y) / zoom;
 
-    console.log('WallBuilder click:', { worldX, worldY, perimeterPoints: perimeterPoints.length, selectedTool });
-
     // Проверяем клик по точке
     const clickedPoint = isClickOnPoint(worldX, worldY);
     if (clickedPoint) {
-      console.log('Clicked on point:', clickedPoint);
       setSelectedPoint(clickedPoint);
       setIsDraggingPoint(true);
       setDragStart({ x: worldX, y: worldY });
@@ -231,9 +238,7 @@ export default function useWallBuilder({
 
     // Проверяем клик по стене периметра
     const wallInfo = isClickOnPerimeterWall(worldX, worldY);
-    console.log('Wall info:', wallInfo);
     if (wallInfo) {
-      console.log('Adding point to wall');
       addPointToWall(worldX, worldY, wallInfo);
       return true; // Событие обработано
     }
@@ -293,7 +298,7 @@ export default function useWallBuilder({
   const drawPerimeter = (ctx) => {
     if (selectedTool !== 'rotate' || !houseElement) return;
 
-    console.log('Drawing perimeter, points:', perimeterPoints.length);
+
     const walls = getPerimeterWalls();
     
     // Заливаем область деформированного дома
