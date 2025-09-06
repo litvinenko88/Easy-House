@@ -172,7 +172,7 @@ export default function House3DViewer({
       const isDoor = doors && doors.find(d => d.id === opening.id);
       const openingHeight = isDoor ? 60 : 36; // Дверь 2м, окно 1.2м
       
-      // Сегмент стены до проема
+      // Сегмент стены до проема - полная высота
       const segmentLength = distFromStart - lastPos - openingWidth/2;
       if (segmentLength > 0.1) {
         const segmentCenter = startPos.clone().add(wallVector.clone().multiplyScalar(lastPos + segmentLength/2));
@@ -189,36 +189,38 @@ export default function House3DViewer({
       // Создаем части стены вокруг проема
       const openingCenter = startPos.clone().add(wallVector.clone().multiplyScalar(distFromStart));
       
-      if (isDoor) {
-        // Для двери не создаем перемычку - оставляем полный проем
-        // Проем остается пустым
-      } else {
-        // Перемычка над окном
-        const topLintelGeometry = new THREE.BoxGeometry(openingWidth, 10, wallThickness);
-        const topLintel = new THREE.Mesh(topLintelGeometry, wallMaterial);
-        topLintel.position.copy(openingCenter);
-        topLintel.position.y = wallHeight - 5;
-        topLintel.rotation.y = -wallAngle;
-        topLintel.castShadow = true;
-        topLintel.receiveShadow = true;
-        scene.add(topLintel);
-        
-        // Подоконник
-        const sillHeight = wallHeight - 28;
-        const sillGeometry = new THREE.BoxGeometry(openingWidth, sillHeight, wallThickness);
-        const sill = new THREE.Mesh(sillGeometry, wallMaterial);
-        sill.position.copy(openingCenter);
-        sill.position.y = sillHeight/2;
-        sill.rotation.y = -wallAngle;
-        sill.castShadow = true;
-        sill.receiveShadow = true;
-        scene.add(sill);
+      // Перемычка над проемом (для дверей и окон)
+      const lintelHeight = wallHeight - openingHeight;
+      if (lintelHeight > 0) {
+        const lintelGeometry = new THREE.BoxGeometry(openingWidth, lintelHeight, wallThickness);
+        const lintel = new THREE.Mesh(lintelGeometry, wallMaterial);
+        lintel.position.copy(openingCenter);
+        lintel.position.y = openingHeight + lintelHeight/2;
+        lintel.rotation.y = -wallAngle;
+        lintel.castShadow = true;
+        lintel.receiveShadow = true;
+        scene.add(lintel);
+      }
+      
+      // Для окон добавляем подоконник
+      if (!isDoor) {
+        const sillHeight = wallHeight - 28; // Высота от пола до низа окна
+        if (sillHeight > 0) {
+          const sillGeometry = new THREE.BoxGeometry(openingWidth, sillHeight, wallThickness);
+          const sill = new THREE.Mesh(sillGeometry, wallMaterial);
+          sill.position.copy(openingCenter);
+          sill.position.y = sillHeight/2;
+          sill.rotation.y = -wallAngle;
+          sill.castShadow = true;
+          sill.receiveShadow = true;
+          scene.add(sill);
+        }
       }
       
       lastPos = distFromStart + openingWidth/2;
     });
     
-    // Последний сегмент стены
+    // Последний сегмент стены - полная высота
     const finalSegmentLength = wallLength - lastPos;
     if (finalSegmentLength > 0.1) {
       const segmentCenter = startPos.clone().add(wallVector.clone().multiplyScalar(lastPos + finalSegmentLength/2));
