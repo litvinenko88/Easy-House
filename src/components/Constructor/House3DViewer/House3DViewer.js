@@ -565,7 +565,7 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
     const scene = sceneRef.current;
     const windowHeight = 15;
     const windowWidth = 12;
-    const windowThickness = 2;
+    const windowDepth = 4;
     const houseElement = elements.find(el => el.type === 'house');
     const scale = 0.5;
 
@@ -578,40 +578,72 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
         windowAngle = Math.atan2(window.wallEnd.y - window.wallStart.y, window.wallEnd.x - window.wallStart.x);
       }
       
-      // Рама окна
-      const frameGeometry = new THREE.BoxGeometry(windowWidth + 2, windowHeight + 2, windowThickness + 0.5);
       const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
-      const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-      frame.position.set(posX, 18, posZ);
-      frame.rotation.y = windowAngle;
-      frame.castShadow = true;
-      scene.add(frame);
-      
-      // Прозрачное стекло
-      const glassGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, 0.1);
       const glassMaterial = new THREE.MeshLambertMaterial({ 
         color: 0x87CEEB, 
         transparent: true, 
-        opacity: 0.2 
+        opacity: 0.3 
       });
-      const glass = new THREE.Mesh(glassGeometry, glassMaterial);
-      glass.position.set(posX, 18, posZ);
-      glass.rotation.y = windowAngle;
-      scene.add(glass);
       
-      // Вертикальная перемычка
-      const vDividerGeometry = new THREE.BoxGeometry(0.5, windowHeight, windowThickness);
-      const dividerMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
-      const vDivider = new THREE.Mesh(vDividerGeometry, dividerMaterial);
+      // Внешняя рама окна
+      const outerFrame = new THREE.Mesh(
+        new THREE.BoxGeometry(windowWidth + 3, windowHeight + 3, windowDepth),
+        frameMaterial
+      );
+      outerFrame.position.set(posX, 18, posZ);
+      outerFrame.rotation.y = windowAngle;
+      outerFrame.castShadow = true;
+      scene.add(outerFrame);
+      
+      // Подоконник
+      const sill = new THREE.Mesh(
+        new THREE.BoxGeometry(windowWidth + 4, 1.5, windowDepth + 2),
+        frameMaterial
+      );
+      sill.position.set(posX, 18 - windowHeight/2 - 1.5, posZ);
+      sill.rotation.y = windowAngle;
+      sill.castShadow = true;
+      scene.add(sill);
+      
+      // Четыре стеклянные секции
+      const glassWidth = (windowWidth - 1.5) / 2;
+      const glassHeight = (windowHeight - 1.5) / 2;
+      
+      const glassPositions = [
+        { x: -glassWidth/2 - 0.375, y: glassHeight/2 + 0.375 },
+        { x: glassWidth/2 + 0.375, y: glassHeight/2 + 0.375 },
+        { x: -glassWidth/2 - 0.375, y: -glassHeight/2 - 0.375 },
+        { x: glassWidth/2 + 0.375, y: -glassHeight/2 - 0.375 }
+      ];
+      
+      glassPositions.forEach(pos => {
+        const glass = new THREE.Mesh(
+          new THREE.BoxGeometry(glassWidth, glassHeight, 0.2),
+          glassMaterial
+        );
+        glass.position.set(posX + pos.x, 18 + pos.y, posZ);
+        glass.rotation.y = windowAngle;
+        scene.add(glass);
+      });
+      
+      // Вертикальная перемычка (более объемная)
+      const vDivider = new THREE.Mesh(
+        new THREE.BoxGeometry(1.5, windowHeight, windowDepth - 0.5),
+        frameMaterial
+      );
       vDivider.position.set(posX, 18, posZ);
       vDivider.rotation.y = windowAngle;
+      vDivider.castShadow = true;
       scene.add(vDivider);
       
-      // Горизонтальная перемычка
-      const hDividerGeometry = new THREE.BoxGeometry(windowWidth, 0.5, windowThickness);
-      const hDivider = new THREE.Mesh(hDividerGeometry, dividerMaterial);
+      // Горизонтальная перемычка (более объемная)
+      const hDivider = new THREE.Mesh(
+        new THREE.BoxGeometry(windowWidth, 1.5, windowDepth - 0.5),
+        frameMaterial
+      );
       hDivider.position.set(posX, 18, posZ);
       hDivider.rotation.y = windowAngle;
+      hDivider.castShadow = true;
       scene.add(hDivider);
     });
   };
