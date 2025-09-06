@@ -72,7 +72,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
 
   const snapToHouseBounds = (x, y) => {
-    const snapDistance = 5;
+    const snapDistance = 30; // Увеличиваем расстояние привязки
     let snappedX = x;
     let snappedY = y;
     
@@ -843,23 +843,23 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     // Рисование стены
     if (isDrawingWall && wallStart) {
+      const deltaX = worldX - wallStart.x;
+      const deltaY = worldY - wallStart.y;
+      
+      // Определяем направление (90 градусов)
+      let endX, endY;
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Горизонтальная линия
+        endX = worldX;
+        endY = wallStart.y;
+      } else {
+        // Вертикальная линия
+        endX = wallStart.x;
+        endY = worldY;
+      }
+      
       // Проверяем, что конечная точка внутри дома
-      if (isPointInsideHouse(worldX, worldY)) {
-        const deltaX = worldX - wallStart.x;
-        const deltaY = worldY - wallStart.y;
-        
-        // Определяем направление (90 градусов)
-        let endX, endY;
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          // Горизонтальная линия
-          endX = worldX;
-          endY = wallStart.y;
-        } else {
-          // Вертикальная линия
-          endX = wallStart.x;
-          endY = worldY;
-        }
-        
+      if (isPointInsideHouse(endX, endY)) {
         setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
       }
       return;
