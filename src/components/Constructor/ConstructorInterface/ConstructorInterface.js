@@ -42,8 +42,44 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [isDraggingResizePoint, setIsDraggingResizePoint] = useState(false);
   const [resizePointType, setResizePointType] = useState(null);
   const [perimeterPoints, setPerimeterPoints] = useState([]);
+  const [isDraggingDoor, setIsDraggingDoor] = useState(false);
+  const [doorDragStart, setDoorDragStart] = useState({ x: 0, y: 0 });
 
   const SCALE = 30;
+  
+  // Вспомогательные функции для работы с дверями
+  const getDistanceToLine = (px, py, lineStart, lineEnd) => {
+    const A = px - lineStart.x;
+    const B = py - lineStart.y;
+    const C = lineEnd.x - lineStart.x;
+    const D = lineEnd.y - lineStart.y;
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    if (lenSq === 0) return Math.sqrt(A * A + B * B);
+    let param = dot / lenSq;
+    param = Math.max(0, Math.min(1, param));
+    const xx = lineStart.x + param * C;
+    const yy = lineStart.y + param * D;
+    const dx = px - xx;
+    const dy = py - yy;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+  
+  const getProjectedPoint = (px, py, lineStart, lineEnd) => {
+    const A = px - lineStart.x;
+    const B = py - lineStart.y;
+    const C = lineEnd.x - lineStart.x;
+    const D = lineEnd.y - lineStart.y;
+    const dot = A * C + B * D;
+    const lenSq = C * C + D * D;
+    if (lenSq === 0) return { x: lineStart.x, y: lineStart.y };
+    let param = dot / lenSq;
+    param = Math.max(0, Math.min(1, param));
+    return {
+      x: lineStart.x + param * C,
+      y: lineStart.y + param * D
+    };
+  };
 
   const isPointInsideHouse = (x, y) => {
     // Если есть деформированный периметр, используем его
@@ -189,6 +225,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawLot(ctx);
     drawElements(ctx);
     drawWalls(ctx);
+    drawDoors(ctx);
     drawCurrentWall(ctx);
     drawWallIcons(ctx);
     drawWallResizePoints(ctx);
@@ -294,6 +331,83 @@ export default function ConstructorInterface({ initialData, onBack }) {
     });
   };
 
+  const drawDoors = (ctx) => {
+    doors.forEach(door => {
+      const isSelected = selectedElement?.id === door.id;
+      const isHovered = hoveredElement?.id === door.id;
+      
+      // Определяем направление стены
+      const wallDx = door.wallEnd.x - door.wallStart.x;
+      const wallDy = door.wallEnd.y - door.wallStart.y;
+      const wallLength = Math.sqrt(wallDx * wallDx + wallDy * wallDy);
+      const wallUnitX = wallDx / wallLength;
+      const wallUnitY = wallDy / wallLength;
+      
+      // Перпендикуляр к стене
+      const perpX = -wallUnitY;
+      const perpY = wallUnitX;
+      
+      const doorHalfWidth = door.width / 2;
+      const doorOpenLength = 25; // Длина открытой двери
+      
+      // Проем в стене
+      const gapStart = {
+        x: door.x - wallUnitX * doorHalfWidth,
+        y: door.y - wallUnitY * doorHalfWidth
+      };
+      const gapEnd = {
+        x: door.x + wallUnitX * doorHalfWidth,
+        y: door.y + wallUnitY * doorHalfWidth
+      };
+      
+      // Отрисовка проема (белая линия)
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = Math.max(4, 5 * zoom);
+      ctx.beginPath();
+      ctx.moveTo(gapStart.x * zoom, gapStart.y * zoom);
+      ctx.lineTo(gapEnd.x * zoom, gapEnd.y * zoom);
+      ctx.stroke();
+      
+      // Отрисовка открытой двери (дуга)
+      ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#666666';
+      ctx.lineWidth = Math.max(2, 3 * zoom);
+      ctx.setLineDash([3, 3]);
+      
+      // Дуга открытой двери
+      const centerX = door.x * zoom;
+      const centerY = door.y * zoom;
+      const radius = doorOpenLength * zoom;
+      
+      // Угол направления стены
+      const wallAngle = Math.atan2(wallDy, wallDx);
+      const startAngle = wallAngle + Math.PI / 2;
+      const endAngle = wallAngle + Math.PI;
+      
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.stroke();
+      
+      // Линия дверного полотна
+      const doorEndX = centerX + Math.cos(endAngle) * radius;
+      const doorEndY = centerY + Math.sin(endAngle) * radius;
+      
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(doorEndX, doorEndY);
+      ctx.stroke();
+      
+      ctx.setLineDash([]);
+      
+      // Подсветка выбранной двери
+      if (isSelected) {
+        ctx.fillStyle = 'rgba(223, 104, 43, 0.3)';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius + 5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    });
+  };
+  
   const drawWalls = (ctx) => {
     walls.forEach(wall => {
       const isHovered = hoveredElement?.id === wall.id;
@@ -672,6 +786,24 @@ export default function ConstructorInterface({ initialData, onBack }) {
       return;
     }
     
+    // Проверяем клик по двери
+    let clickedDoor = null;
+    doors.forEach(door => {
+      const distance = Math.sqrt(
+        Math.pow(worldX - door.x, 2) + Math.pow(worldY - door.y, 2)
+      );
+      if (distance <= 25) { // Радиус клика по двери
+        clickedDoor = door;
+      }
+    });
+    
+    if (clickedDoor && selectedTool === 'select') {
+      setSelectedElement(clickedDoor);
+      setIsDraggingDoor(true);
+      setDoorDragStart({ x: worldX - clickedDoor.x, y: worldY - clickedDoor.y });
+      return;
+    }
+    
     // Проверяем клик по стене (находим ближайшую)
     let clickedWall = null;
     let minClickDistance = Infinity;
@@ -721,6 +853,94 @@ export default function ConstructorInterface({ initialData, onBack }) {
         setSelectedElement(houseElement);
         return;
       }
+    }
+    
+    // Размещение двери на стене
+    if (selectedTool === 'door') {
+      // Проверяем клик по стене
+      let clickedWall = null;
+      let minClickDistance = Infinity;
+      
+      // Проверяем стены периметра
+      if (perimeterPoints.length >= 4) {
+        for (let i = 0; i < perimeterPoints.length; i++) {
+          const start = perimeterPoints[i];
+          const end = perimeterPoints[(i + 1) % perimeterPoints.length];
+          const dist = getDistanceToLine(worldX, worldY, start, end);
+          
+          if (dist < 8 && dist < minClickDistance &&
+              worldX >= Math.min(start.x, end.x) - 8 && worldX <= Math.max(start.x, end.x) + 8 &&
+              worldY >= Math.min(start.y, end.y) - 8 && worldY <= Math.max(start.y, end.y) + 8) {
+            minClickDistance = dist;
+            clickedWall = { start, end, type: 'perimeter', wallId: `perimeter-${i}` };
+          }
+        }
+      } else {
+        // Если нет деформированного периметра, используем обычные стены дома
+        const houseElement = elements.find(el => el.type === 'house');
+        if (houseElement) {
+          const houseWalls = [
+            { start: { x: houseElement.x, y: houseElement.y }, end: { x: houseElement.x + houseElement.width, y: houseElement.y } },
+            { start: { x: houseElement.x + houseElement.width, y: houseElement.y }, end: { x: houseElement.x + houseElement.width, y: houseElement.y + houseElement.height } },
+            { start: { x: houseElement.x + houseElement.width, y: houseElement.y + houseElement.height }, end: { x: houseElement.x, y: houseElement.y + houseElement.height } },
+            { start: { x: houseElement.x, y: houseElement.y + houseElement.height }, end: { x: houseElement.x, y: houseElement.y } }
+          ];
+          
+          houseWalls.forEach((wall, i) => {
+            const dist = getDistanceToLine(worldX, worldY, wall.start, wall.end);
+            
+            if (dist < 8 && dist < minClickDistance &&
+                worldX >= Math.min(wall.start.x, wall.end.x) - 8 && worldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
+                worldY >= Math.min(wall.start.y, wall.end.y) - 8 && worldY <= Math.max(wall.start.y, wall.end.y) + 8) {
+              minClickDistance = dist;
+              clickedWall = { start: wall.start, end: wall.end, type: 'perimeter', wallId: `house-${i}` };
+            }
+          });
+        }
+      }
+      
+      // Проверяем внутренние стены
+      walls.forEach(wall => {
+        const dist = getDistanceToLine(worldX, worldY, wall.start, wall.end);
+        
+        if (dist < 8 && dist < minClickDistance &&
+            worldX >= Math.min(wall.start.x, wall.end.x) - 8 && worldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
+            worldY >= Math.min(wall.start.y, wall.end.y) - 8 && worldY <= Math.max(wall.start.y, wall.end.y) + 8) {
+          minClickDistance = dist;
+          clickedWall = { start: wall.start, end: wall.end, type: 'internal', wallId: wall.id };
+        }
+      });
+      
+      if (clickedWall) {
+        // Проецируем точку клика на стену
+        const projectedPoint = getProjectedPoint(worldX, worldY, clickedWall.start, clickedWall.end);
+        
+        // Проверяем, что дверь не пересекается с другими дверями
+        const doorWidth = 30; // 900мм в пикселях
+        const canPlaceDoor = !doors.some(door => {
+          if (door.wallId !== clickedWall.wallId || door.type !== clickedWall.type) return false;
+          const distance = Math.sqrt(
+            Math.pow(projectedPoint.x - door.x, 2) + Math.pow(projectedPoint.y - door.y, 2)
+          );
+          return distance < doorWidth + 10; // Минимальное расстояние между дверями
+        });
+        
+        if (canPlaceDoor) {
+          const newDoor = {
+            id: Date.now(),
+            x: projectedPoint.x,
+            y: projectedPoint.y,
+            width: doorWidth,
+            wallStart: clickedWall.start,
+            wallEnd: clickedWall.end,
+            wallId: clickedWall.wallId,
+            type: clickedWall.type
+          };
+          
+          setDoors(prev => [...prev, newDoor]);
+        }
+      }
+      return;
     }
     
     // Начало рисования стены
@@ -836,6 +1056,36 @@ export default function ConstructorInterface({ initialData, onBack }) {
           
           setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
         }
+      }
+      return;
+    }
+    
+    // Перетаскивание двери по стене
+    if (isDraggingDoor && selectedElement && selectedElement.wallStart) {
+      const newX = worldX - doorDragStart.x;
+      const newY = worldY - doorDragStart.y;
+      
+      // Проецируем новую позицию на стену
+      const projectedPoint = getProjectedPoint(newX, newY, selectedElement.wallStart, selectedElement.wallEnd);
+      
+      // Проверяем, что новая позиция не пересекается с другими дверями
+      const canMoveDoor = !doors.some(door => {
+        if (door.id === selectedElement.id) return false;
+        if (door.wallId !== selectedElement.wallId || door.type !== selectedElement.type) return false;
+        const distance = Math.sqrt(
+          Math.pow(projectedPoint.x - door.x, 2) + Math.pow(projectedPoint.y - door.y, 2)
+        );
+        return distance < 40; // Минимальное расстояние
+      });
+      
+      if (canMoveDoor) {
+        setDoors(prev => prev.map(door => 
+          door.id === selectedElement.id 
+            ? { ...door, x: projectedPoint.x, y: projectedPoint.y }
+            : door
+        ));
+        
+        setSelectedElement(prev => ({ ...prev, x: projectedPoint.x, y: projectedPoint.y }));
       }
       return;
     }
@@ -1046,6 +1296,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     setIsDraggingWall(false);
     setIsDraggingResizePoint(false);
     setResizePointType(null);
+    setIsDraggingDoor(false);
   };
 
   const handleWheel = (e) => {
@@ -1098,7 +1349,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
           <div className={styles.workspace}>
             <canvas 
               ref={canvasRef}
-              className={selectedTool === 'wall' || selectedTool === 'rotate' ? styles.wallTool : ''}
+              className={selectedTool === 'wall' || selectedTool === 'rotate' ? styles.wallTool : selectedTool === 'door' ? styles.doorTool : ''}
               onMouseDown={handleCanvasMouseDown}
               onMouseMove={(e) => {
         handleCanvasMouseMove(e);
@@ -1114,25 +1365,38 @@ export default function ConstructorInterface({ initialData, onBack }) {
           const hoverWorldX = (clientX - panOffset.x) / zoom;
           const hoverWorldY = (clientY - panOffset.y) / zoom;
           
-          // Сначала проверяем стены (приоритет)
-          let hoveredWall = null;
-          let minDistance = Infinity;
-          
-          walls.forEach(wall => {
-            const dist = Math.abs((wall.end.y - wall.start.y) * hoverWorldX - (wall.end.x - wall.start.x) * hoverWorldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
-                        Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
-            
-            if (dist < 8 && dist < minDistance &&
-                hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 8 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
-                hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 8 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 8) {
-              minDistance = dist;
-              hoveredWall = wall;
+          // Сначала проверяем двери
+          let hoveredDoor = null;
+          doors.forEach(door => {
+            const distance = Math.sqrt(
+              Math.pow(hoverWorldX - door.x, 2) + Math.pow(hoverWorldY - door.y, 2)
+            );
+            if (distance <= 25) {
+              hoveredDoor = door;
             }
           });
           
-          // Если стена не найдена, проверяем дом
+          // Потом проверяем стены
+          let hoveredWall = null;
+          let minDistance = Infinity;
+          
+          if (!hoveredDoor) {
+            walls.forEach(wall => {
+              const dist = Math.abs((wall.end.y - wall.start.y) * hoverWorldX - (wall.end.x - wall.start.x) * hoverWorldY + wall.end.x * wall.start.y - wall.end.y * wall.start.x) / 
+                          Math.sqrt(Math.pow(wall.end.y - wall.start.y, 2) + Math.pow(wall.end.x - wall.start.x, 2));
+              
+              if (dist < 8 && dist < minDistance &&
+                  hoverWorldX >= Math.min(wall.start.x, wall.end.x) - 8 && hoverWorldX <= Math.max(wall.start.x, wall.end.x) + 8 &&
+                  hoverWorldY >= Math.min(wall.start.y, wall.end.y) - 8 && hoverWorldY <= Math.max(wall.start.y, wall.end.y) + 8) {
+                minDistance = dist;
+                hoveredWall = wall;
+              }
+            });
+          }
+          
+          // Если ни дверь, ни стена не найдены, проверяем дом
           let houseElement = null;
-          if (!hoveredWall) {
+          if (!hoveredDoor && !hoveredWall) {
             houseElement = elements.find(el => 
               el.type === 'house' &&
               hoverWorldX >= el.x && hoverWorldX <= el.x + el.width &&
@@ -1140,7 +1404,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
             );
           }
           
-          setHoveredElement(hoveredWall || houseElement || null);
+          setHoveredElement(hoveredDoor || hoveredWall || houseElement || null);
         } else if (selectedTool !== 'select') {
           setHoveredElement(null);
         }

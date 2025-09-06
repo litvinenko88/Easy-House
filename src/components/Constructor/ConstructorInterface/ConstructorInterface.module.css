@@ -88,6 +88,14 @@
   cursor: crosshair;
 }
 
+.workspace canvas.doorTool {
+  cursor: crosshair;
+}
+
+.workspace canvas.doorTool:active {
+  cursor: crosshair;
+}
+
 .controlPanel {
   width: 280px;
   min-width: 280px;
