@@ -44,6 +44,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [perimeterPoints, setPerimeterPoints] = useState([]);
   const [isDraggingDoor, setIsDraggingDoor] = useState(false);
   const [doorDragStart, setDoorDragStart] = useState({ x: 0, y: 0 });
+  const [doorDeleteIcon, setDoorDeleteIcon] = useState(null);
 
   const SCALE = 30;
   
@@ -226,6 +227,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawElements(ctx);
     drawWalls(ctx);
     drawDoors(ctx);
+    drawDoorDeleteIcon(ctx);
     drawCurrentWall(ctx);
     drawWallIcons(ctx);
     drawWallResizePoints(ctx);
@@ -416,6 +418,32 @@ export default function ConstructorInterface({ initialData, onBack }) {
     });
   };
   
+  const drawDoorDeleteIcon = (ctx) => {
+    if (selectedElement && selectedElement.wallStart && selectedTool === 'select') {
+      const iconSize = Math.max(16, 20 * zoom);
+      const iconX = selectedElement.x * zoom;
+      const iconY = selectedElement.y * zoom - 35 * zoom;
+      
+      // Фон иконки
+      ctx.fillStyle = '#dc3545';
+      ctx.beginPath();
+      ctx.arc(iconX, iconY, iconSize / 2, 0, 2 * Math.PI);
+      ctx.fill();
+      
+      // Иконка корзины
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `${Math.max(12, 14 * zoom)}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('🗑️', iconX, iconY);
+      
+      // Сохраняем позицию иконки
+      setDoorDeleteIcon({ x: iconX, y: iconY, size: iconSize });
+    } else {
+      setDoorDeleteIcon(null);
+    }
+  };
+  
   const drawWalls = (ctx) => {
     walls.forEach(wall => {
       const isHovered = hoveredElement?.id === wall.id;
@@ -537,7 +565,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
       const endX = selectedElement.end.x * zoom;
       const endY = selectedElement.end.y * zoom;
       
-      const pointSize = Math.max(6, 8 * zoom);
+      const pointSize = Math.max(4, 5 * zoom);
       
       // Точка начала стены
       ctx.fillStyle = '#007bff';
@@ -730,9 +758,22 @@ export default function ConstructorInterface({ initialData, onBack }) {
       return;
     }
     
-    // Проверяем клик по иконкам стены
+    // Проверяем клик по иконке удаления двери
     const iconClickX = clientX - panOffset.x;
     const iconClickY = clientY - panOffset.y;
+    
+    if (selectedElement && selectedElement.wallStart && doorDeleteIcon && 
+        Math.abs(iconClickX - doorDeleteIcon.x) <= doorDeleteIcon.size/2 && 
+        Math.abs(iconClickY - doorDeleteIcon.y) <= doorDeleteIcon.size/2) {
+      e.preventDefault();
+      e.stopPropagation();
+      // Удаляем дверь
+      setDoors(prev => prev.filter(door => door.id !== selectedElement.id));
+      setSelectedElement(null);
+      return;
+    }
+    
+    // Проверяем клик по иконкам стены
     
     if (selectedElement && selectedElement.start && wallIcons.delete && 
         Math.abs(iconClickX - wallIcons.delete.x) <= wallIcons.delete.size/2 && 
