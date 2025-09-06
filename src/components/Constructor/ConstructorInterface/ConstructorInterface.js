@@ -46,6 +46,24 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const SCALE = 30;
 
   const isPointInsideHouse = (x, y) => {
+    // Если есть деформированный периметр, используем его
+    if (perimeterPoints.length >= 3) {
+      // Алгоритм ray casting для проверки точки внутри полигона
+      let inside = false;
+      for (let i = 0, j = perimeterPoints.length - 1; i < perimeterPoints.length; j = i++) {
+        const xi = perimeterPoints[i].x;
+        const yi = perimeterPoints[i].y;
+        const xj = perimeterPoints[j].x;
+        const yj = perimeterPoints[j].y;
+        
+        if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
+          inside = !inside;
+        }
+      }
+      return inside;
+    }
+    
+    // Иначе используем обычный прямоугольник
     return elements.some(el => 
       el.type === 'house' &&
       x >= el.x && x <= el.x + el.width &&
@@ -58,15 +76,49 @@ export default function ConstructorInterface({ initialData, onBack }) {
     let snappedX = x;
     let snappedY = y;
     
-    elements.forEach(el => {
-      if (el.type === 'house') {
-        // Привязка к границам дома
-        if (Math.abs(x - el.x) < snapDistance) snappedX = el.x;
-        if (Math.abs(x - (el.x + el.width)) < snapDistance) snappedX = el.x + el.width;
-        if (Math.abs(y - el.y) < snapDistance) snappedY = el.y;
-        if (Math.abs(y - (el.y + el.height)) < snapDistance) snappedY = el.y + el.height;
+    // Если есть деформированный периметр, привязываемся к его границам
+    if (perimeterPoints.length >= 3) {
+      for (let i = 0; i < perimeterPoints.length; i++) {
+        const start = perimeterPoints[i];
+        const end = perimeterPoints[(i + 1) % perimeterPoints.length];
+        
+        // Привязка к точкам периметра
+        if (Math.abs(x - start.x) < snapDistance && Math.abs(y - start.y) < snapDistance) {
+          snappedX = start.x;
+          snappedY = start.y;
+        }
+        
+        // Привязка к линиям периметра
+        const A = x - start.x;
+        const B = y - start.y;
+        const C = end.x - start.x;
+        const D = end.y - start.y;
+        const dot = A * C + B * D;
+        const lenSq = C * C + D * D;
+        
+        if (lenSq > 0) {
+          const param = Math.max(0, Math.min(1, dot / lenSq));
+          const projX = start.x + param * C;
+          const projY = start.y + param * D;
+          const dist = Math.sqrt(Math.pow(x - projX, 2) + Math.pow(y - projY, 2));
+          
+          if (dist < snapDistance) {
+            snappedX = projX;
+            snappedY = projY;
+          }
+        }
       }
-    });
+    } else {
+      // Обычная привязка к прямоугольному дому
+      elements.forEach(el => {
+        if (el.type === 'house') {
+          if (Math.abs(x - el.x) < snapDistance) snappedX = el.x;
+          if (Math.abs(x - (el.x + el.width)) < snapDistance) snappedX = el.x + el.width;
+          if (Math.abs(y - el.y) < snapDistance) snappedY = el.y;
+          if (Math.abs(y - (el.y + el.height)) < snapDistance) snappedY = el.y + el.height;
+        }
+      });
+    }
     
     return { x: snappedX, y: snappedY };
   };
@@ -817,25 +869,21 @@ export default function ConstructorInterface({ initialData, onBack }) {
     
     // Рисование стены
     if (isDrawingWall && wallStart) {
-      const houseElement = elements.find(el => el.type === 'house');
-      if (houseElement) {
-        // Ограничиваем координаты границами дома
-        const constrainedX = Math.max(houseElement.x, Math.min(houseElement.x + houseElement.width, worldX));
-        const constrainedY = Math.max(houseElement.y, Math.min(houseElement.y + houseElement.height, worldY));
-        
-        const deltaX = constrainedX - wallStart.x;
-        const deltaY = constrainedY - wallStart.y;
+      // Проверяем, что конечная точка внутри дома
+      if (isPointInsideHouse(worldX, worldY)) {
+        const deltaX = worldX - wallStart.x;
+        const deltaY = worldY - wallStart.y;
         
         // Определяем направление (90 градусов)
         let endX, endY;
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          // Горизонтальная линия - доводим до края дома
-          endX = constrainedX;
+          // Горизонтальная линия
+          endX = worldX;
           endY = wallStart.y;
         } else {
-          // Вертикальная линия - доводим до края дома
+          // Вертикальная линия
           endX = wallStart.x;
-          endY = constrainedY;
+          endY = worldY;
         }
         
         setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
