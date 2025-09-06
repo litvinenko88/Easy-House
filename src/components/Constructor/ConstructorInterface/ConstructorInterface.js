@@ -237,6 +237,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawWallIcons(ctx);
     drawWallResizePoints(ctx);
     drawHouseArea(ctx);
+    drawRoomAreas(ctx);
     
     // Отрисовка периметра для инструмента "Построение стен"
     if (wallBuilder) {
@@ -628,6 +629,165 @@ export default function ConstructorInterface({ initialData, onBack }) {
       ctx.fillStyle = '#df682b';
       ctx.fillText(text, textX, textY);
     }
+  };
+  
+  const findRooms = () => {
+    const rooms = [];
+    const houseElement = elements.find(el => el.type === 'house');
+    if (!houseElement) return rooms;
+    
+    // Создаем сетку для поиска комнат
+    const gridSize = 10;
+    const cols = Math.floor(houseElement.width / gridSize);
+    const rows = Math.floor(houseElement.height / gridSize);
+    const visited = Array(rows).fill().map(() => Array(cols).fill(false));
+    
+    // Получаем все стены (периметр + внутренние)
+    const allWalls = [...walls];
+    
+    // Добавляем стены периметра
+    if (perimeterPoints.length >= 4) {
+      for (let i = 0; i < perimeterPoints.length; i++) {
+        const start = perimeterPoints[i];
+        const end = perimeterPoints[(i + 1) % perimeterPoints.length];
+        allWalls.push({ start, end, id: `perimeter-${i}` });
+      }
+    } else {
+      // Обычные стены дома
+      allWalls.push(
+        { start: { x: houseElement.x, y: houseElement.y }, end: { x: houseElement.x + houseElement.width, y: houseElement.y }, id: 'house-top' },
+        { start: { x: houseElement.x + houseElement.width, y: houseElement.y }, end: { x: houseElement.x + houseElement.width, y: houseElement.y + houseElement.height }, id: 'house-right' },
+        { start: { x: houseElement.x + houseElement.width, y: houseElement.y + houseElement.height }, end: { x: houseElement.x, y: houseElement.y + houseElement.height }, id: 'house-bottom' },
+        { start: { x: houseElement.x, y: houseElement.y + houseElement.height }, end: { x: houseElement.x, y: houseElement.y }, id: 'house-left' }
+      );
+    }
+    
+    // Проверяем, пересекает ли луч стену
+    const intersectsWall = (x, y, endX, endY) => {
+      return allWalls.some(wall => {
+        const x1 = x, y1 = y, x2 = endX, y2 = endY;
+        const x3 = wall.start.x, y3 = wall.start.y, x4 = wall.end.x, y4 = wall.end.y;
+        
+        const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+        if (Math.abs(denom) < 0.001) return false;
+        
+        const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
+        const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom;
+        
+        return t > 0.001 && t < 0.999 && u > 0.001 && u < 0.999;
+      });
+    };
+    
+    // Поиск комнат с помощью flood fill
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        if (visited[row][col]) continue;
+        
+        const startX = houseElement.x + col * gridSize + gridSize / 2;
+        const startY = houseElement.y + row * gridSize + gridSize / 2;
+        
+        if (!isPointInsideHouse(startX, startY)) continue;
+        
+        // Начинаем flood fill
+        const roomPoints = [];
+        const stack = [{ row, col }];
+        
+        while (stack.length > 0) {
+          const { row: r, col: c } = stack.pop();
+          
+          if (r < 0 || r >= rows || c < 0 || c >= cols || visited[r][c]) continue;
+          
+          const pointX = houseElement.x + c * gridSize + gridSize / 2;
+          const pointY = houseElement.y + r * gridSize + gridSize / 2;
+          
+          if (!isPointInsideHouse(pointX, pointY)) continue;
+          
+          visited[r][c] = true;
+          roomPoints.push({ x: pointX, y: pointY });
+          
+          // Проверяем соседние клетки
+          const neighbors = [
+            { row: r - 1, col: c }, { row: r + 1, col: c },
+            { row: r, col: c - 1 }, { row: r, col: c + 1 }
+          ];
+          
+          for (const neighbor of neighbors) {
+            if (neighbor.row < 0 || neighbor.row >= rows || neighbor.col < 0 || neighbor.col >= cols) continue;
+            if (visited[neighbor.row][neighbor.col]) continue;
+            
+            const neighborX = houseElement.x + neighbor.col * gridSize + gridSize / 2;
+            const neighborY = houseElement.y + neighbor.row * gridSize + gridSize / 2;
+            
+            // Проверяем, нет ли стены между точками
+            if (!intersectsWall(pointX, pointY, neighborX, neighborY)) {
+              stack.push(neighbor);
+            }
+          }
+        }
+        
+        if (roomPoints.length > 5) { // Минимальный размер комнаты
+          rooms.push(roomPoints);
+        }
+      }
+    }
+    
+    return rooms;
+  };
+  
+  const drawRoomAreas = (ctx) => {
+    if (walls.length === 0 || zoom < 0.5) return;
+    
+    const rooms = findRooms();
+    
+    rooms.forEach((room, index) => {
+      // Вычисляем центр комнаты
+      const centerX = room.reduce((sum, p) => sum + p.x, 0) / room.length;
+      const centerY = room.reduce((sum, p) => sum + p.y, 0) / room.length;
+      
+      // Приблизительная площадь комнаты
+      const area = (room.length * 100) / (30 * 30); // 100 = gridSize^2
+      
+      if (area > 0.5) { // Показываем только комнаты больше 0.5 м²
+        // Фон для текста
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.strokeStyle = '#28a745';
+        ctx.lineWidth = 1;
+        
+        const fontSize = Math.max(12, 14 * zoom);
+        ctx.font = `${fontSize}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        const text = `${area.toFixed(1)} м²`;
+        const textWidth = ctx.measureText(text).width;
+        const padding = Math.max(6, 8 * zoom);
+        
+        const rectWidth = textWidth + padding * 2;
+        const rectHeight = fontSize + padding;
+        
+        const screenX = centerX * zoom;
+        const screenY = centerY * zoom;
+        
+        // Прямоугольник фона
+        ctx.fillRect(
+          screenX - rectWidth / 2,
+          screenY - rectHeight / 2,
+          rectWidth,
+          rectHeight
+        );
+        
+        ctx.strokeRect(
+          screenX - rectWidth / 2,
+          screenY - rectHeight / 2,
+          rectWidth,
+          rectHeight
+        );
+        
+        // Текст
+        ctx.fillStyle = '#28a745';
+        ctx.fillText(text, screenX, screenY);
+      }
+    });
   };
   
   const drawWalls = (ctx) => {
