@@ -430,8 +430,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
           // Вычисляем нормаль к стене (перпендикуляр наружу)
           const dx = end.x - start.x;
           const dy = end.y - start.y;
-          const normalX = -dy / length; // Перпендикуляр
-          const normalY = dx / length;
+          const normalX = dy / length; // Перпендикуляр наружу
+          const normalY = -dx / length;
           
           // Размещаем текст снаружи дома на расстоянии 30 пикселей
           const offsetDistance = 30;
