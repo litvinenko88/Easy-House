@@ -343,67 +343,75 @@ export default function ConstructorInterface({ initialData, onBack }) {
       const wallUnitX = wallDx / wallLength;
       const wallUnitY = wallDy / wallLength;
       
-      // Перпендикуляр к стене
-      const perpX = -wallUnitY;
-      const perpY = wallUnitX;
-      
       const doorHalfWidth = door.width / 2;
-      const doorOpenLength = 25; // Длина открытой двери
-      
-      // Проем в стене
-      const gapStart = {
-        x: door.x - wallUnitX * doorHalfWidth,
-        y: door.y - wallUnitY * doorHalfWidth
-      };
-      const gapEnd = {
-        x: door.x + wallUnitX * doorHalfWidth,
-        y: door.y + wallUnitY * doorHalfWidth
-      };
-      
-      // Отрисовка проема (белая линия)
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = Math.max(4, 5 * zoom);
-      ctx.beginPath();
-      ctx.moveTo(gapStart.x * zoom, gapStart.y * zoom);
-      ctx.lineTo(gapEnd.x * zoom, gapEnd.y * zoom);
-      ctx.stroke();
-      
-      // Отрисовка открытой двери (дуга)
-      ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#666666';
-      ctx.lineWidth = Math.max(2, 3 * zoom);
-      ctx.setLineDash([3, 3]);
-      
-      // Дуга открытой двери
+      const doorOpenLength = 28;
       const centerX = door.x * zoom;
       const centerY = door.y * zoom;
-      const radius = doorOpenLength * zoom;
       
-      // Угол направления стены
-      const wallAngle = Math.atan2(wallDy, wallDx);
-      const startAngle = wallAngle + Math.PI / 2;
-      const endAngle = wallAngle + Math.PI;
+      // Проем в стене (толстая белая линия)
+      const gapStart = {
+        x: (door.x - wallUnitX * doorHalfWidth) * zoom,
+        y: (door.y - wallUnitY * doorHalfWidth) * zoom
+      };
+      const gapEnd = {
+        x: (door.x + wallUnitX * doorHalfWidth) * zoom,
+        y: (door.y + wallUnitY * doorHalfWidth) * zoom
+      };
       
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = Math.max(6, 8 * zoom);
+      ctx.lineCap = 'round';
       ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+      ctx.moveTo(gapStart.x, gapStart.y);
+      ctx.lineTo(gapEnd.x, gapEnd.y);
       ctx.stroke();
       
-      // Линия дверного полотна
-      const doorEndX = centerX + Math.cos(endAngle) * radius;
-      const doorEndY = centerY + Math.sin(endAngle) * radius;
+      // Цвет двери
+      const doorColor = isSelected ? '#df682b' : isHovered ? '#ff8c42' : '#4a90e2';
+      
+      // Петля в углу проема
+      const hingeX = gapStart.x;
+      const hingeY = gapStart.y;
+      
+      // Дуга открытой двери от петли
+      ctx.strokeStyle = doorColor;
+      ctx.lineWidth = Math.max(2, 2.5 * zoom);
+      ctx.lineCap = 'round';
+      ctx.setLineDash([]);
+      
+      const wallAngle = Math.atan2(wallDy, wallDx);
+      const perpAngle = wallAngle + Math.PI / 2;
+      const radius = doorOpenLength * zoom;
       
       ctx.beginPath();
-      ctx.moveTo(centerX, centerY);
+      ctx.arc(hingeX, hingeY, radius, wallAngle, perpAngle);
+      ctx.stroke();
+      
+      // Линия дверного полотна от петли до конца дуги
+      const doorEndX = hingeX + Math.cos(perpAngle) * radius;
+      const doorEndY = hingeY + Math.sin(perpAngle) * radius;
+      
+      ctx.lineWidth = Math.max(3, 3.5 * zoom);
+      ctx.beginPath();
+      ctx.moveTo(hingeX, hingeY);
       ctx.lineTo(doorEndX, doorEndY);
       ctx.stroke();
       
-      ctx.setLineDash([]);
+      // Петля (точка в углу)
+      ctx.fillStyle = doorColor;
+      ctx.beginPath();
+      ctx.arc(hingeX, hingeY, Math.max(3, 4 * zoom), 0, 2 * Math.PI);
+      ctx.fill();
       
       // Подсветка выбранной двери
-      if (isSelected) {
-        ctx.fillStyle = 'rgba(223, 104, 43, 0.3)';
+      if (isSelected || isHovered) {
+        ctx.strokeStyle = doorColor;
+        ctx.lineWidth = Math.max(1, 1.5 * zoom);
+        ctx.setLineDash([4, 4]);
         ctx.beginPath();
-        ctx.arc(centerX, centerY, radius + 5, 0, 2 * Math.PI);
-        ctx.fill();
+        ctx.arc(centerX, centerY, radius + Math.max(8, 10 * zoom), 0, 2 * Math.PI);
+        ctx.stroke();
+        ctx.setLineDash([]);
       }
     });
   };
