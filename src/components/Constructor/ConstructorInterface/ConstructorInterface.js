@@ -1055,12 +1055,31 @@ export default function ConstructorInterface({ initialData, onBack }) {
           return false;
         });
         
-        if (!hasOverlap) {
+        // Проверяем пересечение с дверями
+        const wouldHitDoor = doors.some(door => {
+          const distToDoor = getDistanceToLine(door.x, door.y, { x: newStart.x, y: newStart.y }, { x: newEnd.x, y: newEnd.y });
+          return distToDoor < 20;
+        });
+        
+        if (!hasOverlap && !wouldHitDoor) {
+          // Обновляем стену
           setWalls(prev => prev.map(wall => 
             wall.id === selectedElement.id 
               ? { ...wall, start: newStart, end: newEnd }
               : wall
           ));
+          
+          // Обновляем двери на этой стене
+          setDoors(prev => prev.map(door => {
+            if (door.wallId === selectedElement.id && door.type === 'internal') {
+              return {
+                ...door,
+                wallStart: newStart,
+                wallEnd: newEnd
+              };
+            }
+            return door;
+          }));
           
           setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
         }
@@ -1121,11 +1140,47 @@ export default function ConstructorInterface({ initialData, onBack }) {
       
       // Проверяем, что обе точки стены остаются внутри дома
       if (isPointInsideHouse(newStart.x, newStart.y) && isPointInsideHouse(newEnd.x, newEnd.y)) {
+        // Обновляем стену
         setWalls(prev => prev.map(wall => 
           wall.id === selectedElement.id 
             ? { ...wall, start: newStart, end: newEnd }
             : wall
         ));
+        
+        // Обновляем двери на этой стене
+        setDoors(prev => prev.map(door => {
+          if (door.wallId === selectedElement.id && door.type === 'internal') {
+            // Пересчитываем позицию двери на новой стене
+            const oldWallLength = Math.sqrt(
+              Math.pow(selectedElement.end.x - selectedElement.start.x, 2) + 
+              Math.pow(selectedElement.end.y - selectedElement.start.y, 2)
+            );
+            const newWallLength = Math.sqrt(
+              Math.pow(newEnd.x - newStart.x, 2) + 
+              Math.pow(newEnd.y - newStart.y, 2)
+            );
+            
+            // Находим относительную позицию двери на старой стене
+            const doorDistFromStart = Math.sqrt(
+              Math.pow(door.x - selectedElement.start.x, 2) + 
+              Math.pow(door.y - selectedElement.start.y, 2)
+            );
+            const relativePos = doorDistFromStart / oldWallLength;
+            
+            // Вычисляем новую позицию двери
+            const newDoorX = newStart.x + (newEnd.x - newStart.x) * relativePos;
+            const newDoorY = newStart.y + (newEnd.y - newStart.y) * relativePos;
+            
+            return {
+              ...door,
+              x: newDoorX,
+              y: newDoorY,
+              wallStart: newStart,
+              wallEnd: newEnd
+            };
+          }
+          return door;
+        }));
         
         setSelectedElement(prev => ({ ...prev, start: newStart, end: newEnd }));
       }
@@ -1188,7 +1243,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
           return false;
         });
         
-        if (!wouldOverlap) {
+        // Проверяем пересечение с дверями
+        const wouldHitDoor = doors.some(door => {
+          const distToDoor = getDistanceToLine(door.x, door.y, { x: wallStart.x, y: wallStart.y }, { x: endX, y: endY });
+          return distToDoor < 20; // Минимальное расстояние до двери
+        });
+        
+        if (!wouldOverlap && !wouldHitDoor) {
           setCurrentWall({ start: wallStart, end: { x: endX, y: endY } });
         }
       }
@@ -1285,7 +1346,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
           return false;
         });
         
-        if (!hasOverlap) {
+        // Проверяем пересечение с дверями
+        const wouldHitDoor = doors.some(door => {
+          const distToDoor = getDistanceToLine(door.x, door.y, currentWall.start, currentWall.end);
+          return distToDoor < 20;
+        });
+        
+        if (!hasOverlap && !wouldHitDoor) {
           setWalls(prev => [...prev, {
             id: Date.now(),
             start: currentWall.start,
