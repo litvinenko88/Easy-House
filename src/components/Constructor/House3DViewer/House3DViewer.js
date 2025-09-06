@@ -139,7 +139,7 @@ export default function House3DViewer({
     };
   }, [elements, walls, doors, windows, perimeterPoints]);
 
-  const createWallWithOpenings = (scene, wallMaterial, startX, startZ, endX, endZ, wallAngle, wallHeight, wallThickness, openings, houseElement, scale) => {
+  const createWallWithOpenings = (scene, wallMaterial, startX, startZ, endX, endZ, wallAngle, wallHeight, wallThickness, openings, houseElement, scale, pileHeight) => {
     const wallLength = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endZ - startZ, 2));
     const wallVector = new THREE.Vector3(endX - startX, 0, endZ - startZ).normalize();
     const startPos = new THREE.Vector3(startX, 0, startZ);
@@ -179,7 +179,7 @@ export default function House3DViewer({
         const segmentGeometry = new THREE.BoxGeometry(segmentLength, wallHeight, wallThickness);
         const segmentWall = new THREE.Mesh(segmentGeometry, wallMaterial);
         segmentWall.position.copy(segmentCenter);
-        segmentWall.position.y = wallHeight/2;
+        segmentWall.position.y = pileHeight + wallHeight/2;
         segmentWall.rotation.y = -wallAngle;
         segmentWall.castShadow = true;
         segmentWall.receiveShadow = true;
@@ -195,7 +195,7 @@ export default function House3DViewer({
         const lintelGeometry = new THREE.BoxGeometry(openingWidth, lintelHeight, wallThickness);
         const lintel = new THREE.Mesh(lintelGeometry, wallMaterial);
         lintel.position.copy(openingCenter);
-        lintel.position.y = openingHeight + lintelHeight/2;
+        lintel.position.y = pileHeight + openingHeight + lintelHeight/2;
         lintel.rotation.y = -wallAngle;
         lintel.castShadow = true;
         lintel.receiveShadow = true;
@@ -209,7 +209,7 @@ export default function House3DViewer({
           const sillGeometry = new THREE.BoxGeometry(openingWidth, sillHeight, wallThickness);
           const sill = new THREE.Mesh(sillGeometry, wallMaterial);
           sill.position.copy(openingCenter);
-          sill.position.y = sillHeight/2;
+          sill.position.y = pileHeight + sillHeight/2;
           sill.rotation.y = -wallAngle;
           sill.castShadow = true;
           sill.receiveShadow = true;
@@ -227,7 +227,7 @@ export default function House3DViewer({
       const segmentGeometry = new THREE.BoxGeometry(finalSegmentLength, wallHeight, wallThickness);
       const segmentWall = new THREE.Mesh(segmentGeometry, wallMaterial);
       segmentWall.position.copy(segmentCenter);
-      segmentWall.position.y = wallHeight/2;
+      segmentWall.position.y = pileHeight + wallHeight/2;
       segmentWall.rotation.y = -wallAngle;
       segmentWall.castShadow = true;
       segmentWall.receiveShadow = true;
@@ -240,8 +240,41 @@ export default function House3DViewer({
     if (!houseElement) return;
 
     const scale = 1.2; // Увеличиваем масштаб для лучшего отображения
+    const pileHeight = 9; // Высота свай над землей
 
-    // Пол дома
+    // Свайно-винтовой фундамент
+    const pileMaterial = new THREE.MeshLambertMaterial({ color: 0x4A4A4A });
+    const capMaterial = new THREE.MeshLambertMaterial({ color: 0x666666 });
+    
+    const houseWidth = houseElement.width * scale;
+    const houseHeight = houseElement.height * scale;
+    const pileSpacing = 36; // Расстояние между сваями (1.2м)
+    
+    const pilesX = Math.ceil(houseWidth / pileSpacing) + 1;
+    const pilesZ = Math.ceil(houseHeight / pileSpacing) + 1;
+    
+    for (let i = 0; i < pilesX; i++) {
+      for (let j = 0; j < pilesZ; j++) {
+        const x = -houseWidth/2 + (i * houseWidth / (pilesX - 1));
+        const z = -houseHeight/2 + (j * houseHeight / (pilesZ - 1));
+        
+        // Свая (цилиндр)
+        const pileGeometry = new THREE.CylinderGeometry(1.5, 1.5, pileHeight, 8);
+        const pile = new THREE.Mesh(pileGeometry, pileMaterial);
+        pile.position.set(x, pileHeight/2 - 2, z);
+        pile.castShadow = true;
+        scene.add(pile);
+        
+        // Оголовок сваи (расширение сверху)
+        const capGeometry = new THREE.CylinderGeometry(2.5, 2.5, 2, 8);
+        const cap = new THREE.Mesh(capGeometry, capMaterial);
+        cap.position.set(x, pileHeight - 2, z);
+        cap.castShadow = true;
+        scene.add(cap);
+      }
+    }
+
+    // Пол дома (поднят на высоту свай)
     if (perimeterPoints && perimeterPoints.length >= 4) {
       // Деформированный пол
       const vertices = [];
@@ -273,18 +306,15 @@ export default function House3DViewer({
       
       const floorMaterial = new THREE.MeshLambertMaterial({ color: 0xD2B48C, side: THREE.DoubleSide });
       const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-      floor.position.y = 0;
+      floor.position.y = pileHeight;
       scene.add(floor);
     } else {
       // Обычный пол
-      const houseWidth = houseElement.width * scale;
-      const houseHeight = houseElement.height * scale;
-      
       const floorGeometry = new THREE.PlaneGeometry(houseWidth, houseHeight);
       const floorMaterial = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
       const floor = new THREE.Mesh(floorGeometry, floorMaterial);
       floor.rotation.x = -Math.PI / 2;
-      floor.position.y = 0;
+      floor.position.y = pileHeight;
       scene.add(floor);
     }
 
@@ -329,14 +359,14 @@ export default function House3DViewer({
           // Обычная стена без проемов
           const wallGeometry = new THREE.BoxGeometry(extendedLength, wallHeight, wallThickness);
           const wall = new THREE.Mesh(wallGeometry, wallMaterial);
-          wall.position.set(centerX, wallHeight/2, centerZ);
+          wall.position.set(centerX, pileHeight + wallHeight/2, centerZ);
           wall.rotation.y = -wallAngle;
           wall.castShadow = true;
           wall.receiveShadow = true;
           scene.add(wall);
         } else {
           // Создаем стену с проемами
-          createWallWithOpenings(scene, wallMaterial, extendedStartX, extendedStartZ, extendedEndX, extendedEndZ, wallAngle, wallHeight, wallThickness, wallOpenings, houseElement, scale);
+          createWallWithOpenings(scene, wallMaterial, extendedStartX, extendedStartZ, extendedEndX, extendedEndZ, wallAngle, wallHeight, wallThickness, wallOpenings, houseElement, scale, pileHeight);
         }
       }
     } else {
@@ -354,7 +384,7 @@ export default function House3DViewer({
       wallPositions.forEach(pos => {
         const wallGeometry = new THREE.BoxGeometry(pos.width, wallHeight, pos.height);
         const wall = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall.position.set(pos.x, wallHeight/2, pos.z);
+        wall.position.set(pos.x, pileHeight + wallHeight/2, pos.z);
         wall.castShadow = true;
         wall.receiveShadow = true;
         scene.add(wall);
@@ -386,14 +416,14 @@ export default function House3DViewer({
         
         const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, 3);
         const wallMesh = new THREE.Mesh(wallGeometry, internalWallMaterial);
-        wallMesh.position.set(centerX, wallHeight/2, centerZ);
+        wallMesh.position.set(centerX, pileHeight + wallHeight/2, centerZ);
         wallMesh.rotation.y = -angle;
         wallMesh.castShadow = true;
         wallMesh.receiveShadow = true;
         scene.add(wallMesh);
       } else {
         // Создаем стену с проемами
-        createWallWithOpenings(scene, internalWallMaterial, startX, startZ, endX, endZ, angle, wallHeight, 3, wallOpenings, houseElement, scale);
+        createWallWithOpenings(scene, internalWallMaterial, startX, startZ, endX, endZ, angle, wallHeight, 3, wallOpenings, houseElement, scale, pileHeight);
       }
     });
 
@@ -421,7 +451,7 @@ export default function House3DViewer({
         // Верхняя перекладина
         const topFrameGeometry = new THREE.BoxGeometry(doorWidth + 2, 4, frameDepth);
         const topFrame = new THREE.Mesh(topFrameGeometry, frameMaterial);
-        topFrame.position.set(doorX, doorHeight - 2, doorZ);
+        topFrame.position.set(doorX, pileHeight + doorHeight - 2, doorZ);
         topFrame.rotation.y = -doorAngle;
         topFrame.castShadow = true;
         scene.add(topFrame);
@@ -431,7 +461,7 @@ export default function House3DViewer({
         const leftFrame = new THREE.Mesh(leftFrameGeometry, frameMaterial);
         const leftOffset = new THREE.Vector3(-(doorWidth + 2)/2, 0, 0);
         leftOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -doorAngle);
-        leftFrame.position.set(doorX + leftOffset.x, (doorHeight - 4)/2, doorZ + leftOffset.z);
+        leftFrame.position.set(doorX + leftOffset.x, pileHeight + (doorHeight - 4)/2, doorZ + leftOffset.z);
         leftFrame.rotation.y = -doorAngle;
         leftFrame.castShadow = true;
         scene.add(leftFrame);
@@ -441,7 +471,7 @@ export default function House3DViewer({
         const rightFrame = new THREE.Mesh(rightFrameGeometry, frameMaterial);
         const rightOffset = new THREE.Vector3((doorWidth + 2)/2, 0, 0);
         rightOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -doorAngle);
-        rightFrame.position.set(doorX + rightOffset.x, (doorHeight - 4)/2, doorZ + rightOffset.z);
+        rightFrame.position.set(doorX + rightOffset.x, pileHeight + (doorHeight - 4)/2, doorZ + rightOffset.z);
         rightFrame.rotation.y = -doorAngle;
         rightFrame.castShadow = true;
         scene.add(rightFrame);
@@ -478,7 +508,7 @@ export default function House3DViewer({
         const doorCenterX = hingeX + doorCenterOffset.x;
         const doorCenterZ = hingeZ + doorCenterOffset.z;
         
-        doorPanel.position.set(doorCenterX, doorPanelHeight/2, doorCenterZ);
+        doorPanel.position.set(doorCenterX, pileHeight + doorPanelHeight/2, doorCenterZ);
         doorPanel.rotation.y = -doorAngle + openAngle;
         
         topPanel.position.set(0, doorPanelHeight * 0.25, 1.4);
@@ -503,7 +533,7 @@ export default function House3DViewer({
         
         const windowX = (window.x - (houseElement.x + houseElement.width / 2)) * scale;
         const windowZ = (window.y - (houseElement.y + houseElement.height / 2)) * scale;
-        const windowY = 30; // Окно на высоте 1м от пола
+        const windowY = pileHeight + 30; // Окно на высоте 1м от пола дома
         
         let windowAngle = 0;
         if (window.wallEnd && window.wallStart) {
