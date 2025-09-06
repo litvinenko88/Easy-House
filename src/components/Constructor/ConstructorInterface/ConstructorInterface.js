@@ -413,6 +413,39 @@ export default function ConstructorInterface({ initialData, onBack }) {
       ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#31323d';
       ctx.lineWidth = (isSelected || isHovered) ? Math.max(4, 5 * zoom) : Math.max(3, 4 * zoom);
       ctx.stroke();
+      
+      // Показываем размеры стен периметра
+      if (zoom >= 0.3) {
+        for (let i = 0; i < perimeterPoints.length; i++) {
+          const start = perimeterPoints[i];
+          const end = perimeterPoints[(i + 1) % perimeterPoints.length];
+          
+          const length = Math.sqrt(
+            Math.pow(end.x - start.x, 2) + 
+            Math.pow(end.y - start.y, 2)
+          );
+          const centerX = (start.x + end.x) / 2 * zoom;
+          const centerY = (start.y + end.y) / 2 * zoom;
+          
+          ctx.fillStyle = '#df682b';
+          ctx.font = '12px Arial';
+          ctx.textAlign = 'center';
+          
+          const lengthMm = (length * 1000 / 30).toFixed(0);
+          
+          if (Math.abs(end.x - start.x) > Math.abs(end.y - start.y)) {
+            // Горизонтальная стена
+            ctx.fillText(`${lengthMm}мм`, centerX, centerY - 12 * zoom);
+          } else {
+            // Вертикальная стена
+            ctx.save();
+            ctx.translate(centerX - 18 * zoom, centerY);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(`${lengthMm}мм`, 0, 0);
+            ctx.restore();
+          }
+        }
+      }
       return;
     }
     
