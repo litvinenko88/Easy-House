@@ -499,11 +499,11 @@ export default function House3DViewer({
         
         const windowWidth = (window.width || 30) * scale;
         const windowHeight = 36; // 1.2м стандартная высота окна
-        const frameDepth = wallThickness + 1;
+        const frameDepth = wallThickness + 2;
         
         const windowX = (window.x - (houseElement.x + houseElement.width / 2)) * scale;
         const windowZ = (window.y - (houseElement.y + houseElement.height / 2)) * scale;
-        const windowY = 30; // Окно на высоте 1м от пола (опущено ниже)
+        const windowY = 30; // Окно на высоте 1м от пола
         
         let windowAngle = 0;
         if (window.wallEnd && window.wallStart) {
@@ -512,32 +512,42 @@ export default function House3DViewer({
           windowAngle = Math.atan2(wallDy, wallDx);
         }
         
-        // Оконная рама
-        const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+        // Материалы
+        const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xF5F5F5 });
+        const glassMaterial = new THREE.MeshLambertMaterial({ 
+          color: 0xE0F6FF, 
+          transparent: true, 
+          opacity: 0.2
+        });
+        const sashMaterial = new THREE.MeshLambertMaterial({ color: 0xE8E8E8 });
         
-        // Верхняя перекладина рамы
-        const topFrameGeometry = new THREE.BoxGeometry(windowWidth + 4, 2, frameDepth);
+        // Внешняя рама окна (коробка)
+        const outerFrameWidth = windowWidth + 6;
+        const outerFrameHeight = windowHeight + 6;
+        
+        // Верхняя часть рамы
+        const topFrameGeometry = new THREE.BoxGeometry(outerFrameWidth, 3, frameDepth);
         const topFrame = new THREE.Mesh(topFrameGeometry, frameMaterial);
-        topFrame.position.set(windowX, windowY + windowHeight/2 + 1, windowZ);
+        topFrame.position.set(windowX, windowY + windowHeight/2 + 1.5, windowZ);
         topFrame.rotation.y = -windowAngle;
         topFrame.castShadow = true;
         scene.add(topFrame);
         
-        // Нижняя перекладина рамы
-        const bottomFrameGeometry = new THREE.BoxGeometry(windowWidth + 4, 2, frameDepth);
+        // Нижняя часть рамы (подоконник)
+        const bottomFrameGeometry = new THREE.BoxGeometry(outerFrameWidth, 4, frameDepth + 2);
         const bottomFrame = new THREE.Mesh(bottomFrameGeometry, frameMaterial);
-        bottomFrame.position.set(windowX, windowY - windowHeight/2 - 1, windowZ);
+        bottomFrame.position.set(windowX, windowY - windowHeight/2 - 2, windowZ);
         bottomFrame.rotation.y = -windowAngle;
         bottomFrame.castShadow = true;
         scene.add(bottomFrame);
         
-        // Боковые стойки рамы
-        const sideFrameGeometry = new THREE.BoxGeometry(2, windowHeight + 4, frameDepth);
+        // Боковые части рамы
+        const sideFrameGeometry = new THREE.BoxGeometry(3, windowHeight + 6, frameDepth);
         const leftFrame = new THREE.Mesh(sideFrameGeometry, frameMaterial);
         const rightFrame = new THREE.Mesh(sideFrameGeometry, frameMaterial);
         
-        const leftOffset = new THREE.Vector3(-(windowWidth + 4)/2, 0, 0);
-        const rightOffset = new THREE.Vector3((windowWidth + 4)/2, 0, 0);
+        const leftOffset = new THREE.Vector3(-outerFrameWidth/2, 0, 0);
+        const rightOffset = new THREE.Vector3(outerFrameWidth/2, 0, 0);
         leftOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -windowAngle);
         rightOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -windowAngle);
         
@@ -550,34 +560,66 @@ export default function House3DViewer({
         scene.add(leftFrame);
         scene.add(rightFrame);
         
-        // Прозрачное стекло
-        const glassGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, 0.2);
-        const glassMaterial = new THREE.MeshLambertMaterial({ 
-          color: 0xE6F3FF, 
-          transparent: true, 
-          opacity: 0.3
+        // Створки окна (разделение на 4 части)
+        const sashWidth = windowWidth / 2 - 1;
+        const sashHeight = windowHeight / 2 - 1;
+        
+        // Центральная вертикальная перемычка
+        const vSashGeometry = new THREE.BoxGeometry(2, windowHeight, 1.5);
+        const vSash = new THREE.Mesh(vSashGeometry, sashMaterial);
+        vSash.position.set(windowX, windowY, windowZ);
+        vSash.rotation.y = -windowAngle;
+        vSash.castShadow = true;
+        scene.add(vSash);
+        
+        // Центральная горизонтальная перемычка
+        const hSashGeometry = new THREE.BoxGeometry(windowWidth, 2, 1.5);
+        const hSash = new THREE.Mesh(hSashGeometry, sashMaterial);
+        hSash.position.set(windowX, windowY, windowZ);
+        hSash.rotation.y = -windowAngle;
+        hSash.castShadow = true;
+        scene.add(hSash);
+        
+        // 4 стеклопакета
+        const glassPositions = [
+          { x: -sashWidth/2 - 0.5, y: sashHeight/2 + 0.5 }, // верхний левый
+          { x: sashWidth/2 + 0.5, y: sashHeight/2 + 0.5 },  // верхний правый
+          { x: -sashWidth/2 - 0.5, y: -sashHeight/2 - 0.5 }, // нижний левый
+          { x: sashWidth/2 + 0.5, y: -sashHeight/2 - 0.5 }   // нижний правый
+        ];
+        
+        glassPositions.forEach(pos => {
+          const glassGeometry = new THREE.BoxGeometry(sashWidth, sashHeight, 0.3);
+          const glass = new THREE.Mesh(glassGeometry, glassMaterial);
+          
+          const glassOffset = new THREE.Vector3(pos.x, pos.y, 0);
+          glassOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -windowAngle);
+          
+          glass.position.set(
+            windowX + glassOffset.x, 
+            windowY + pos.y, 
+            windowZ + glassOffset.z
+          );
+          glass.rotation.y = -windowAngle;
+          scene.add(glass);
         });
-        const glass = new THREE.Mesh(glassGeometry, glassMaterial);
-        glass.position.set(windowX, windowY, windowZ);
-        glass.rotation.y = -windowAngle;
-        scene.add(glass);
         
-        // Крестовины в окне
-        const crossMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+        // Ручки на створках
+        const handleMaterial = new THREE.MeshLambertMaterial({ color: 0x888888 });
+        const handleGeometry = new THREE.CylinderGeometry(0.3, 0.3, 1, 6);
         
-        // Горизонтальная крестовина
-        const hCrossGeometry = new THREE.BoxGeometry(windowWidth, 0.8, 0.4);
-        const hCross = new THREE.Mesh(hCrossGeometry, crossMaterial);
-        hCross.position.set(windowX, windowY, windowZ);
-        hCross.rotation.y = -windowAngle;
-        scene.add(hCross);
-        
-        // Вертикальная крестовина
-        const vCrossGeometry = new THREE.BoxGeometry(0.8, windowHeight, 0.4);
-        const vCross = new THREE.Mesh(vCrossGeometry, crossMaterial);
-        vCross.position.set(windowX, windowY, windowZ);
-        vCross.rotation.y = -windowAngle;
-        scene.add(vCross);
+        // Ручка на правой створке
+        const handle = new THREE.Mesh(handleGeometry, handleMaterial);
+        const handleOffset = new THREE.Vector3(windowWidth/4, 0, 0);
+        handleOffset.applyAxisAngle(new THREE.Vector3(0, 1, 0), -windowAngle);
+        handle.position.set(
+          windowX + handleOffset.x, 
+          windowY - 5, 
+          windowZ + handleOffset.z
+        );
+        handle.rotation.z = Math.PI / 2;
+        handle.rotation.y = -windowAngle;
+        scene.add(handle);
       });
     }
 
