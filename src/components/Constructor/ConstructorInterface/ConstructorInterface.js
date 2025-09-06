@@ -45,16 +45,6 @@ export default function ConstructorInterface({ initialData, onBack }) {
 
   const SCALE = 30;
 
-  // Использование WallBuilder
-  const wallBuilder = useWallBuilder({
-    elements,
-    zoom,
-    panOffset,
-    selectedTool,
-    onPerimeterChange: setPerimeterPoints,
-    canvasRef
-  });
-
   const isPointInsideHouse = (x, y) => {
     return elements.some(el => 
       el.type === 'house' &&
@@ -91,18 +81,10 @@ export default function ConstructorInterface({ initialData, onBack }) {
         drawCanvas();
       };
       
-      const handleRedraw = () => {
-        drawCanvas();
-      };
-      
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
-      canvas.addEventListener('redraw', handleRedraw);
       
-      return () => {
-        window.removeEventListener('resize', resizeCanvas);
-        canvas.removeEventListener('redraw', handleRedraw);
-      };
+      return () => window.removeEventListener('resize', resizeCanvas);
     }
   }, []);
 
@@ -881,6 +863,17 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const delta = e.deltaY > 0 ? 0.9 : 1.1;
     setZoom(prev => Math.max(0.3, Math.min(5, prev * delta)));
   };
+
+  // Использование WallBuilder
+  const wallBuilder = useWallBuilder({
+    elements,
+    zoom,
+    panOffset,
+    selectedTool,
+    onPerimeterChange: setPerimeterPoints,
+    canvasRef,
+    drawCanvas
+  });
 
   return (
     <>

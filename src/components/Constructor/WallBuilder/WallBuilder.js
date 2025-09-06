@@ -8,7 +8,8 @@ export default function useWallBuilder({
   panOffset, 
   selectedTool, 
   onPerimeterChange,
-  canvasRef 
+  canvasRef,
+  drawCanvas
 }) {
   const [perimeterPoints, setPerimeterPoints] = useState([]);
   const [selectedPoint, setSelectedPoint] = useState(null);
@@ -147,13 +148,9 @@ export default function useWallBuilder({
     newPoints.splice(wallIndex + 1, 0, newPoint);
     setPerimeterPoints(newPoints);
     
-    // Принудительно перерисовываем canvas
-    setTimeout(() => {
-      if (canvasRef.current) {
-        const event = new Event('redraw');
-        canvasRef.current.dispatchEvent(event);
-      }
-    }, 0);
+    // Мгновенная перерисовка
+    if (drawCanvas) drawCanvas();
+
   };
 
   // Обработка перетаскивания точки
@@ -206,11 +203,8 @@ export default function useWallBuilder({
       setPerimeterPoints(newPoints);
       setSelectedPoint({ ...selectedPoint, x: newX, y: newY });
       
-      // Принудительно перерисовываем canvas
-      if (canvasRef.current) {
-        const event = new Event('redraw');
-        canvasRef.current.dispatchEvent(event);
-      }
+      // Мгновенная перерисовка
+      if (drawCanvas) drawCanvas();
     }
   };
 
