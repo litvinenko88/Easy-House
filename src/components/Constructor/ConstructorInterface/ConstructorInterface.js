@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import useWallBuilder from '../WallBuilder/WallBuilder';
 import styles from './ConstructorInterface.module.css';
 
 const House3DViewer = dynamic(() => import('../House3DViewer/House3DViewer'), {
@@ -40,8 +41,19 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [wallResizePoints, setWallResizePoints] = useState({ start: null, end: null });
   const [isDraggingResizePoint, setIsDraggingResizePoint] = useState(false);
   const [resizePointType, setResizePointType] = useState(null);
+  const [perimeterPoints, setPerimeterPoints] = useState([]);
 
   const SCALE = 30;
+
+  // Использование WallBuilder
+  const wallBuilder = useWallBuilder({
+    elements,
+    zoom,
+    panOffset,
+    selectedTool,
+    onPerimeterChange: setPerimeterPoints,
+    canvasRef
+  });
 
   const isPointInsideHouse = (x, y) => {
     return elements.some(el => 
@@ -91,6 +103,14 @@ export default function ConstructorInterface({ initialData, onBack }) {
     return () => clearTimeout(timer);
   }, [zoom, panOffset, initialData, selectedElement, elements, walls, doors, windows, currentWall]);
   
+  // Сброс курсора при смене инструмента
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas && selectedTool !== 'rotate') {
+      canvas.style.cursor = '';
+    }
+  }, [selectedTool]);
+  
   useEffect(() => {
     if (initialData) {
       const lotCenterX = 100 + (initialData.lotSize.width * 30) / 2;
@@ -130,6 +150,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawCurrentWall(ctx);
     drawWallIcons(ctx);
     drawWallResizePoints(ctx);
+    
+    // Отрисовка периметра для инструмента "Построение стен"
+    if (wallBuilder) {
+      wallBuilder.drawPerimeter(ctx);
+    }
     
     ctx.restore();
   };
@@ -379,6 +404,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
   
   const drawElement = (ctx, element) => {
+    // Не рисуем дом при активном инструменте "Построение стен"
+    if (element.type === 'house' && selectedTool === 'rotate') {
+      return;
+    }
+    
     const isSelected = selectedElement?.id === element.id;
     const isHovered = hoveredElement?.id === element.id;
     
@@ -447,6 +477,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
 
   const handleCanvasMouseDown = (e) => {
+    // Проверяем обработку WallBuilder
+    if (wallBuilder && wallBuilder.handleMouseDown(e)) {
+      return;
+    }
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
     
@@ -613,6 +648,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
 
   const handleCanvasMouseMove = (e) => {
+    // Проверяем обработку WallBuilder
+    if (wallBuilder && wallBuilder.handleMouseMove(e)) {
+      return;
+    }
+    
     const canvas = canvasRef.current;
     if (!canvas) return;
     
@@ -797,6 +837,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
 
   const handleCanvasMouseUp = () => {
+    // Проверяем обработку WallBuilder
+    if (wallBuilder && wallBuilder.handleMouseUp()) {
+      return;
+    }
+    
     if (isDrawingWall && currentWall) {
       const length = Math.sqrt(
         Math.pow(currentWall.end.x - currentWall.start.x, 2) + 
@@ -862,13 +907,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
           <div className={styles.workspace}>
             <canvas 
               ref={canvasRef}
-              className={selectedTool === 'wall' ? styles.wallTool : ''}
+              className={selectedTool === 'wall' || selectedTool === 'rotate' ? styles.wallTool : ''}
               onMouseDown={handleCanvasMouseDown}
               onMouseMove={(e) => {
         handleCanvasMouseMove(e);
         
         // Подсветка элементов при наведении
-        if (!isDragging && !isDraggingHouse && !isDrawingWall && selectedTool === 'select') {
+        if (!isDragging && !isDraggingHouse && !isDrawingWall && selectedTool === 'select' && selectedTool !== 'rotate') {
           const canvas = canvasRef.current;
           if (!canvas) return;
           
