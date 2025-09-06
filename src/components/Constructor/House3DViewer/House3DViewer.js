@@ -17,6 +17,20 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
   useEffect(() => {
     if (!mountRef.current) return;
 
+    console.log('House3DViewer useEffect - данные:', {
+      elements: elements?.length || 0,
+      walls: walls?.length || 0,
+      doors: doors?.length || 0,
+      windows: windows?.length || 0,
+      perimeterPoints: perimeterPoints?.length || 0
+    });
+    
+    if (walls && walls.length > 0) {
+      console.log('Полученные стены в 3D:', walls);
+    } else {
+      console.log('Нет стен для отображения в 3D');
+    }
+
     // Создание сцены
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x87CEEB);
@@ -143,13 +157,20 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
     const scene = sceneRef.current;
     if (!scene) return;
 
+    console.log('Создание дома в 3D');
+
     // Очищаем сцену
     while(scene.children.length > 2) {
       scene.remove(scene.children[2]);
     }
 
     const houseElement = elements.find(el => el.type === 'house');
-    if (!houseElement) return;
+    if (!houseElement) {
+      console.log('Элемент дома не найден');
+      return;
+    }
+
+    console.log('Элемент дома найден:', houseElement);
 
     // Создание фундамента (сваи)
     createFoundation(houseElement);
@@ -197,19 +218,15 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
     const pileRadius = 1;
     const pileColor = 0x8B4513;
 
-    // Масштаб для 3D
     const scale = 0.5;
     const houseWidth = houseElement.width * scale;
     const houseHeight = houseElement.height * scale;
     
-    // Размещаем сваи по углам и периметру
     const pilePositions = [
-      // Углы
       { x: -houseWidth/2, z: -houseHeight/2 },
       { x: houseWidth/2, z: -houseHeight/2 },
       { x: houseWidth/2, z: houseHeight/2 },
       { x: -houseWidth/2, z: houseHeight/2 },
-      // Дополнительные сваи
       { x: 0, z: -houseHeight/2 },
       { x: 0, z: houseHeight/2 },
       { x: -houseWidth/2, z: 0 },
@@ -249,12 +266,11 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
         
         const wallLength = Math.sqrt(
           Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2)
-        ) * scale / 30; // Конвертируем в 3D масштаб
+        ) * scale / 30;
         
         const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallThickness);
         const wall = new THREE.Mesh(wallGeometry, wallMaterial);
         
-        // Позиционирование и поворот стены
         const centerX = ((start.x + end.x) / 2 - (houseElement.x + houseElement.width / 2)) * scale / 30;
         const centerZ = ((start.y + end.y) / 2 - (houseElement.y + houseElement.height / 2)) * scale / 30;
         const angle = Math.atan2(end.y - start.y, end.x - start.x);
@@ -294,16 +310,16 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
     const scale = 0.5;
 
     walls.forEach(wall => {
-      const wallLength = Math.sqrt(
+      const wallLengthPixels = Math.sqrt(
         Math.pow(wall.end.x - wall.start.x, 2) + Math.pow(wall.end.y - wall.start.y, 2)
-      ) * scale / 30;
+      );
+      const wallLength = wallLengthPixels * scale;
       
       const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallThickness);
       const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
       
-      // Правильное позиционирование относительно дома
-      const centerX = ((wall.start.x + wall.end.x) / 2 - (houseElement.x + houseElement.width / 2)) * scale / 30;
-      const centerZ = ((wall.start.y + wall.end.y) / 2 - (houseElement.y + houseElement.height / 2)) * scale / 30;
+      const centerX = ((wall.start.x + wall.end.x) / 2 - (houseElement.x + houseElement.width / 2)) * scale;
+      const centerZ = ((wall.start.y + wall.end.y) / 2 - (houseElement.y + houseElement.height / 2)) * scale;
       const angle = Math.atan2(wall.end.y - wall.start.y, wall.end.x - wall.start.x);
       
       wallMesh.position.set(centerX, wallHeight/2, centerZ);
@@ -323,12 +339,10 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
     const scale = 0.5;
 
     doors.forEach(door => {
-      // Дверная рама
       const frameGeometry = new THREE.BoxGeometry(doorWidth + 0.1, doorHeight + 2, doorThickness + 0.1);
       const frameMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
       const frame = new THREE.Mesh(frameGeometry, frameMaterial);
       
-      // Дверное полотно
       const doorGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, doorThickness);
       const doorMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
       const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
@@ -355,12 +369,10 @@ export default function House3DViewer({ elements, walls, doors, windows, initial
     const scale = 0.5;
 
     windows.forEach(window => {
-      // Оконная рама
       const frameGeometry = new THREE.BoxGeometry(windowWidth + 0.1, windowHeight + 1, windowThickness + 0.1);
       const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
       const frame = new THREE.Mesh(frameGeometry, frameMaterial);
       
-      // Стекло
       const glassGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, windowThickness);
       const glassMaterial = new THREE.MeshLambertMaterial({ 
         color: 0x87CEEB, 
