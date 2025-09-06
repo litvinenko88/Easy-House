@@ -1999,6 +1999,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
           doors={doors}
           windows={windows}
           initialData={initialData}
+          perimeterPoints={perimeterPoints}
           onClose={() => setView3D(false)}
         />
       )}

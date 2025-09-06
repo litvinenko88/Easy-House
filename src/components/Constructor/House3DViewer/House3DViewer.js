@@ -1,61 +1,429 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
 import styles from './House3DViewer.module.css';
 
-export default function House3DViewer({ 
-  elements, 
-  walls, 
-  doors, 
-  windows, 
-  initialData,
-  onClose 
-}) {
+export default function House3DViewer({ elements, walls, doors, windows, initialData, onClose, perimeterPoints }) {
   const mountRef = useRef(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const sceneRef = useRef(null);
+  const rendererRef = useRef(null);
+  const cameraRef = useRef(null);
+  const animationIdRef = useRef(null);
+  const mouseRef = useRef({ x: 0, y: 0, isDown: false });
+  const cameraAngleRef = useRef({ theta: 0, phi: Math.PI / 4 });
+  const cameraDistanceRef = useRef(100);
 
   useEffect(() => {
-    // Имитация загрузки 3D модели
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+    if (!mountRef.current) return;
 
-    return () => clearTimeout(timer);
-  }, []);
+    // Создание сцены
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x87CEEB);
+    sceneRef.current = scene;
+
+    // Создание камеры
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      mountRef.current.clientWidth / mountRef.current.clientHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(100, 80, 100);
+    camera.lookAt(0, 0, 0);
+    cameraRef.current = camera;
+
+    // Создание рендерера
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    mountRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // Освещение
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(100, 200, 100);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
+    directionalLight.shadow.camera.near = 0.1;
+    directionalLight.shadow.camera.far = 500;
+    directionalLight.shadow.camera.left = -200;
+    directionalLight.shadow.camera.right = 200;
+    directionalLight.shadow.camera.top = 200;
+    directionalLight.shadow.camera.bottom = -200;
+    scene.add(directionalLight);
+
+    // Создание дома
+    createHouse();
+
+    // Управление мышью
+    const handleMouseDown = (event) => {
+      mouseRef.current.isDown = true;
+      mouseRef.current.x = event.clientX;
+      mouseRef.current.y = event.clientY;
+    };
+
+    const handleMouseMove = (event) => {
+      if (!mouseRef.current.isDown) return;
+      
+      const deltaX = event.clientX - mouseRef.current.x;
+      const deltaY = event.clientY - mouseRef.current.y;
+      
+      cameraAngleRef.current.theta += deltaX * 0.01;
+      cameraAngleRef.current.phi += deltaY * 0.01;
+      cameraAngleRef.current.phi = Math.max(0.1, Math.min(Math.PI - 0.1, cameraAngleRef.current.phi));
+      
+      mouseRef.current.x = event.clientX;
+      mouseRef.current.y = event.clientY;
+    };
+
+    const handleMouseUp = () => {
+      mouseRef.current.isDown = false;
+    };
+
+    const handleWheel = (event) => {
+      event.preventDefault();
+      const delta = event.deltaY > 0 ? 1.1 : 0.9;
+      cameraDistanceRef.current = Math.max(30, Math.min(300, cameraDistanceRef.current * delta));
+    };
+
+    renderer.domElement.addEventListener('mousedown', handleMouseDown);
+    renderer.domElement.addEventListener('mousemove', handleMouseMove);
+    renderer.domElement.addEventListener('mouseup', handleMouseUp);
+    renderer.domElement.addEventListener('wheel', handleWheel);
+
+    // Анимация
+    const animate = () => {
+      animationIdRef.current = requestAnimationFrame(animate);
+      
+      // Обновление позиции камеры
+      const radius = cameraDistanceRef.current;
+      camera.position.x = radius * Math.sin(cameraAngleRef.current.phi) * Math.cos(cameraAngleRef.current.theta);
+      camera.position.y = radius * Math.cos(cameraAngleRef.current.phi);
+      camera.position.z = radius * Math.sin(cameraAngleRef.current.phi) * Math.sin(cameraAngleRef.current.theta);
+      camera.lookAt(0, 0, 0);
+      
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Обработка изменения размера
+    const handleResize = () => {
+      if (!mountRef.current) return;
+      
+      camera.aspect = mountRef.current.clientWidth / mountRef.current.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+    };
+    
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      renderer.domElement.removeEventListener('mousedown', handleMouseDown);
+      renderer.domElement.removeEventListener('mousemove', handleMouseMove);
+      renderer.domElement.removeEventListener('mouseup', handleMouseUp);
+      renderer.domElement.removeEventListener('wheel', handleWheel);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+      renderer.dispose();
+    };
+  }, [elements, walls, doors, windows, perimeterPoints]);
+
+  const createHouse = () => {
+    const scene = sceneRef.current;
+    if (!scene) return;
+
+    // Очищаем сцену
+    while(scene.children.length > 2) {
+      scene.remove(scene.children[2]);
+    }
+
+    const houseElement = elements.find(el => el.type === 'house');
+    if (!houseElement) return;
+
+    // Создание фундамента (сваи)
+    createFoundation(houseElement);
+
+    // Создание стен дома
+    createHouseWalls(houseElement);
+
+    // Создание внутренних стен
+    createInternalWalls();
+
+    // Создание дверей
+    createDoors();
+
+    // Создание окон
+    createWindows();
+
+    // Крыша убрана для просмотра внутренней планировки
+
+    // Пол дома
+    const scale = 0.5;
+    const houseWidth = houseElement.width * scale;
+    const houseHeight = houseElement.height * scale;
+    
+    const floorGeometry = new THREE.PlaneGeometry(houseWidth, houseHeight);
+    const floorMaterial = new THREE.MeshLambertMaterial({ color: 0xD2B48C });
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI / 2;
+    floor.position.y = 0;
+    floor.receiveShadow = true;
+    scene.add(floor);
+    
+    // Земля вокруг дома
+    const groundGeometry = new THREE.PlaneGeometry(300, 300);
+    const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x90EE90 });
+    const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -1;
+    ground.receiveShadow = true;
+    scene.add(ground);
+  };
+
+  const createFoundation = (houseElement) => {
+    const scene = sceneRef.current;
+    const pileHeight = 15;
+    const pileRadius = 1;
+    const pileColor = 0x8B4513;
+
+    // Масштаб для 3D
+    const scale = 0.5;
+    const houseWidth = houseElement.width * scale;
+    const houseHeight = houseElement.height * scale;
+    
+    // Размещаем сваи по углам и периметру
+    const pilePositions = [
+      // Углы
+      { x: -houseWidth/2, z: -houseHeight/2 },
+      { x: houseWidth/2, z: -houseHeight/2 },
+      { x: houseWidth/2, z: houseHeight/2 },
+      { x: -houseWidth/2, z: houseHeight/2 },
+      // Дополнительные сваи
+      { x: 0, z: -houseHeight/2 },
+      { x: 0, z: houseHeight/2 },
+      { x: -houseWidth/2, z: 0 },
+      { x: houseWidth/2, z: 0 },
+      { x: 0, z: 0 }
+    ];
+
+    pilePositions.forEach(pos => {
+      const pileGeometry = new THREE.CylinderGeometry(pileRadius, pileRadius, pileHeight);
+      const pileMaterial = new THREE.MeshLambertMaterial({ color: pileColor });
+      const pile = new THREE.Mesh(pileGeometry, pileMaterial);
+      pile.position.set(pos.x, -pileHeight/2, pos.z);
+      pile.castShadow = true;
+      scene.add(pile);
+    });
+  };
+
+  const createHouseWalls = (houseElement) => {
+    const scene = sceneRef.current;
+    const wallHeight = 30;
+    const wallThickness = 2;
+    const scale = 0.5;
+    const houseWidth = houseElement.width * scale;
+    const houseHeight = houseElement.height * scale;
+    const wallMaterial = new THREE.MeshLambertMaterial({ 
+      color: 0xF5DEB3,
+      transparent: true,
+      opacity: 0.9
+    });
+
+    // Используем периметр если есть, иначе обычные стены
+    if (perimeterPoints && perimeterPoints.length >= 3) {
+      // Создаем стены по периметру
+      for (let i = 0; i < perimeterPoints.length; i++) {
+        const start = perimeterPoints[i];
+        const end = perimeterPoints[(i + 1) % perimeterPoints.length];
+        
+        const wallLength = Math.sqrt(
+          Math.pow(end.x - start.x, 2) + Math.pow(end.y - start.y, 2)
+        ) * scale / 30; // Конвертируем в 3D масштаб
+        
+        const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallThickness);
+        const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+        
+        // Позиционирование и поворот стены
+        const centerX = ((start.x + end.x) / 2 - (houseElement.x + houseElement.width / 2)) * scale / 30;
+        const centerZ = ((start.y + end.y) / 2 - (houseElement.y + houseElement.height / 2)) * scale / 30;
+        const angle = Math.atan2(end.y - start.y, end.x - start.x);
+        
+        wall.position.set(centerX, wallHeight/2, centerZ);
+        wall.rotation.y = angle;
+        wall.castShadow = true;
+        wall.receiveShadow = true;
+        scene.add(wall);
+      }
+    } else {
+      // Обычные стены дома
+      const wallPositions = [
+        { x: 0, z: -houseHeight/2, width: houseWidth, height: wallThickness },
+        { x: 0, z: houseHeight/2, width: houseWidth, height: wallThickness },
+        { x: -houseWidth/2, z: 0, width: wallThickness, height: houseHeight },
+        { x: houseWidth/2, z: 0, width: wallThickness, height: houseHeight }
+      ];
+
+      wallPositions.forEach(pos => {
+        const wallGeometry = new THREE.BoxGeometry(pos.width, wallHeight, pos.height);
+        const wall = new THREE.Mesh(wallGeometry, wallMaterial);
+        wall.position.set(pos.x, wallHeight/2, pos.z);
+        wall.castShadow = true;
+        wall.receiveShadow = true;
+        scene.add(wall);
+      });
+    }
+  };
+
+  const createInternalWalls = () => {
+    const scene = sceneRef.current;
+    const wallHeight = 30;
+    const wallThickness = 1;
+    const wallMaterial = new THREE.MeshLambertMaterial({ color: 0xE6E6FA });
+    const houseElement = elements.find(el => el.type === 'house');
+    const scale = 0.5;
+
+    walls.forEach(wall => {
+      const wallLength = Math.sqrt(
+        Math.pow(wall.end.x - wall.start.x, 2) + Math.pow(wall.end.y - wall.start.y, 2)
+      ) * scale / 30;
+      
+      const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallThickness);
+      const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
+      
+      // Правильное позиционирование относительно дома
+      const centerX = ((wall.start.x + wall.end.x) / 2 - (houseElement.x + houseElement.width / 2)) * scale / 30;
+      const centerZ = ((wall.start.y + wall.end.y) / 2 - (houseElement.y + houseElement.height / 2)) * scale / 30;
+      const angle = Math.atan2(wall.end.y - wall.start.y, wall.end.x - wall.start.x);
+      
+      wallMesh.position.set(centerX, wallHeight/2, centerZ);
+      wallMesh.rotation.y = angle;
+      wallMesh.castShadow = true;
+      wallMesh.receiveShadow = true;
+      scene.add(wallMesh);
+    });
+  };
+
+  const createDoors = () => {
+    const scene = sceneRef.current;
+    const doorHeight = 25;
+    const doorWidth = 1;
+    const doorThickness = 0.3;
+    const houseElement = elements.find(el => el.type === 'house');
+    const scale = 0.5;
+
+    doors.forEach(door => {
+      // Дверная рама
+      const frameGeometry = new THREE.BoxGeometry(doorWidth + 0.1, doorHeight + 2, doorThickness + 0.1);
+      const frameMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
+      const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+      
+      // Дверное полотно
+      const doorGeometry = new THREE.BoxGeometry(doorWidth, doorHeight, doorThickness);
+      const doorMaterial = new THREE.MeshLambertMaterial({ color: 0x654321 });
+      const doorMesh = new THREE.Mesh(doorGeometry, doorMaterial);
+      
+      const posX = (door.x - (houseElement.x + houseElement.width / 2)) * scale / 30;
+      const posZ = (door.y - (houseElement.y + houseElement.height / 2)) * scale / 30;
+      
+      frame.position.set(posX, doorHeight/2, posZ);
+      doorMesh.position.set(posX, doorHeight/2, posZ);
+      
+      frame.castShadow = true;
+      doorMesh.castShadow = true;
+      scene.add(frame);
+      scene.add(doorMesh);
+    });
+  };
+
+  const createWindows = () => {
+    const scene = sceneRef.current;
+    const windowHeight = 15;
+    const windowWidth = 1;
+    const windowThickness = 0.2;
+    const houseElement = elements.find(el => el.type === 'house');
+    const scale = 0.5;
+
+    windows.forEach(window => {
+      // Оконная рама
+      const frameGeometry = new THREE.BoxGeometry(windowWidth + 0.1, windowHeight + 1, windowThickness + 0.1);
+      const frameMaterial = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+      const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+      
+      // Стекло
+      const glassGeometry = new THREE.BoxGeometry(windowWidth, windowHeight, windowThickness);
+      const glassMaterial = new THREE.MeshLambertMaterial({ 
+        color: 0x87CEEB, 
+        transparent: true, 
+        opacity: 0.3 
+      });
+      const glass = new THREE.Mesh(glassGeometry, glassMaterial);
+      
+      const posX = (window.x - (houseElement.x + houseElement.width / 2)) * scale / 30;
+      const posZ = (window.y - (houseElement.y + houseElement.height / 2)) * scale / 30;
+      
+      frame.position.set(posX, 18, posZ);
+      glass.position.set(posX, 18, posZ);
+      
+      frame.castShadow = true;
+      scene.add(frame);
+      scene.add(glass);
+    });
+  };
+
+  const createRoof = (houseElement) => {
+    const scene = sceneRef.current;
+    const roofHeight = 40;
+    
+    if (perimeterPoints && perimeterPoints.length >= 3) {
+      // Плоская крыша для деформированного дома
+      const roofGeometry = new THREE.BoxGeometry(
+        houseElement.width/25, 
+        4, 
+        houseElement.height/25
+      );
+      const roofMaterial = new THREE.MeshLambertMaterial({ color: 0x8B0000 });
+      const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+      roof.position.y = 62;
+      roof.castShadow = true;
+      scene.add(roof);
+    } else {
+      // Двускатная крыша
+      const roofGeometry = new THREE.ConeGeometry(
+        Math.max(houseElement.width/40, houseElement.height/40), 
+        roofHeight, 
+        4
+      );
+      const roofMaterial = new THREE.MeshLambertMaterial({ color: 0x8B0000 });
+      const roof = new THREE.Mesh(roofGeometry, roofMaterial);
+      roof.position.y = 60 + roofHeight/2;
+      roof.rotation.y = Math.PI / 4;
+      roof.castShadow = true;
+      scene.add(roof);
+    }
+  };
 
   return (
-    <div className={styles.house3DViewer}>
-      {isLoading && (
-        <div className={styles.loadingOverlay}>
-          <div className={styles.loadingSpinner}></div>
-          <p>Загрузка 3D модели...</p>
-        </div>
-      )}
-      
-      <div className={styles.viewerControls}>
+    <div className={styles.viewer3D}>
+      <div className={styles.controls}>
         <button className={styles.closeBtn} onClick={onClose}>
-          ✕ Закрыть 3D
+          ✕ Закрыть 3D вид
         </button>
-        <div className={styles.controlsInfo}>
-          <span>🖱️ Перетаскивайте для поворота</span>
-          <span>🔍 Колесо мыши для масштаба</span>
+        <div className={styles.hint}>
+          Зажмите левую кнопку мыши и перетаскивайте для поворота камеры
         </div>
       </div>
-      
-      <div ref={mountRef} className={styles.viewerContainer}>
-        {!isLoading && (
-          <div className={styles.placeholder3D}>
-            <div className={styles.houseModel}>
-              <div className={styles.houseBase}></div>
-              <div className={styles.houseRoof}></div>
-              <div className={styles.houseDoor}></div>
-              <div className={styles.houseWindow}></div>
-              <div className={styles.houseWindow} style={{right: '20px'}}></div>
-            </div>
-            <p>3D модель дома {initialData.house.width}×{initialData.house.height}м</p>
-          </div>
-        )}
-      </div>
+      <div ref={mountRef} className={styles.canvas3D} />
     </div>
   );
 }
