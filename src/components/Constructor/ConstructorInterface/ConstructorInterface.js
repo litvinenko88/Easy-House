@@ -636,10 +636,25 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const houseElement = elements.find(el => el.type === 'house');
     if (!houseElement) return rooms;
     
+    // Определяем границы для сетки
+    let minX, minY, maxX, maxY;
+    
+    if (perimeterPoints.length >= 3) {
+      minX = Math.min(...perimeterPoints.map(p => p.x));
+      minY = Math.min(...perimeterPoints.map(p => p.y));
+      maxX = Math.max(...perimeterPoints.map(p => p.x));
+      maxY = Math.max(...perimeterPoints.map(p => p.y));
+    } else {
+      minX = houseElement.x;
+      minY = houseElement.y;
+      maxX = houseElement.x + houseElement.width;
+      maxY = houseElement.y + houseElement.height;
+    }
+    
     // Создаем сетку для поиска комнат
     const gridSize = 10;
-    const cols = Math.floor(houseElement.width / gridSize);
-    const rows = Math.floor(houseElement.height / gridSize);
+    const cols = Math.floor((maxX - minX) / gridSize);
+    const rows = Math.floor((maxY - minY) / gridSize);
     const visited = Array(rows).fill().map(() => Array(cols).fill(false));
     
     // Получаем все стены (периметр + внутренние)
@@ -683,8 +698,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
       for (let col = 0; col < cols; col++) {
         if (visited[row][col]) continue;
         
-        const startX = houseElement.x + col * gridSize + gridSize / 2;
-        const startY = houseElement.y + row * gridSize + gridSize / 2;
+        const startX = minX + col * gridSize + gridSize / 2;
+        const startY = minY + row * gridSize + gridSize / 2;
         
         if (!isPointInsideHouse(startX, startY)) continue;
         
@@ -697,8 +712,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
           
           if (r < 0 || r >= rows || c < 0 || c >= cols || visited[r][c]) continue;
           
-          const pointX = houseElement.x + c * gridSize + gridSize / 2;
-          const pointY = houseElement.y + r * gridSize + gridSize / 2;
+          const pointX = minX + c * gridSize + gridSize / 2;
+          const pointY = minY + r * gridSize + gridSize / 2;
           
           if (!isPointInsideHouse(pointX, pointY)) continue;
           
@@ -715,8 +730,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
             if (neighbor.row < 0 || neighbor.row >= rows || neighbor.col < 0 || neighbor.col >= cols) continue;
             if (visited[neighbor.row][neighbor.col]) continue;
             
-            const neighborX = houseElement.x + neighbor.col * gridSize + gridSize / 2;
-            const neighborY = houseElement.y + neighbor.row * gridSize + gridSize / 2;
+            const neighborX = minX + neighbor.col * gridSize + gridSize / 2;
+            const neighborY = minY + neighbor.row * gridSize + gridSize / 2;
             
             // Проверяем, нет ли стены между точками
             if (!intersectsWall(pointX, pointY, neighborX, neighborY)) {
@@ -753,7 +768,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
         ctx.strokeStyle = '#28a745';
         ctx.lineWidth = 1;
         
-        const fontSize = Math.max(12, 14 * zoom);
+        const fontSize = Math.max(7, 8 * zoom);
         ctx.font = `${fontSize}px Arial`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
