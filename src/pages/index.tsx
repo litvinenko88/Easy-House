@@ -84,7 +84,7 @@ export default function Home() {
         <Features />
         <VirtualTour />
         <ProductionProcess />
-        <ProjectConstructor />
+        <ProjectConstructor onConstructorOpen={() => window.location.href = '/konstruktor'} />
         <WhyChooseUs />
         <Guarantees />
         <PhotoGallery />
