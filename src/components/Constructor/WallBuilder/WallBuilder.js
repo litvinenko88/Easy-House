@@ -148,7 +148,10 @@ export default function useWallBuilder({
     newPoints.splice(wallIndex + 1, 0, newPoint);
     setPerimeterPoints(newPoints);
     
-    // Мгновенная перерисовка
+    // Мгновенная перерисовка и обновление элементов
+    if (onPerimeterChange) {
+      onPerimeterChange(newPoints);
+    }
     if (drawCanvas) drawCanvas();
 
   };
@@ -203,7 +206,10 @@ export default function useWallBuilder({
       setPerimeterPoints(newPoints);
       setSelectedPoint({ ...selectedPoint, x: newX, y: newY });
       
-      // Мгновенная перерисовка
+      // Мгновенная перерисовка и обновление элементов
+      if (onPerimeterChange) {
+        onPerimeterChange(newPoints);
+      }
       if (drawCanvas) drawCanvas();
     }
   };
