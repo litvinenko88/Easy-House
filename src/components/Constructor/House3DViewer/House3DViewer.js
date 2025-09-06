@@ -198,7 +198,7 @@ export default function House3DViewer({
     const wallMaterial = new THREE.MeshLambertMaterial({ color: 0xF5DEB3 });
 
     if (perimeterPoints && perimeterPoints.length >= 4) {
-      // Стены по деформированному периметру
+      // Стены по деформированному периметру с удлинением для соединения углов
       for (let i = 0; i < perimeterPoints.length; i++) {
         const start = perimeterPoints[i];
         const end = perimeterPoints[(i + 1) % perimeterPoints.length];
@@ -208,12 +208,23 @@ export default function House3DViewer({
         const endX = (end.x - (houseElement.x + houseElement.width / 2)) * scale;
         const endZ = (end.y - (houseElement.y + houseElement.height / 2)) * scale;
         
-        const wallLength = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endZ - startZ, 2));
-        const wallAngle = Math.atan2(endZ - startZ, endX - startX);
-        const centerX = (startX + endX) / 2;
-        const centerZ = (startZ + endZ) / 2;
+        // Удлиняем стену на половину толщины с каждой стороны для соединения углов
+        const wallVector = new THREE.Vector3(endX - startX, 0, endZ - startZ);
+        const wallLength = wallVector.length();
+        wallVector.normalize();
         
-        const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallThickness);
+        const extension = wallThickness / 2;
+        const extendedStartX = startX - wallVector.x * extension;
+        const extendedStartZ = startZ - wallVector.z * extension;
+        const extendedEndX = endX + wallVector.x * extension;
+        const extendedEndZ = endZ + wallVector.z * extension;
+        
+        const extendedLength = wallLength + wallThickness;
+        const wallAngle = Math.atan2(endZ - startZ, endX - startX);
+        const centerX = (extendedStartX + extendedEndX) / 2;
+        const centerZ = (extendedStartZ + extendedEndZ) / 2;
+        
+        const wallGeometry = new THREE.BoxGeometry(extendedLength, wallHeight, wallThickness);
         const wall = new THREE.Mesh(wallGeometry, wallMaterial);
         wall.position.set(centerX, wallHeight/2, centerZ);
         wall.rotation.y = -wallAngle;
