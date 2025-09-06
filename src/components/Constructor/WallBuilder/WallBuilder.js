@@ -34,9 +34,6 @@ export default function useWallBuilder({
 
       setPerimeterPoints(initialPerimeter);
       initializedRef.current = true;
-    } else if (selectedTool !== 'rotate') {
-      initializedRef.current = false;
-      setPerimeterPoints([]);
     }
   }, [houseElement, selectedTool]);
 
@@ -290,7 +287,19 @@ export default function useWallBuilder({
 
   // Отрисовка периметра и точек
   const drawPerimeter = (ctx) => {
-    if (selectedTool !== 'rotate' || !houseElement) return;
+    if (!houseElement || perimeterPoints.length === 0) return;
+    
+    // Показываем деформированный периметр всегда, если есть изменения
+    const hasChanges = perimeterPoints.some(point => !point.isCorner) || 
+                      perimeterPoints.some((point, index) => {
+                        if (index === 0) return point.x !== houseElement.x || point.y !== houseElement.y;
+                        if (index === 1) return point.x !== houseElement.x + houseElement.width || point.y !== houseElement.y;
+                        if (index === 2) return point.x !== houseElement.x + houseElement.width || point.y !== houseElement.y + houseElement.height;
+                        if (index === 3) return point.x !== houseElement.x || point.y !== houseElement.y + houseElement.height;
+                        return false;
+                      });
+    
+    if (!hasChanges && selectedTool !== 'rotate') return;
 
 
     const walls = getPerimeterWalls();
@@ -345,37 +354,39 @@ export default function useWallBuilder({
       }
     });
 
-    // Рисуем точки редактирования
-    perimeterPoints.forEach(point => {
-      const screenX = point.x * zoom;
-      const screenY = point.y * zoom;
-      const pointSize = Math.max(6, 8 * zoom);
+    // Рисуем точки редактирования только при активном инструменте
+    if (selectedTool === 'rotate') {
+      perimeterPoints.forEach(point => {
+        const screenX = point.x * zoom;
+        const screenY = point.y * zoom;
+        const pointSize = Math.max(6, 8 * zoom);
 
-      if (point.isCorner) {
-        // Угловые точки (красные, неподвижные)
-        ctx.fillStyle = '#dc3545';
-        ctx.strokeStyle = '#ffffff';
-      } else {
-        // Обычные точки (синие, подвижные)
-        ctx.fillStyle = '#007bff';
-        ctx.strokeStyle = '#ffffff';
-      }
+        if (point.isCorner) {
+          // Угловые точки (красные, неподвижные)
+          ctx.fillStyle = '#dc3545';
+          ctx.strokeStyle = '#ffffff';
+        } else {
+          // Обычные точки (синие, подвижные)
+          ctx.fillStyle = '#007bff';
+          ctx.strokeStyle = '#ffffff';
+        }
 
-      ctx.beginPath();
-      ctx.arc(screenX, screenY, pointSize, 0, 2 * Math.PI);
-      ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.stroke();
-
-      // Подсветка выбранной точки
-      if (selectedPoint && selectedPoint.id === point.id) {
-        ctx.strokeStyle = '#ffd700';
-        ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(screenX, screenY, pointSize + 2, 0, 2 * Math.PI);
+        ctx.arc(screenX, screenY, pointSize, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.lineWidth = 2;
         ctx.stroke();
-      }
-    });
+
+        // Подсветка выбранной точки
+        if (selectedPoint && selectedPoint.id === point.id) {
+          ctx.strokeStyle = '#ffd700';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(screenX, screenY, pointSize + 2, 0, 2 * Math.PI);
+          ctx.stroke();
+        }
+      });
+    }
   };
 
   return {
