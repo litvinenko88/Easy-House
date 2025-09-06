@@ -424,8 +424,19 @@ export default function ConstructorInterface({ initialData, onBack }) {
             Math.pow(end.x - start.x, 2) + 
             Math.pow(end.y - start.y, 2)
           );
-          const centerX = (start.x + end.x) / 2 * zoom;
-          const centerY = (start.y + end.y) / 2 * zoom;
+          const centerX = (start.x + end.x) / 2;
+          const centerY = (start.y + end.y) / 2;
+          
+          // Вычисляем нормаль к стене (перпендикуляр наружу)
+          const dx = end.x - start.x;
+          const dy = end.y - start.y;
+          const normalX = -dy / length; // Перпендикуляр
+          const normalY = dx / length;
+          
+          // Размещаем текст снаружи дома на расстоянии 30 пикселей
+          const offsetDistance = 30;
+          const textX = (centerX + normalX * offsetDistance) * zoom;
+          const textY = (centerY + normalY * offsetDistance) * zoom;
           
           ctx.fillStyle = '#df682b';
           ctx.font = '12px Arial';
@@ -433,17 +444,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
           
           const lengthMm = (length * 1000 / 30).toFixed(0);
           
-          if (Math.abs(end.x - start.x) > Math.abs(end.y - start.y)) {
-            // Горизонтальная стена
-            ctx.fillText(`${lengthMm}мм`, centerX, centerY - 12 * zoom);
-          } else {
-            // Вертикальная стена
-            ctx.save();
-            ctx.translate(centerX - 18 * zoom, centerY);
-            ctx.rotate(-Math.PI / 2);
-            ctx.fillText(`${lengthMm}мм`, 0, 0);
-            ctx.restore();
-          }
+          // Поворачиваем текст под углом стены
+          ctx.save();
+          ctx.translate(textX, textY);
+          const angle = Math.atan2(dy, dx);
+          ctx.rotate(angle);
+          ctx.fillText(`${lengthMm}мм`, 0, -5);
+          ctx.restore();
         }
       }
       return;
