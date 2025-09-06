@@ -394,13 +394,27 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
   
   const drawElement = (ctx, element) => {
-    // Не рисуем дом при активном инструменте "Построение стен"
-    if (element.type === 'house' && selectedTool === 'rotate') {
+      const isSelected = selectedElement?.id === element.id;
+    const isHovered = hoveredElement?.id === element.id;
+    
+    // Отрисовываем деформированный дом вместо обычного
+    if (element.type === 'house' && perimeterPoints.length > 0) {
+      // Заливаем область деформированного дома
+      ctx.fillStyle = isSelected ? '#d4c5e8' : isHovered ? '#f0e8f8' : '#eee8f4';
+      ctx.beginPath();
+      ctx.moveTo(perimeterPoints[0].x * zoom, perimeterPoints[0].y * zoom);
+      for (let i = 1; i < perimeterPoints.length; i++) {
+        ctx.lineTo(perimeterPoints[i].x * zoom, perimeterPoints[i].y * zoom);
+      }
+      ctx.closePath();
+      ctx.fill();
+      
+      // Обводка деформированного периметра
+      ctx.strokeStyle = (isSelected || isHovered) ? '#df682b' : '#31323d';
+      ctx.lineWidth = (isSelected || isHovered) ? Math.max(4, 5 * zoom) : Math.max(3, 4 * zoom);
+      ctx.stroke();
       return;
     }
-    
-    const isSelected = selectedElement?.id === element.id;
-    const isHovered = hoveredElement?.id === element.id;
     
     const scaledWidth = element.width * zoom;
     const scaledHeight = element.height * zoom;

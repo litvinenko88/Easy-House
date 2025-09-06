@@ -288,108 +288,41 @@ export default function useWallBuilder({
     return isDraggingPoint; // Возвращаем true если было перетаскивание
   };
 
-  // Отрисовка периметра и точек
+  // Отрисовка только точек редактирования
   const drawPerimeter = (ctx) => {
-    if (!houseElement || perimeterPoints.length === 0) return;
-    
-    // Показываем деформированный периметр всегда, если есть изменения
-    const hasChanges = perimeterPoints.some(point => !point.isCorner) || 
-                      perimeterPoints.some((point, index) => {
-                        if (index === 0) return point.x !== houseElement.x || point.y !== houseElement.y;
-                        if (index === 1) return point.x !== houseElement.x + houseElement.width || point.y !== houseElement.y;
-                        if (index === 2) return point.x !== houseElement.x + houseElement.width || point.y !== houseElement.y + houseElement.height;
-                        if (index === 3) return point.x !== houseElement.x || point.y !== houseElement.y + houseElement.height;
-                        return false;
-                      });
-    
-    if (!hasChanges && selectedTool !== 'rotate') return;
+    if (!houseElement || perimeterPoints.length === 0 || selectedTool !== 'rotate') return;
 
+    // Рисуем только точки редактирования
+    perimeterPoints.forEach(point => {
+      const screenX = point.x * zoom;
+      const screenY = point.y * zoom;
+      const pointSize = Math.max(4, 5 * zoom);
 
-    const walls = getPerimeterWalls();
-    
-    // Заливаем область деформированного дома
-    if (perimeterPoints.length >= 3) {
-      ctx.fillStyle = 'rgba(238, 232, 244, 0.8)';
-      ctx.beginPath();
-      ctx.moveTo(perimeterPoints[0].x * zoom, perimeterPoints[0].y * zoom);
-      for (let i = 1; i < perimeterPoints.length; i++) {
-        ctx.lineTo(perimeterPoints[i].x * zoom, perimeterPoints[i].y * zoom);
+      if (point.isCorner) {
+        // Угловые точки (красные, неподвижные)
+        ctx.fillStyle = '#dc3545';
+        ctx.strokeStyle = '#ffffff';
+      } else {
+        // Обычные точки (синие, подвижные)
+        ctx.fillStyle = '#007bff';
+        ctx.strokeStyle = '#ffffff';
       }
-      ctx.closePath();
-      ctx.fill();
-    }
-    
-    // Рисуем стены периметра
-    walls.forEach(wall => {
-      ctx.strokeStyle = '#df682b';
-      ctx.lineWidth = Math.max(4, 5 * zoom);
+
       ctx.beginPath();
-      ctx.moveTo(wall.start.x * zoom, wall.start.y * zoom);
-      ctx.lineTo(wall.end.x * zoom, wall.end.y * zoom);
+      ctx.arc(screenX, screenY, pointSize, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.lineWidth = 2;
       ctx.stroke();
-      
-      // Показываем размеры стен
-      if (zoom >= 0.3) {
-        const length = Math.sqrt(
-          Math.pow(wall.end.x - wall.start.x, 2) + 
-          Math.pow(wall.end.y - wall.start.y, 2)
-        );
-        const centerX = (wall.start.x + wall.end.x) / 2 * zoom;
-        const centerY = (wall.start.y + wall.end.y) / 2 * zoom;
-        
-        ctx.fillStyle = '#df682b';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        
-        const lengthMm = (length * 1000 / 30).toFixed(0);
-        
-        if (Math.abs(wall.end.x - wall.start.x) > Math.abs(wall.end.y - wall.start.y)) {
-          // Горизонтальная стена
-          ctx.fillText(`${lengthMm}мм`, centerX, centerY - 12 * zoom);
-        } else {
-          // Вертикальная стена
-          ctx.save();
-          ctx.translate(centerX - 18 * zoom, centerY);
-          ctx.rotate(-Math.PI / 2);
-          ctx.fillText(`${lengthMm}мм`, 0, 0);
-          ctx.restore();
-        }
+
+      // Подсветка выбранной точки
+      if (selectedPoint && selectedPoint.id === point.id) {
+        ctx.strokeStyle = '#ffd700';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, pointSize + 2, 0, 2 * Math.PI);
+        ctx.stroke();
       }
     });
-
-    // Рисуем точки редактирования только при активном инструменте
-    if (selectedTool === 'rotate') {
-      perimeterPoints.forEach(point => {
-        const screenX = point.x * zoom;
-        const screenY = point.y * zoom;
-        const pointSize = Math.max(4, 5 * zoom);
-
-        if (point.isCorner) {
-          // Угловые точки (красные, неподвижные)
-          ctx.fillStyle = '#dc3545';
-          ctx.strokeStyle = '#ffffff';
-        } else {
-          // Обычные точки (синие, подвижные)
-          ctx.fillStyle = '#007bff';
-          ctx.strokeStyle = '#ffffff';
-        }
-
-        ctx.beginPath();
-        ctx.arc(screenX, screenY, pointSize, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        // Подсветка выбранной точки
-        if (selectedPoint && selectedPoint.id === point.id) {
-          ctx.strokeStyle = '#ffd700';
-          ctx.lineWidth = 3;
-          ctx.beginPath();
-          ctx.arc(screenX, screenY, pointSize + 2, 0, 2 * Math.PI);
-          ctx.stroke();
-        }
-      });
-    }
   };
 
   return {
