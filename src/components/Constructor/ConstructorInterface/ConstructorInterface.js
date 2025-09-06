@@ -1208,6 +1208,19 @@ export default function ConstructorInterface({ initialData, onBack }) {
                   </button>
                 ))}
               </div>
+              <button 
+                className={styles.resetLayoutBtn}
+                onClick={() => {
+                  setWalls([]);
+                  setDoors([]);
+                  setWindows([]);
+                  setPerimeterPoints([]);
+                  setSelectedElement(null);
+                  setSelectedTool('select');
+                }}
+              >
+                🗑️ Сбросить планировку
+              </button>
             </div>
 
             <div className={styles.panelSection}>
