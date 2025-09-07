@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
-import ContactForm from '../ContactForm/ContactForm';
+import ContactForm from "../ContactForm/ContactForm";
 
 const Header = ({ onConstructorOpen }) => {
   const [isRegionOpen, setIsRegionOpen] = useState(false);
@@ -23,7 +23,6 @@ const Header = ({ onConstructorOpen }) => {
   const navItems = [
     "Каталог",
     "Конструктор",
-    "Для бизнеса",
     "Отзывы",
     "О компании",
     "Контакты",
@@ -153,15 +152,15 @@ const Header = ({ onConstructorOpen }) => {
             role="navigation"
             aria-label="Основное меню">
             {navItems.map((item, index) => {
-              let href = '#';
-              if (item === 'Каталог') href = '/catalog';
-              if (item === 'Конструктор') href = '/konstruktor';
-              if (item === 'Для бизнеса') href = '/dlya-biznesa';
-              if (item === 'Отзывы') href = '/otzyvy';
-              if (item === 'О компании') href = '/o-kompanii';
-              if (item === 'Контакты') href = '/contacts';
-              
-              if (item === 'Конструктор') {
+              let href = "#";
+              if (item === "Каталог") href = "/catalog";
+              if (item === "Конструктор") href = "/konstruktor";
+              if (item === "Для бизнеса") href = "/dlya-biznesa";
+              if (item === "Отзывы") href = "/otzyvy";
+              if (item === "О компании") href = "/o-kompanii";
+              if (item === "Контакты") href = "/contacts";
+
+              if (item === "Конструктор") {
                 return (
                   <a
                     key={index}
@@ -172,7 +171,7 @@ const Header = ({ onConstructorOpen }) => {
                   </a>
                 );
               }
-              
+
               return (
                 <a
                   key={index}
@@ -206,7 +205,6 @@ const Header = ({ onConstructorOpen }) => {
                 aria-expanded={isRegionOpen}
                 aria-haspopup="listbox"
                 aria-label={`Текущий регион: ${selectedRegion}. Нажмите для выбора другого региона`}>
-
                 <div
                   className={`${styles.arrow} ${
                     isRegionOpen ? styles.open : ""
@@ -308,15 +306,15 @@ const Header = ({ onConstructorOpen }) => {
         <div className={styles.mobileNavContent}>
           <div className={styles.mobileNavItems}>
             {navItems.map((item, index) => {
-              let href = '#';
-              if (item === 'Каталог') href = '/catalog';
-              if (item === 'Конструктор') href = '/konstruktor';
-              if (item === 'Для бизнеса') href = '/dlya-biznesa';
-              if (item === 'Отзывы') href = '/otzyvy';
-              if (item === 'О компании') href = '/o-kompanii';
-              if (item === 'Контакты') href = '/contacts';
-              
-              if (item === 'Конструктор') {
+              let href = "#";
+              if (item === "Каталог") href = "/catalog";
+              if (item === "Конструктор") href = "/konstruktor";
+              if (item === "Для бизнеса") href = "/dlya-biznesa";
+              if (item === "Отзывы") href = "/otzyvy";
+              if (item === "О компании") href = "/o-kompanii";
+              if (item === "Контакты") href = "/contacts";
+
+              if (item === "Конструктор") {
                 return (
                   <a
                     key={index}
@@ -328,7 +326,7 @@ const Header = ({ onConstructorOpen }) => {
                   </a>
                 );
               }
-              
+
               return (
                 <a
                   key={index}
@@ -357,21 +355,21 @@ const Header = ({ onConstructorOpen }) => {
 
       {/* Модальное окно с формой обратной связи */}
       {isContactFormOpen && (
-        <div 
-          className={styles.modal} 
+        <div
+          className={styles.modal}
           onClick={() => setIsContactFormOpen(false)}
           onWheel={(e) => e.preventDefault()}
-          onTouchMove={(e) => e.preventDefault()}
-        >
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <button 
+          onTouchMove={(e) => e.preventDefault()}>
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}>
+            <button
               className={styles.modalClose}
               onClick={() => setIsContactFormOpen(false)}
-              aria-label="Закрыть форму"
-            >
+              aria-label="Закрыть форму">
               ×
             </button>
-            <ContactForm 
+            <ContactForm
               title="Обратная связь"
               source="header - кнопка обратной связи"
             />
