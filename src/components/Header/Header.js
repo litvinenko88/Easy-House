@@ -6,7 +6,7 @@ const Header = ({ onConstructorOpen }) => {
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
-  const [selectedRegion, setSelectedRegion] = useState("Вся Россия");
+  const [selectedRegion, setSelectedRegion] = useState("");
   const [dropdownPosition, setDropdownPosition] = useState({
     top: 0,
     right: 0,
@@ -14,7 +14,6 @@ const Header = ({ onConstructorOpen }) => {
   const regionButtonRef = useRef(null);
 
   const regions = [
-    { name: "Вся Россия", short: "РФ" },
     { name: "Ставропольский край", short: "СК" },
     { name: "Краснодарский край", short: "КК" },
     { name: "Республика КЧР", short: "КЧР" },
@@ -207,9 +206,7 @@ const Header = ({ onConstructorOpen }) => {
                 aria-expanded={isRegionOpen}
                 aria-haspopup="listbox"
                 aria-label={`Текущий регион: ${selectedRegion}. Нажмите для выбора другого региона`}>
-                <span className={styles.regionText}>
-                  {getSelectedRegionShort()}
-                </span>
+
                 <div
                   className={`${styles.arrow} ${
                     isRegionOpen ? styles.open : ""
@@ -278,7 +275,6 @@ const Header = ({ onConstructorOpen }) => {
             <button
               className={styles.mobileRegionButton}
               onClick={() => setIsRegionOpen(!isRegionOpen)}>
-              <span>{getSelectedRegionShort()}</span>
               <div
                 className={`${styles.arrow} ${
                   isRegionOpen ? styles.open : ""
