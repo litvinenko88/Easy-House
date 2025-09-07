@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import styles from './Hero.module.css'
 import ContactForm from '../ContactForm'
 
-export default function Hero() {
+export default function Hero({ title, titleSub, price, subtitle, advantages }) {
   const [isVisible, setIsVisible] = useState(false)
   const [isContactFormOpen, setIsContactFormOpen] = useState(false)
 
@@ -58,37 +58,30 @@ export default function Hero() {
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.leftSection}>
             <h1 className={styles.title} itemScope itemType="https://schema.org/Product">
-              <span className={styles.titleMain} itemProp="name">Модульные дома </span>
-              <span className={styles.titleSub}>под ключ от </span>
+              <span className={styles.titleMain} itemProp="name">{title} </span>
+              <span className={styles.titleSub}>{titleSub} </span>
               <span className={styles.price} itemProp="offers" itemScope itemType="https://schema.org/Offer">
                 <meta itemProp="price" content="855000" />
                 <meta itemProp="priceCurrency" content="RUB" />
                 <meta itemProp="availability" content="https://schema.org/InStock" />
-                855 000₽
+                {price}
               </span>
             </h1>
             
             <p className={styles.subtitle} itemProp="description">
-              Это не просто коробка с окнами — это полноценный дом
+              {subtitle}
             </p>
             
             <ul className={styles.advantages} role="list" aria-label="Преимущества модульных домов">
-              <li className={styles.advantage}>
-                <div className={styles.advantageIcon} role="img" aria-label="Иконка дома">🏠</div>
-                <span className={styles.advantageText}>Заезжайте через 30 дней</span>
-              </li>
-              <li className={styles.advantage}>
-                <div className={styles.advantageIcon} role="img" aria-label="Иконка инструментов">🔧</div>
-                <span className={styles.advantageText}>Полный цикл «под ключ»</span>
-              </li>
-              <li className={styles.advantage}>
-                <div className={styles.advantageIcon} role="img" aria-label="Иконка денег">💰</div>
-                <span className={styles.advantageText}>Фиксированная цена</span>
-              </li>
-              <li className={styles.advantage}>
-                <div className={styles.advantageIcon} role="img" aria-label="Иконка молнии">⚡</div>
-                <span className={styles.advantageText}>Скорость и прозрачность</span>
-              </li>
+              {advantages.map((advantage, index) => {
+                const icons = ['🏠', '🔧', '💰', '⚡'];
+                return (
+                  <li key={index} className={styles.advantage}>
+                    <div className={styles.advantageIcon} role="img" aria-label={`Иконка ${index + 1}`}>{icons[index] || '✓'}</div>
+                    <span className={styles.advantageText}>{advantage}</span>
+                  </li>
+                );
+              })}
             </ul>
             
             <div className={styles.buttons} role="group" aria-label="Действия">
