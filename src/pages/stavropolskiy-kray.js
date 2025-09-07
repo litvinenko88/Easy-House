@@ -3,6 +3,7 @@ import Hero from "../components/Hero/Hero";
 import ProblemSolution from "../components/ProblemSolution/ProblemSolution";
 import Features from "../components/Features/Features";
 import Bestsellers from "../components/Bestsellers/Bestsellers";
+import VideoReviews from "../components/VideoReviews";
 import WhyChooseUs from "../components/WhyChooseUs/WhyChooseUs";
 import VideoTestimonials from "../components/VideoTestimonials/VideoTestimonials";
 import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryInstallation";
@@ -30,26 +31,23 @@ export default function StavropolskiyKray() {
           "Стоимость от 850 000₽",
         ]}
       />
-      <ProblemSolution 
+      <ProblemSolution
         problems={[
           "Сложности с наймом подрядчиков",
           "Климатические особенности региона",
           "Постоянный рост сметы",
-          "Долгие сроки строительства"
+          "Долгие сроки строительства",
         ]}
         solutions={[
           "Только своя бригада",
           "Дома, адаптированные под климат Ставрополья",
           "Фиксированная цена",
-          "Готовый дом за 30 дней"
+          "Готовый дом за 30 дней",
         ]}
       />
-      <Features />
       <Bestsellers />
-      <WhyChooseUs />
-      <VideoTestimonials />
-      <DeliveryInstallation />
-      <FAQReviews />
+      <VideoReviews showViewAllButton={true} />
+      <Features />
     </Layout>
   );
 }
