@@ -2,9 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   build-and-deploy:
@@ -24,13 +22,6 @@ jobs:
     
     - name: Build project
       run: npm run build
-    
-    - name: Deploy to Production branch
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./out
-        publish_branch: production
     
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
