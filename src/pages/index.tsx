@@ -89,7 +89,20 @@ export default function Home() {
             "Скорость и прозрачность"
           ]}
         />
-        <ProblemSolution />
+        <ProblemSolution 
+          problems={[
+            "Стройка затягивается на месяцы",
+            "Цена растет в процессе",
+            "Много подрядчиков",
+            "Непрозрачное качество"
+          ]}
+          solutions={[
+            "Сборка за 1-2 дня",
+            "Фиксированная стоимость",
+            "Один исполнитель",
+            "Фото/видео отчеты"
+          ]}
+        />
         <Bestsellers />
         <VideoReviews showViewAllButton={true} />
         <Features />

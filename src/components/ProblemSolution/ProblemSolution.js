@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './ProblemSolution.module.css'
 
-export default function ProblemSolution() {
+export default function ProblemSolution({ problems, solutions }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -41,10 +41,16 @@ export default function ProblemSolution() {
           <div className={styles.column}>
             <h3 className={styles.columnTitle}>Обычная стройка</h3>
             <div className={styles.list}>
-              <div className={styles.item}>Стройка затягивается на месяцы</div>
-              <div className={styles.item}>Цена растет в процессе</div>
-              <div className={styles.item}>Много подрядчиков</div>
-              <div className={styles.item}>Непрозрачное качество</div>
+              {problems ? problems.map((problem, index) => (
+                <div key={index} className={styles.item}>{problem}</div>
+              )) : (
+                <>
+                  <div className={styles.item}>Стройка затягивается на месяцы</div>
+                  <div className={styles.item}>Цена растет в процессе</div>
+                  <div className={styles.item}>Много подрядчиков</div>
+                  <div className={styles.item}>Непрозрачное качество</div>
+                </>
+              )}
             </div>
           </div>
           
@@ -53,10 +59,16 @@ export default function ProblemSolution() {
           <div className={styles.column}>
             <h3 className={styles.columnTitle}>Модульные дома</h3>
             <div className={styles.list}>
-              <div className={styles.item}>Сборка за 1-2 дня</div>
-              <div className={styles.item}>Фиксированная стоимость</div>
-              <div className={styles.item}>Один исполнитель</div>
-              <div className={styles.item}>Фото/видео отчеты</div>
+              {solutions ? solutions.map((solution, index) => (
+                <div key={index} className={styles.item}>{solution}</div>
+              )) : (
+                <>
+                  <div className={styles.item}>Сборка за 1-2 дня</div>
+                  <div className={styles.item}>Фиксированная стоимость</div>
+                  <div className={styles.item}>Один исполнитель</div>
+                  <div className={styles.item}>Фото/видео отчеты</div>
+                </>
+              )}
             </div>
           </div>
         </div>
