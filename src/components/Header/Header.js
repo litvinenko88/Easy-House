@@ -34,7 +34,7 @@ const Header = ({ onConstructorOpen }) => {
     
     // Навигация на страницу региона
     if (region.name === "Ставропольский край") {
-      window.location.href = "/stavropolskiy-kray";
+      window.location.href = "/stavropolskiy-kray/";
     }
   };
 
