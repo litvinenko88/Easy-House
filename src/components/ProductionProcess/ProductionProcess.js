@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./ProductionProcess.module.css";
 
-const ProductionProcess = () => {
+const ProductionProcess = ({ title, subtitle, description, steps: customSteps, guarantee }) => {
   const [visibleSteps, setVisibleSteps] = useState(new Set());
   const sectionRef = useRef(null);
   const stepsRef = useRef([]);
@@ -96,21 +96,18 @@ const ProductionProcess = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            Немецкая точность и российская надежность
+            {title || "Немецкая точность и российская надежность"}
           </h2>
           <p className={styles.subtitle}>
-            От чертежа до готового дома: технологический процесс мирового уровня
+            {subtitle || "От чертежа до готового дома: технологический процесс мирового уровня"}
           </p>
           <p className={styles.description}>
-            Наш заводской процесс исключает ошибки и гарантирует высочайшее
-            качество каждого модульного дома. Мы используем немецкое
-            оборудование Weinmann и отборные российские материалы для создания
-            домов премиум-класса.
+            {description || "Наш заводской процесс исключает ошибки и гарантирует высочайшее качество каждого модульного дома. Мы используем немецкое оборудование Weinmann и отборные российские материалы для создания домов премиум-класса."}
           </p>
         </div>
 
         <div className={styles.processGrid}>
-          {steps.map((step, index) => (
+          {(customSteps || steps).map((step, index) => (
             <div
               key={step.id}
               ref={(el) => (stepsRef.current[index] = el)}
@@ -136,9 +133,7 @@ const ProductionProcess = () => {
 
         <div className={styles.footer}>
           <p className={styles.guarantee}>
-            🏆 Этот технологический подход гарантирует, что ваш модульный дом
-            будет теплым, тихим, энергоэффективным и готовым к комфортному
-            проживанию сразу после сборки на участке.
+            {guarantee || "🏆 Этот технологический подход гарантирует, что ваш модульный дом будет теплым, тихим, энергоэффективным и готовым к комфортному проживанию сразу после сборки на участке."}
           </p>
         </div>
       </div>

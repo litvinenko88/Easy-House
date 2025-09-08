@@ -5,6 +5,7 @@ import Features from "../components/Features/Features";
 import Bestsellers from "../components/Bestsellers/Bestsellers";
 import VideoReviews from "../components/VideoReviews";
 import VirtualTour from "../components/VirtualTour/VirtualTour";
+import ProductionProcess from "../components/ProductionProcess/ProductionProcess";
 import WhyChooseUs from "../components/WhyChooseUs/WhyChooseUs";
 import VideoTestimonials from "../components/VideoTestimonials/VideoTestimonials";
 import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryInstallation";
@@ -133,6 +134,68 @@ export default function StavropolskiyKray() {
       <VirtualTour 
         title="Оцените свое будущее уже сегодня"
         description="Мечтаете прикинуть планировку, расставить мебель и представить жизнь в доме? Приглашаем на виртуальный тур по нашему выставленному образцу для ПМЖ. Пройдитесь по готовым решениям, изучите нюансы и ощутите атмосферу нового жилья — еще до старта строительства."
+      />
+      <ProductionProcess 
+        title="Гибрид немецкой аккуратности и российской прочности"
+        subtitle="От эскиза до завершённой сборки: производственные стандарты международного класса"
+        description="Наше промышленное производство предотвращает недочёты и обеспечивает безупречное качество каждого модульного здания. Мы применяем оборудование Weinmann из Германии и тщательно отобранные российские ресурсы для возведения домов премиум-уровня, предназначенных для постоянного проживания, на собственных мощностях."
+        steps={[
+          {
+            id: 1,
+            title: "Проектирование",
+            description: "Разрабатываем трёхмерную цифровую модель здания и подробные схемы всех панелей в системе CADwork.",
+            icon: "📏"
+          },
+          {
+            id: 2,
+            title: "Раскрой и обработка",
+            description: "Станок точно разрезает древесину камерной сушки для каждого модуля.",
+            icon: "🔧"
+          },
+          {
+            id: 3,
+            title: "Формирование каркаса",
+            description: "Автоматизированная линия собирает усиленный каркас из двутавровых балок.",
+            icon: "🏗️"
+          },
+          {
+            id: 4,
+            title: "Облицовка ГСП",
+            description: "Конструкция покрывается безопасными гипсостружечными плитами.",
+            icon: "🛡️"
+          },
+          {
+            id: 5,
+            title: "Установка пароизоляции",
+            description: "Монтируется парозащитное полотно «Изоспан».",
+            icon: "💨"
+          },
+          {
+            id: 6,
+            title: "Монтаж insulation",
+            description: "Аккуратно устанавливается огнестойкий каменный утеплитель Технониколь.",
+            icon: "🧧"
+          },
+          {
+            id: 7,
+            title: "Разводка инженерных сетей",
+            description: "Прокладывается электрика и проектируются линии коммуникаций.",
+            icon: "⚡"
+          },
+          {
+            id: 8,
+            title: "Идентификация и упаковка",
+            description: "Все панели помечаются для оперативного монтажа на территории.",
+            icon: "📦"
+          },
+          {
+            id: 9,
+            title: "Приёмка ОТК",
+            description: "Мастер проверяет каждую панель на соблюдение нормативов.",
+            icon: "✅"
+          }
+        ]}
+        guarantee="🏆 Такой метод возведения модульных строений обеспечивает тёплый, quiet, энергоэффективный дом, полностью пригодный для заселения сразу после установки на местности."
       />
     </Layout>
   );
