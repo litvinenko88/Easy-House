@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import styles from './VideoReviews.module.css'
 
-export default function VideoReviews({ showAllVideos = false, showViewAllButton = false }) {
+export default function VideoReviews({ title, description, showAllVideos = false, showViewAllButton = false }) {
   const [isVisible, setIsVisible] = useState(false)
   const [playingVideo, setPlayingVideo] = useState(null)
   const [isPlaying, setIsPlaying] = useState({})
@@ -151,11 +151,11 @@ export default function VideoReviews({ showAllVideos = false, showViewAllButton 
       <div className="container">
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <h2 id="video-reviews-title">
-            Видеообзоры наших домов
+            {title || "Видеообзоры наших домов"}
           </h2>
           
           <p className={styles.description}>
-            Убедитесь в качестве и продуманности каждой детали
+            {description || "Убедитесь в качестве и продуманности каждой детали"}
           </p>
           
           <div className={styles.videoGrid}>
