@@ -80,7 +80,7 @@ const housesData = [
   },
 ];
 
-export default function Bestsellers() {
+export default function Bestsellers({ title = "Наши бестселлеры", subtitle = "Популярные модульные дома, которые выбирают наши клиенты" }) {
   const [visibleCards, setVisibleCards] = useState([]);
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef(null);
@@ -133,10 +133,10 @@ export default function Bestsellers() {
         <div className="container">
           <header className={styles.header}>
             <h2 id="bestsellers-title" className={styles.title} itemProp="name">
-              Наши бестселлеры
+              {title}
             </h2>
             <p className={styles.subtitle}>
-              Популярные модульные дома, которые выбирают наши клиенты
+              {subtitle}
             </p>
           </header>
 
