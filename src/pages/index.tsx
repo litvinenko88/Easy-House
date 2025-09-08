@@ -90,8 +90,6 @@ export default function Home() {
           ]}
         />
         <ProblemSolution 
-          heading={'Строительство дома - это сложно?'}
-          headingSub={'Мы решили проблему'}
           problems={[
             "Стройка затягивается на месяцы",
             "Цена растет в процессе",
