@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './VirtualTour.module.css'
 
-export default function VirtualTour() {
+export default function VirtualTour({ title, description }) {
   const [isVisible, setIsVisible] = useState(false)
 
   const handleTour65 = () => {
@@ -50,14 +50,11 @@ export default function VirtualTour() {
       <div className={styles.container}>
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <h2 className={styles.title}>
-            Загляните в будущее прямо сейчас
+            {title || "Загляните в будущее прямо сейчас"}
           </h2>
           
           <p className={styles.description}>
-            Хотите заранее оценить площади дома, где будет стоять диван или кровать одного модуля? 
-            Воспользуйтесь нашей интерактивной 3D-экскурсией по выставочному образцу модульного дома. 
-            Погуляйте по готовым проектам, изучите каждую деталь и представьте свою жизнь в новом доме — 
-            еще до начала строительства.
+            {description || "Хотите заранее оценить площади дома, где будет стоять диван или кровать одного модуля? Воспользуйтесь нашей интерактивной 3D-экскурсией по выставочному образцу модульного дома. Погуляйте по готовым проектам, изучите каждую деталь и представьте свою жизнь в новом доме — еще до начала строительства."}
           </p>
           
           <div className={styles.buttons} role="group" aria-label="Выбор виртуальной экскурсии">

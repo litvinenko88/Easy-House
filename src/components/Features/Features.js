@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./Features.module.css";
 
-const Features = () => {
+const Features = ({ title, features: customFeatures }) => {
   const containerRef = useRef(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
@@ -141,7 +141,7 @@ const Features = () => {
       <div className={styles.container} ref={containerRef}>
         <div>
           <h2 id="features-title" className={styles.sectionTitle}>
-            Что вы получаете при покупке модульного дома
+            {title || "Что вы получаете при покупке модульного дома"}
           </h2>
         </div>
 
@@ -152,7 +152,7 @@ const Features = () => {
           id="features-grid"
           role="list"
           aria-label="Особенности модульных домов">
-          {features.map((feature, index) => {
+          {(customFeatures || features).map((feature, index) => {
             const isEven = index % 2 === 0;
             const isHidden = index >= 4;
 
