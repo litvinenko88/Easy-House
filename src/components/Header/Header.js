@@ -23,6 +23,7 @@ const Header = ({ onConstructorOpen }) => {
   const navItems = [
     "Каталог",
     "Конструктор",
+    "Для бизнеса",
     "Отзывы",
     "О компании",
     "Контакты",
@@ -31,10 +32,16 @@ const Header = ({ onConstructorOpen }) => {
   const handleRegionSelect = (region) => {
     setSelectedRegion(region.name);
     setIsRegionOpen(false);
-    
+
     // Навигация на страницу региона
     if (region.name === "Ставропольский край") {
-      window.location.href = "/stavropolskiy-kray/";
+      window.location.href = "/stavropolskiy-kray";
+    } else if (region.name === "Краснодарский край") {
+      window.location.href = "/krasnodarskiy-kray";
+    } else if (region.name === "Республика КЧР") {
+      window.location.href = "/respublika-kchr";
+    } else if (region.name === "Республика КБР") {
+      window.location.href = "/respublika-kbr";
     }
   };
 

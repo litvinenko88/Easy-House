@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./WhyChooseUs.module.css";
 import ContactForm from "../ContactForm";
 
-const WhyChooseUs = () => {
+const WhyChooseUs = ({ title, subtitle, advantages: customAdvantages, ctaTitle, ctaText }) => {
   const [visibleItems, setVisibleItems] = useState(new Set());
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const sectionRef = useRef(null);
@@ -96,15 +96,14 @@ const WhyChooseUs = () => {
     <section className={styles.section} ref={sectionRef}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>Причины выбрать модульный дом</h2>
+          <h2 className={styles.title}>{title || "Причины выбрать модульный дом"}</h2>
           <p className={styles.subtitle}>
-            Технология производства модульных домов - это принципиально новый
-            уровень комфорта, надежности и экономии
+            {subtitle || "Технология производства модульных домов - это принципиально новый уровень комфорта, надежности и экономии"}
           </p>
         </div>
 
         <div className={styles.advantagesGrid}>
-          {advantages.map((advantage, index) => (
+          {(customAdvantages || advantages).map((advantage, index) => (
             <div
               key={advantage.id}
               ref={(el) => (itemsRef.current[index] = el)}
@@ -132,9 +131,9 @@ const WhyChooseUs = () => {
 
         <div className={styles.footer}>
           <div className={styles.ctaSection}>
-            <h3 className={styles.ctaTitle}>Готовы начать строительство?</h3>
+            <h3 className={styles.ctaTitle}>{ctaTitle || "Готовы начать строительство?"}</h3>
             <p className={styles.ctaText}>
-              Получите персональный расчет стоимости вашего модульного дома
+              {ctaText || "Получите персональный расчет стоимости вашего модульного дома"}
             </p>
             <button
               className={styles.ctaButton}

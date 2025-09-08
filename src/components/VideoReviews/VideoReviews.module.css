@@ -1,5 +1,10 @@
 .videoReviews {
-  background: linear-gradient(135deg, var(--color-primary) 0%, #16213e 50%, #0f3460 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    #16213e 50%,
+    #0f3460 100%
+  );
   padding: var(--spacing-2xl) 0;
   position: relative;
   overflow: hidden;
@@ -110,7 +115,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
     opacity: 0.7;
   }
@@ -132,7 +138,8 @@
 }
 
 @keyframes twinkle {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
     transform: scale(1);
   }
@@ -143,7 +150,8 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(-50%, -50%) scale(1);
     opacity: 0.3;
   }
@@ -168,7 +176,11 @@
 }
 
 .content h2 {
-  background: linear-gradient(135deg, var(--color-white) 0%, var(--color-accent) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-white) 0%,
+    var(--color-accent) 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -179,7 +191,6 @@
   font-size: var(--font-text-lg);
   color: rgba(255, 255, 255, 0.8);
   margin-bottom: var(--spacing-xl);
-  max-width: 500px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
@@ -305,7 +316,7 @@
   font-size: var(--font-text-xs);
   font-weight: 400;
   white-space: nowrap;
-  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  font-family: "SF Mono", "Monaco", "Consolas", monospace;
 }
 
 .centerPlayButton {
@@ -397,40 +408,40 @@
   .videoReviews {
     padding: var(--spacing-xl) 0;
   }
-  
+
   .videoGrid {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
-  
+
   .video {
     height: 180px;
   }
-  
+
   .customControls {
     padding: 12px 8px 6px;
     gap: 6px;
   }
-  
+
   .playButton {
     width: 30px;
     height: 30px;
   }
-  
+
   .centerPlay {
     width: 50px;
     height: 50px;
   }
-  
+
   .centerPlay svg {
     width: 20px;
     height: 20px;
   }
-  
+
   .buttonContainer {
     margin-top: var(--spacing-lg);
   }
-  
+
   .viewAllButton {
     padding: 16px 28px;
     font-size: var(--font-text-sm);
