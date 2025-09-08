@@ -36,8 +36,8 @@ Disallow: /admin/
 Disallow: /*.json$
 
 # Sitemap
-Sitemap: https://easy-house.ru/sitemap.xml
-Sitemap: https://easy-house.ru/sitemap-img.xml
+Sitemap: https://house-modular.ru/sitemap.xml
+Sitemap: https://house-modular.ru/sitemap-img.xml
 
 # Время задержки для ботов
 Crawl-delay: 1

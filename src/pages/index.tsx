@@ -17,10 +17,10 @@ export default function Home() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://easy-house.ru/#business",
+    "@id": "https://house-modular.ru/#business",
     "name": "Easy House",
     "description": "Производство и строительство модульных домов под ключ за 30 дней",
-    "url": "https://easy-house.ru",
+    "url": "https://house-modular.ru",
     "telephone": "+7 (800) 123-45-67",
     "priceRange": "от 855,000 ₽",
     "address": {
@@ -62,8 +62,8 @@ export default function Home() {
             "@type": "Product",
             "name": "Новый Архангельск",
             "description": "Модульный дом под ключ от 855 000 рублей",
-            "url": "https://easy-house.ru/catalog/novyj-arkhangelsk/",
-            "image": "https://easy-house.ru/images/New_Arkhangelsk/1.jpg",
+            "url": "https://house-modular.ru/catalog/novyj-arkhangelsk/",
+            "image": "https://house-modular.ru/images/New_Arkhangelsk/1.jpg",
             "offers": {
               "@type": "Offer",
               "price": "855000",
@@ -78,8 +78,8 @@ export default function Home() {
             "@type": "Product",
             "name": "Барнхаус",
             "description": "Модульный дом в стиле барнхаус от 891 000 рублей",
-            "url": "https://easy-house.ru/catalog/barnkhaus/",
-            "image": "https://easy-house.ru/images/Barnhouse/1.jpg",
+            "url": "https://house-modular.ru/catalog/barnkhaus/",
+            "image": "https://house-modular.ru/images/Barnhouse/1.jpg",
             "offers": {
               "@type": "Offer",
               "price": "891000",
@@ -94,8 +94,8 @@ export default function Home() {
             "@type": "Product",
             "name": "Четырехмодульный Барн",
             "description": "Большой модульный дом от 3 130 000 рублей",
-            "url": "https://easy-house.ru/catalog/chetyrekhmodulnyj-barn/",
-            "image": "https://easy-house.ru/images/Four_Module_Barn/1.jpg",
+            "url": "https://house-modular.ru/catalog/chetyrekhmodulnyj-barn/",
+            "image": "https://house-modular.ru/images/Four_Module_Barn/1.jpg",
             "offers": {
               "@type": "Offer",
               "price": "3130000",
@@ -110,7 +110,7 @@ export default function Home() {
             "@type": "Product",
             "name": "Модульные дома для бизнеса",
             "description": "Коммерческие модульные здания",
-            "url": "https://easy-house.ru/dlya-biznesa/"
+            "url": "https://house-modular.ru/dlya-biznesa/"
           }
         }
       ]
@@ -129,7 +129,7 @@ export default function Home() {
     ],
     "potentialAction": {
       "@type": "OrderAction",
-      "target": "https://easy-house.ru/konstruktor/",
+      "target": "https://house-modular.ru/konstruktor/",
       "name": "Заказать модульный дом"
     }
   }
@@ -148,7 +148,7 @@ export default function Home() {
         title="Строительство модульных домов под ключ 🔑 за 30 дней | От 855 000р за дом" 
         description="Модульные дома от производителя под ключ за 30 дней 🔑| Строительство модульных домов для круглогодичного проживания с отделкой и коммуникациями | Доставка и гарантия | Собственное производство модульных домов"
         keywords="модульный дом под ключ, модульный дом цена, купить модульный дом, готовый модульный дом, производство модульных домов, модульный дом с отделкой, модульный дом с коммуникациями"
-        canonical="https://easy-house.ru/"
+        canonical="https://house-modular.ru/"
       >
         <Hero 
           title="Модульные дома"

@@ -2,7 +2,7 @@
 
 /* TEAM */
 Developer: Easy House Development Team
-Contact: info@easy-house.ru
+Contact: info@house-modular.ru
 Location: Russia
 
 /* THANKS */

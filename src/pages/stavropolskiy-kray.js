@@ -18,10 +18,10 @@ export default function StavropolskiyKray() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://easy-house.ru/stavropolskiy-kray/#business",
+    "@id": "https://house-modular.ru/stavropolskiy-kray/#business",
     "name": "Easy House - Ставропольский край",
     "description": "Строительство модульных домов под ключ в Ставропольском крае",
-    "url": "https://easy-house.ru/stavropolskiy-kray",
+    "url": "https://house-modular.ru/stavropolskiy-kray",
     "telephone": "+7 (800) 123-45-67",
     "priceRange": "от 855,000 ₽",
     "address": {

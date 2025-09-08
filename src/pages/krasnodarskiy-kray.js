@@ -18,10 +18,10 @@ export default function KrasnodarskiyKray() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://easy-house.ru/krasnodarskiy-kray/#business",
+    "@id": "https://house-modular.ru/krasnodarskiy-kray/#business",
     "name": "Easy House - Краснодарский край",
     "description": "Строительство модульных домов под ключ в Краснодарском крае",
-    "url": "https://easy-house.ru/krasnodarskiy-kray",
+    "url": "https://house-modular.ru/krasnodarskiy-kray",
     "telephone": "+7 (800) 123-45-67",
     "priceRange": "от 855,000 ₽",
     "address": {

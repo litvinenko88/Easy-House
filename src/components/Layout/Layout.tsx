@@ -19,9 +19,9 @@ export default function Layout({
   description = 'Модульные дома от производителя под ключ за 30 дней 🔑| Строительство модульных домов для круглогодичного проживания с отделкой и коммуникациями | Доставка и гарантия | Собственное производство модульных домов',
   keywords = 'модульный дом под ключ, модульный дом цена, купить модульный дом, готовый модульный дом, производство модульных домов, модульный дом с отделкой, модульный дом с коммуникациями',
   ogImage = '/images/og-image.jpg',
-  canonical = 'https://easy-house.ru/'
+  canonical = 'https://house-modular.ru/'
 }: LayoutProps) {
-  const siteUrl = 'https://easy-house.ru'
+  const siteUrl = 'https://house-modular.ru'
   const fullTitle = title.includes('Easy House') ? title : `${title} | Easy House`
   
   return (
