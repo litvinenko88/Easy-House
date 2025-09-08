@@ -3,6 +3,7 @@ import Layout from "../components/Layout/Layout";
 import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs';
 import VideoReviews from "../components/VideoReviews/VideoReviews";
 import TeamSection from "../components/TeamSection";
+import FAQReviews from "../components/FAQReviews/FAQReviews";
 import styles from "./OKompanii.module.css";
 
 export default function OKompanii() {
@@ -200,6 +201,9 @@ export default function OKompanii() {
 
         {/* Video Reviews */}
         <VideoReviews showViewAllButton={true} />
+
+        {/* FAQ Reviews */}
+        <FAQReviews />
 
         {/* Company Info */}
         <section className={styles.companyInfo}>
