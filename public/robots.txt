@@ -6,7 +6,28 @@ Allow: /catalog
 Allow: /konstruktor
 Allow: /otzyvy
 Allow: /o-kompanii
-Allow: /kontakty
+Allow: /contacts
+Allow: /contact
+Allow: /dlya-biznesa
+
+# Региональные страницы
+Allow: /stavropolskiy-kray
+Allow: /krasnodarskiy-kray
+Allow: /respublika-kchr
+Allow: /respublika-kbr
+
+# Каталог товаров
+Allow: /catalog/novyj-arkhangelsk
+Allow: /catalog/arkhangelsk-s-terrasoj
+Allow: /catalog/uglovoj-arkhangelsk
+Allow: /catalog/barnkhaus
+Allow: /catalog/dvukhmodulnaya-dvineya
+Allow: /catalog/chetyrekhmodulnyj-barn
+Allow: /catalog/novyj-s-paluboj
+Allow: /catalog/barn-s-terrasoj
+Allow: /catalog/barn
+Allow: /catalog/trekhmodulnyj-barn
+Allow: /catalog/uglovoj-arkhangelsk-s-terrasoj
 
 # Запрещаем индексацию служебных файлов
 Disallow: /api/
@@ -16,6 +37,7 @@ Disallow: /*.json$
 
 # Sitemap
 Sitemap: https://easy-house.ru/sitemap.xml
+Sitemap: https://easy-house.ru/sitemap-img.xml
 
 # Время задержки для ботов
 Crawl-delay: 1

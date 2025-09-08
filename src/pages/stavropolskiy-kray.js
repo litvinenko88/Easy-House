@@ -15,8 +15,35 @@ import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryIns
 import FAQReviews from "../components/FAQReviews/FAQReviews";
 
 export default function StavropolskiyKray() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://easy-house.ru/stavropolskiy-kray/#business",
+    "name": "Easy House - Ставропольский край",
+    "description": "Строительство модульных домов под ключ в Ставропольском крае",
+    "url": "https://easy-house.ru/stavropolskiy-kray",
+    "telephone": "+7 (800) 123-45-67",
+    "priceRange": "от 855,000 ₽",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "RU",
+      "addressRegion": "Ставропольский край"
+    },
+    "serviceArea": {
+      "@type": "State",
+      "name": "Ставропольский край"
+    }
+  }
+
   return (
-    <Layout
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+        }}
+      />
+      <Layout
       title="Модульные дома под ключ в Ставрополе и в Ставропольском крае | Строительство домов | модульных | каркасных домов"
       description="Строительство 🔨 модульных и каркасных домов под ключ 🔑 в Ставрополе и в Ставропольском крае  | Быстровозводимые дома недорого | 👷 Строительство домов doorhan | Гарантия и доставка дома в Ставрополе"
       keywords="модульные дома под ключ, модульные дома цена, модульные дома купить, модульные дома Ставропольский край, модульные дома проекты, модульные дома стоимость, модульные дома производство, модульные дома готовые, модульные дома недорого, модульные дома с гарантией">
@@ -373,5 +400,6 @@ export default function StavropolskiyKray() {
         footerText="Вам достаточно выбрать проект — мы берём на себя все остальные задачи, включая монтаж на участке."
       />
     </Layout>
+    </>
   );
 }

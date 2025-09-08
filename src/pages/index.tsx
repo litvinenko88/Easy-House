@@ -34,10 +34,24 @@ export default function Home() {
       "longitude": "37.6176"
     },
     "openingHours": "Mo-Su 09:00-21:00",
-    "serviceArea": {
-      "@type": "Country",
-      "name": "Россия"
-    },
+    "serviceArea": [
+      {
+        "@type": "State",
+        "name": "Ставропольский край"
+      },
+      {
+        "@type": "State",
+        "name": "Краснодарский край"
+      },
+      {
+        "@type": "State",
+        "name": "Республика КЧР"
+      },
+      {
+        "@type": "State",
+        "name": "Республика КБР"
+      }
+    ],
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Каталог модульных домов",
@@ -46,18 +60,77 @@ export default function Home() {
           "@type": "Offer",
           "itemOffered": {
             "@type": "Product",
-            "name": "Модульные дома под ключ",
-            "description": "Полноценные модульные дома с отделкой и коммуникациями"
+            "name": "Новый Архангельск",
+            "description": "Модульный дом под ключ от 855 000 рублей",
+            "url": "https://easy-house.ru/catalog/novyj-arkhangelsk/",
+            "image": "https://easy-house.ru/images/New_Arkhangelsk/1.jpg",
+            "offers": {
+              "@type": "Offer",
+              "price": "855000",
+              "priceCurrency": "RUB",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Барнхаус",
+            "description": "Модульный дом в стиле барнхаус от 891 000 рублей",
+            "url": "https://easy-house.ru/catalog/barnkhaus/",
+            "image": "https://easy-house.ru/images/Barnhouse/1.jpg",
+            "offers": {
+              "@type": "Offer",
+              "price": "891000",
+              "priceCurrency": "RUB",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Четырехмодульный Барн",
+            "description": "Большой модульный дом от 3 130 000 рублей",
+            "url": "https://easy-house.ru/catalog/chetyrekhmodulnyj-barn/",
+            "image": "https://easy-house.ru/images/Four_Module_Barn/1.jpg",
+            "offers": {
+              "@type": "Offer",
+              "price": "3130000",
+              "priceCurrency": "RUB",
+              "availability": "https://schema.org/InStock"
+            }
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Product",
+            "name": "Модульные дома для бизнеса",
+            "description": "Коммерческие модульные здания",
+            "url": "https://easy-house.ru/dlya-biznesa/"
           }
         }
       ]
     },
     "aggregateRating": {
       "@type": "AggregateRating",
-      "ratingValue": "4.8",
-      "reviewCount": "127",
+      "ratingValue": "4.9",
+      "reviewCount": "156",
       "bestRating": "5",
       "worstRating": "1"
+    },
+    "sameAs": [
+      "https://vk.com/easy_house_ru",
+      "https://t.me/easy_house_ru",
+      "https://wa.me/78001234567"
+    ],
+    "potentialAction": {
+      "@type": "OrderAction",
+      "target": "https://easy-house.ru/konstruktor/",
+      "name": "Заказать модульный дом"
     }
   }
 

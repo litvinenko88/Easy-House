@@ -15,8 +15,35 @@ import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryIns
 import FAQReviews from "../components/FAQReviews/FAQReviews";
 
 export default function KrasnodarskiyKray() {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://easy-house.ru/krasnodarskiy-kray/#business",
+    "name": "Easy House - Краснодарский край",
+    "description": "Строительство модульных домов под ключ в Краснодарском крае",
+    "url": "https://easy-house.ru/krasnodarskiy-kray",
+    "telephone": "+7 (800) 123-45-67",
+    "priceRange": "от 855,000 ₽",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "RU",
+      "addressRegion": "Краснодарский край"
+    },
+    "serviceArea": {
+      "@type": "State",
+      "name": "Краснодарский край"
+    }
+  }
+
   return (
-    <Layout
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData)
+        }}
+      />
+      <Layout
       title="Модульные дома под ключ в Краснодарском крае | Строительство домов | модульных | каркасных домов"
       description="Строительство 🔨 модульных и каркасных домов под ключ 🔑 в Краснодарском крае | Быстровозводимые дома недорого | 👷 Строительство домов doorhan | Гарантия и доставка дома в Краснодарском крае"
       keywords="модульные дома под ключ, модульные дома цена, модульные дома купить, модульные дома Краснодарский край, модульные дома проекты, модульные дома стоимость, модульные дома производство, модульные дома готовые, модульные дома недорого, модульные дома с гарантией">
@@ -36,5 +63,6 @@ export default function KrasnodarskiyKray() {
         ]}
       />
     </Layout>
+    </>
   );
 }
