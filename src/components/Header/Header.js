@@ -35,7 +35,13 @@ const Header = ({ onConstructorOpen }) => {
 
     // Навигация на страницу региона
     if (region.name === "Ставропольский край") {
-      window.location.href = "/stavropolskiy-kray/";
+      window.location.href = "/stavropolskiy-kray";
+    } else if (region.name === "Краснодарский край") {
+      window.location.href = "/krasnodarskiy-kray";
+    } else if (region.name === "Республика КЧР") {
+      window.location.href = "/respublika-kchr";
+    } else if (region.name === "Республика КБР") {
+      window.location.href = "/respublika-kbr";
     }
   };
 
