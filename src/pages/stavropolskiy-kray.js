@@ -32,6 +32,11 @@ export default function StavropolskiyKray() {
         ]}
       />
       <ProblemSolution
+        title={
+          <>
+            Строительство дома - это сложно? <span style={{ color: "#ff6b35" }}>Мы превратили сложность в результат</span>
+          </>
+        }
         problems={[
           "Сложности с наймом подрядчиков",
           "Климатические особенности региона",

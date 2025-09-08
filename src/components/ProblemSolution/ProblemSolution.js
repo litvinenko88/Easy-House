@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './ProblemSolution.module.css'
 
-export default function ProblemSolution({ problems, solutions }) {
+export default function ProblemSolution({ title, problems, solutions }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -34,7 +34,11 @@ export default function ProblemSolution({ problems, solutions }) {
     >
       <div className={styles.container}>
         <h2 id="problem-solution-title" className={styles.title}>
-          Строительство дома - это сложно? <span className={styles.accent}>Мы решили проблему</span>
+          {title || (
+            <>
+              Строительство дома - это сложно? <span className={styles.accent}>Мы решили проблему</span>
+            </>
+          )}
         </h2>
         
         <div className={styles.comparison}>
