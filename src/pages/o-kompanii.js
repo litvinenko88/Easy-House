@@ -2,6 +2,7 @@ import Head from "next/head";
 import Layout from "../components/Layout/Layout";
 import Breadcrumbs from '../components/Breadcrumbs/Breadcrumbs';
 import VideoReviews from "../components/VideoReviews/VideoReviews";
+import TeamSection from "../components/TeamSection";
 import styles from "./OKompanii.module.css";
 
 export default function OKompanii() {
@@ -190,6 +191,12 @@ export default function OKompanii() {
             </div>
           </div>
         </section>
+
+        {/* Team Section */}
+        <TeamSection 
+          title="Наша команда"
+          subtitle="Профессионалы, которые воплощают ваши мечты в реальность"
+        />
 
         {/* Video Reviews */}
         <VideoReviews showViewAllButton={true} />
