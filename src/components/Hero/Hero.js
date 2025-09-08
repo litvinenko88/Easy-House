@@ -58,7 +58,7 @@ export default function Hero({ title, titleSub, price, subtitle, advantages }) {
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.leftSection}>
             <h1 className={styles.title} itemScope itemType="https://schema.org/Product">
-              <span className={styles.titleMain} itemProp="name">{title} </span>
+              <span className={styles.titleMain} itemProp="name">{title}</span>
               <span className={styles.titleSub}>{titleSub} </span>
               <span className={styles.price} itemProp="offers" itemScope itemType="https://schema.org/Offer">
                 <meta itemProp="price" content="855000" />
