@@ -159,7 +159,6 @@ export default function TeamSection({ title, subtitle }) {
                       {member.name.charAt(0)}
                     </div>
                   </div>
-                  <div className={styles.photoGlow}></div>
                 </div>
                 
                 <div className={styles.memberInfo}>
@@ -169,13 +168,6 @@ export default function TeamSection({ title, subtitle }) {
                   <p className={styles.memberPosition} itemProp="jobTitle">
                     {member.position}
                   </p>
-                </div>
-
-                <div className={styles.cardOverlay}>
-                  <div className={styles.overlayContent}>
-                    <span className={styles.overlayIcon}>👤</span>
-                    <span className={styles.overlayText}>Профессионал</span>
-                  </div>
                 </div>
               </div>
             </article>

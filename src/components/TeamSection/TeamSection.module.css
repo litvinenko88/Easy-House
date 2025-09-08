@@ -188,43 +188,7 @@
   text-align: center;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(255, 107, 53, 0.1);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
-  cursor: pointer;
-}
-
-.cardInner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.05), transparent);
-  transition: left 0.6s ease;
-}
-
-.cardInner:hover::before {
-  left: 100%;
-}
-
-.cardInner:hover {
-  transform: translateY(-15px);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-  border-color: rgba(255, 107, 53, 0.3);
-}
-
-.cardInner:hover .photoWrapper {
-  transform: scale(1.1);
-}
-
-.cardInner:hover .photoGlow {
-  opacity: 1;
-  transform: scale(1.2);
-}
-
-.cardInner:hover .cardOverlay {
-  opacity: 1;
 }
 
 .photoContainer {
@@ -236,7 +200,6 @@
 
 .photoWrapper {
   position: relative;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .memberPhoto {
@@ -246,7 +209,6 @@
   object-fit: cover;
   border: 4px solid #ffffff;
   box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .photoPlaceholder {
@@ -264,19 +226,7 @@
   box-shadow: 0 8px 30px rgba(255, 107, 53, 0.2);
 }
 
-.photoGlow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 120px;
-  height: 120px;
-  background: radial-gradient(circle, rgba(255, 107, 53, 0.3) 0%, transparent 70%);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  opacity: 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
-}
+
 
 .memberInfo {
   position: relative;
@@ -288,7 +238,6 @@
   font-weight: 600;
   color: #2c3e50;
   margin-bottom: 8px;
-  transition: color 0.3s ease;
 }
 
 .memberPosition {
@@ -299,38 +248,7 @@
   letter-spacing: 0.5px;
 }
 
-.cardOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, rgba(255, 107, 53, 0.9) 0%, rgba(232, 118, 58, 0.9) 100%);
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
-.overlayContent {
-  text-align: center;
-  color: white;
-}
-
-.overlayIcon {
-  font-size: 2.5rem;
-  display: block;
-  margin-bottom: 10px;
-}
-
-.overlayText {
-  font-size: 1.1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
 
 @keyframes float {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -384,14 +302,7 @@
     font-size: 2rem;
   }
   
-  .photoGlow {
-    width: 100px;
-    height: 100px;
-  }
-  
-  .overlayIcon {
-    font-size: 2rem;
-  }
+
 }
 
 @media (max-width: 480px) {
