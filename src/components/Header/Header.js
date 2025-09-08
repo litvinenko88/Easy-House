@@ -23,6 +23,7 @@ const Header = ({ onConstructorOpen }) => {
   const navItems = [
     "Каталог",
     "Конструктор",
+    "Для бизнеса",
     "Отзывы",
     "О компании",
     "Контакты",
@@ -31,7 +32,7 @@ const Header = ({ onConstructorOpen }) => {
   const handleRegionSelect = (region) => {
     setSelectedRegion(region.name);
     setIsRegionOpen(false);
-    
+
     // Навигация на страницу региона
     if (region.name === "Ставропольский край") {
       window.location.href = "/stavropolskiy-kray/";
