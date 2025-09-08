@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './ProjectConstructor.module.css';
 
-const ProjectConstructor = ({ onConstructorOpen = () => {} }) => {
+const ProjectConstructor = ({ title, subtitle, description, onConstructorOpen = () => {} }) => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef(null);
 
@@ -44,13 +44,13 @@ const ProjectConstructor = ({ onConstructorOpen = () => {} }) => {
       <div className={styles.container}>
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <h2 className={styles.title}>
-            Не нашли нужную планировку?
+            {title || "Не нашли нужную планировку?"}
           </h2>
           <p className={styles.subtitle}>
-            Спроектируйте идеальный план сами
+            {subtitle || "Спроектируйте идеальный план сами"}
           </p>
           <p className={styles.description}>
-            Всего за несколько минут - и готовый 3D-тур по вашей будущему дому
+            {description || "Всего за несколько минут - и готовый 3D-тур по вашей будущему дому"}
           </p>
           
           <button className={styles.constructorButton} onClick={onConstructorOpen}>

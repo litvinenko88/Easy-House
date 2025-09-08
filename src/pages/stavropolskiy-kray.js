@@ -6,6 +6,7 @@ import Bestsellers from "../components/Bestsellers/Bestsellers";
 import VideoReviews from "../components/VideoReviews";
 import VirtualTour from "../components/VirtualTour/VirtualTour";
 import ProductionProcess from "../components/ProductionProcess/ProductionProcess";
+import ProjectConstructor from "../components/ProjectConstructor/ProjectConstructor";
 import WhyChooseUs from "../components/WhyChooseUs/WhyChooseUs";
 import VideoTestimonials from "../components/VideoTestimonials/VideoTestimonials";
 import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryInstallation";
@@ -196,6 +197,12 @@ export default function StavropolskiyKray() {
           }
         ]}
         guarantee="🏆 Такой метод возведения модульных строений обеспечивает тёплый, quiet, энергоэффективный дом, полностью пригодный для заселения сразу после установки на местности."
+      />
+      <ProjectConstructor 
+        title="Не подобрали подходящую планировку?"
+        subtitle="Создайте идеальный проект самостоятельно"
+        description="Всего за несколько минут — получите готовый 3D-тур по вашему будущему дому. Мгновенно отправьте проект и узнайте точную стоимость."
+        onConstructorOpen={() => window.location.href = '/konstruktor'}
       />
     </Layout>
   );
