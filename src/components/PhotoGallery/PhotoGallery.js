@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./PhotoGallery.module.css";
 
-const PhotoGallery = () => {
+const PhotoGallery = ({ title, subtitle }) => {
   const sliderRef = useRef(null);
 
   const photos = [
@@ -47,10 +47,10 @@ const PhotoGallery = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 id="gallery-title" className={styles.title}>
-            Наши модульные дома в реальной жизни
+            {title || "Наши модульные дома в реальной жизни"}
           </h2>
           <p className={styles.subtitle}>
-            Лучше один раз увидеть, чем сто раз услышать. Посмотрите, как выглядят готовые проекты наших клиентов
+            {subtitle || "Лучше один раз увидеть, чем сто раз услышать. Посмотрите, как выглядят готовые проекты наших клиентов"}
           </p>
         </div>
 

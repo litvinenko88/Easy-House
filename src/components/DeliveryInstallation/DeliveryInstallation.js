@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import styles from './DeliveryInstallation.module.css'
 
-export default function DeliveryInstallation() {
+export default function DeliveryInstallation({ title, subtitle, steps: customSteps, footerText }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -56,15 +56,15 @@ export default function DeliveryInstallation() {
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.header}>
             <h2 className={styles.title}>
-              Аккуратная доставка и монтаж за 1-2 дня
+              {title || "Аккуратная доставка и монтаж за 1-2 дня"}
             </h2>
             <p className={styles.subtitle}>
-              Мы не просто производим модульные дома, мы берем на себя всю логистику и строительные работы на вашем участке.
+              {subtitle || "Мы не просто производим модульные дома, мы берем на себя всю логистику и строительные работы на вашем участке."}
             </p>
           </div>
           
           <div className={styles.stepsList}>
-            {steps.map((step, index) => (
+            {(customSteps || steps).map((step, index) => (
               <div
                 key={index}
                 className={`${styles.stepItem} ${isVisible ? styles.stepVisible : ''}`}
@@ -75,7 +75,7 @@ export default function DeliveryInstallation() {
                 </div>
                 <div className={styles.stepContent}>
                   <h3 className={styles.stepTitle}>{step.title}</h3>
-                  <p className={styles.stepDesc}>{step.desc}</p>
+                  <p className={styles.stepDesc}>{step.desc || step.description}</p>
                 </div>
               </div>
             ))}
@@ -83,7 +83,7 @@ export default function DeliveryInstallation() {
           
           <div className={styles.footer}>
             <p className={styles.footerText}>
-              Вы просто выбираете проект — мы делаем всё остальное, включая монтаж на участке.
+              {footerText || "Вы просто выбираете проект — мы делаем всё остальное, включая монтаж на участке."}
             </p>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styles from "./Guarantees.module.css";
 
-const Guarantees = () => {
+const Guarantees = ({ title, subtitle, guarantees: customGuarantees, footerText }) => {
   const containerRef = useRef(null);
 
   const guarantees = [
@@ -61,15 +61,15 @@ const Guarantees = () => {
     <section className={styles.guarantees}>
       <div className={styles.titleSection}>
         <h2 className={styles.title}>
-          Ваша уверенность прописана в договоре
+          {title || "Ваша уверенность прописана в договоре"}
         </h2>
         <p className={styles.subtitle}>
-          Мы понимаем, что строительство дома - это важный и ответственный шаг. Поэтому наша работа на 100% прозрачна и защищена юридически
+          {subtitle || "Мы понимаем, что строительство дома - это важный и ответственный шаг. Поэтому наша работа на 100% прозрачна и защищена юридически"}
         </p>
       </div>
       <div className={styles.container} ref={containerRef}>
         <div className={styles.guaranteesGrid}>
-          {guarantees.map((guarantee, index) => {
+          {(customGuarantees || guarantees).map((guarantee, index) => {
             const isEven = index % 2 === 0;
 
             return (
@@ -96,7 +96,7 @@ const Guarantees = () => {
         
         <div className={styles.footer}>
           <p className={styles.footerText}>
-            С нами вы можете быть спокойны: ваш модульный дом будет построен в срок, за оговоренную сумму и с гарантией качества, которая подтверждена документально.
+            {footerText || "С нами вы можете быть спокойны: ваш модульный дом будет построен в срок, за оговоренную сумму и с гарантией качества, которая подтверждена документально."}
           </p>
         </div>
       </div>
