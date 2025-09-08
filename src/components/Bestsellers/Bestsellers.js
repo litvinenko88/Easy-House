@@ -24,7 +24,7 @@ const housesData = [
     feature: "Модульный дом с открытой террасой",
     price: "от 1 075 000 руб",
     description:
-      "Уютный дом с готовой террасой для отдыха на свежем воздухе. Идеальное место для уютных посиделак.",
+      "Уютный дом с готовой террасой для отдыха на свежем воздухе. Идеальное место для уютных посиделок.",
     image: "/images/Arkhangelsk_terrace/1.jpg",
     imageWebp: "/images/Arkhangelsk_terrace/1.jpg",
     slug: "arkhangelsk-s-terrasoj",
@@ -196,7 +196,9 @@ export default function Bestsellers() {
 
                     <div className={styles.feature} itemProp="description">
                       <span className={styles.featureLabel}>Особенность:</span>
-                      <span className={styles.featureText}>{house.feature}</span>
+                      <span className={styles.featureText}>
+                        {house.feature}
+                      </span>
                     </div>
 
                     <div
