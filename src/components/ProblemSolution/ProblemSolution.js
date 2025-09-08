@@ -1,51 +1,61 @@
-import { useState, useEffect } from 'react'
-import styles from './ProblemSolution.module.css'
+import { useState, useEffect } from "react";
+import styles from "./ProblemSolution.module.css";
 
-export default function ProblemSolution({ problems, solutions }) {
-  const [isVisible, setIsVisible] = useState(false)
+export default function ProblemSolution({
+  heading,
+  headingSub,
+  problems,
+  solutions,
+}) {
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsVisible(true)
+          setIsVisible(true);
         }
       },
       { threshold: 0.1 }
-    )
+    );
 
-    const element = document.getElementById('problem-solution')
+    const element = document.getElementById("problem-solution");
     if (element) {
-      observer.observe(element)
+      observer.observe(element);
     }
 
     return () => {
       if (element) {
-        observer.unobserve(element)
+        observer.unobserve(element);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
-    <section 
-      id="problem-solution" 
-      className={`${styles.section} ${isVisible ? styles.visible : ''}`} 
-      aria-labelledby="problem-solution-title"
-    >
+    <section
+      id="problem-solution"
+      className={`${styles.section} ${isVisible ? styles.visible : ""}`}
+      aria-labelledby="problem-solution-title">
       <div className={styles.container}>
         <h2 id="problem-solution-title" className={styles.title}>
-          Строительство дома - это сложно? <span className={styles.accent}>Мы решили проблему</span>
+          {heading} <span className={styles.accent}>{headingSub}</span>
         </h2>
-        
+
         <div className={styles.comparison}>
           <div className={styles.column}>
             <h3 className={styles.columnTitle}>Обычная стройка</h3>
             <div className={styles.list}>
-              {problems ? problems.map((problem, index) => (
-                <div key={index} className={styles.item}>{problem}</div>
-              )) : (
+              {problems ? (
+                problems.map((problem, index) => (
+                  <div key={index} className={styles.item}>
+                    {problem}
+                  </div>
+                ))
+              ) : (
                 <>
-                  <div className={styles.item}>Стройка затягивается на месяцы</div>
+                  <div className={styles.item}>
+                    Стройка затягивается на месяцы
+                  </div>
                   <div className={styles.item}>Цена растет в процессе</div>
                   <div className={styles.item}>Много подрядчиков</div>
                   <div className={styles.item}>Непрозрачное качество</div>
@@ -53,15 +63,19 @@ export default function ProblemSolution({ problems, solutions }) {
               )}
             </div>
           </div>
-          
+
           <div className={styles.vs}>VS</div>
-          
+
           <div className={styles.column}>
             <h3 className={styles.columnTitle}>Модульные дома</h3>
             <div className={styles.list}>
-              {solutions ? solutions.map((solution, index) => (
-                <div key={index} className={styles.item}>{solution}</div>
-              )) : (
+              {solutions ? (
+                solutions.map((solution, index) => (
+                  <div key={index} className={styles.item}>
+                    {solution}
+                  </div>
+                ))
+              ) : (
                 <>
                   <div className={styles.item}>Сборка за 1-2 дня</div>
                   <div className={styles.item}>Фиксированная стоимость</div>
@@ -78,5 +92,5 @@ export default function ProblemSolution({ problems, solutions }) {
         </div>
       </div>
     </section>
-  )
+  );
 }

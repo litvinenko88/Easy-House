@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./WhyChooseUs.module.css";
-import ContactForm from '../ContactForm';
+import ContactForm from "../ContactForm";
 
 const WhyChooseUs = () => {
   const [visibleItems, setVisibleItems] = useState(new Set());
@@ -13,7 +13,7 @@ const WhyChooseUs = () => {
       id: 1,
       title: "Скорость возведения",
       description:
-        "Полный цикл от фундамента до сдачи ключей занимает 30 дней. Монтаж коробки на участке заказчика — всего 1-2 дня, что позволяет быстро начать проект модульного дома.",
+        "Полный цикл производства модульных домов от фундамента до сдачи ключей занимает 30 дней. Монтаж коробки на участке заказчика — всего 1-2 дня, что позволяет быстро начать проект модульного дома.",
       icon: "⚡",
       color: "#FF6B35",
     },
@@ -53,7 +53,7 @@ const WhyChooseUs = () => {
       id: 6,
       title: "Прочность и долговечность",
       description:
-        "Каркас из сухой древесины и двутавровых балок не дает усадки, не деформируется и служит десятилетиями.",
+        "Каркас из сухой древесины и двутавровых балок не дает усадки, не деформируется и служит десятилетиями. Что делает модульные дома для круглогодичного проживания ничем не хуже кирпичных ",
       icon: "🏠",
       color: "#DDA0DD",
     },
@@ -83,12 +83,12 @@ const WhyChooseUs = () => {
 
   useEffect(() => {
     if (isContactFormOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isContactFormOpen]);
 
@@ -136,10 +136,9 @@ const WhyChooseUs = () => {
             <p className={styles.ctaText}>
               Получите персональный расчет стоимости вашего модульного дома
             </p>
-            <button 
+            <button
               className={styles.ctaButton}
-              onClick={() => setIsContactFormOpen(true)}
-            >
+              onClick={() => setIsContactFormOpen(true)}>
               <span>Рассчитать стоимость</span>
               <div className={styles.buttonGlow}></div>
             </button>
@@ -148,21 +147,21 @@ const WhyChooseUs = () => {
       </div>
 
       {isContactFormOpen && (
-        <div 
-          className={styles.modal} 
+        <div
+          className={styles.modal}
           onClick={() => setIsContactFormOpen(false)}
           onWheel={(e) => e.preventDefault()}
-          onTouchMove={(e) => e.preventDefault()}
-        >
-          <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-            <button 
+          onTouchMove={(e) => e.preventDefault()}>
+          <div
+            className={styles.modalContent}
+            onClick={(e) => e.stopPropagation()}>
+            <button
               className={styles.modalClose}
               onClick={() => setIsContactFormOpen(false)}
-              aria-label="Закрыть форму"
-            >
+              aria-label="Закрыть форму">
               ×
             </button>
-            <ContactForm 
+            <ContactForm
               title="Рассчитать стоимость"
               source="блок преимуществ - кнопка рассчитать стоимость"
             />
