@@ -51,7 +51,7 @@ export default function KrasnodarskiyKray() {
         title={
           <>
             Модульные дома под ключ в{" "}
-            <span style={{ color: "#ff6b35" }}>Краснодаре и в Краснодарском край</span>
+            <span style={{ color: "#ff6b35" }}>Краснодаре и в Краснодарском крае</span>
           </>
         }
         titleSub=""
