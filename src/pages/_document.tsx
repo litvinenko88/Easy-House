@@ -21,6 +21,8 @@ export default function Document() {
         <link rel="preload" href="/fonts/Raleway-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Raleway-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/videos/glav2308.mp4" as="video" type="video/mp4" />
+        <meta name="robots" content="noarchive, nosnippet" />
+        <meta httpEquiv="X-Robots-Tag" content="noarchive, nosnippet" />
       </Head>
       <body>
         <Main />

@@ -204,3 +204,34 @@ p {
   scrollbar-width: thin;
   scrollbar-color: var(--color-accent) rgba(0, 0, 0, 0.05);
 }
+
+/* Скрытие нежелательных технических заголовков */
+h3:has-text("Search"),
+h3:has-text("1. HTML (index.html)"),
+h3:has-text("2. CSS (styles.css)"),
+h3:has-text("3. JavaScript (script.js)"),
+h3:has-text("Пояснение:"),
+h3:has-text("Объяснение изменений:"),
+h3:has-text("Что изменилось:"),
+h3:has-text("Внесенные изменения:"),
+h3:has-text("Объяснение"),
+h3:has-text("Практические шаги:"),
+h3:has-text("Использование PHP для редиректов"),
+h3:has-text("Объяснение кода:"),
+h3:has-text("Настройка в .htaccess"),
+h3:has-text("Итог"),
+h3:has-text("Vision"),
+h3:has-text("Загрузить файл"),
+h3:has-text("Пригласите друзей и заработайте кредиты") {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Альтернативный способ через содержимое */
+h3[data-unwanted="true"] {
+  display: none !important;
+}

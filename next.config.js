@@ -10,6 +10,9 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
+  experimental: {
+    outputFileTracingRoot: undefined
+  },
   webpack: (config, { dev }) => {
     if (dev) {
       config.cache = false;
