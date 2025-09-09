@@ -53,7 +53,10 @@ const ProjectConstructor = ({ title, subtitle, description, onConstructorOpen = 
             {description || "Всего за несколько минут - и готовый 3D-тур по вашей будущему дому"}
           </p>
           
-          <button className={styles.constructorButton} onClick={onConstructorOpen}>
+          <button 
+            className={styles.constructorButton} 
+            onClick={() => window.open('/konstruktor', '_blank', 'noopener,noreferrer')}
+          >
             Перейти в конструктор
           </button>
         </div>

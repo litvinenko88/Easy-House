@@ -177,8 +177,10 @@ const Header = ({ onConstructorOpen }) => {
                   <a
                     key={index}
                     href="/konstruktor"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={styles.navLink}
-                    title={`Открыть конструктор`}>
+                    title={`Открыть конструктор в новой вкладке`}>
                     {item}
                   </a>
                 );
@@ -331,6 +333,8 @@ const Header = ({ onConstructorOpen }) => {
                   <a
                     key={index}
                     href="/konstruktor"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={styles.mobileNavLink}
                     onClick={closeMobileMenu}
                     style={{ animationDelay: `${index * 0.1}s` }}>
