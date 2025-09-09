@@ -29,7 +29,7 @@ export default function Footer() {
         <div className={`${styles.content} ${isVisible ? styles.visible : ""}`}>
           <div className={styles.grid}>
             <div className={styles.company}>
-              <h3 className={styles.logo}>Easy House</h3>
+              <div className={styles.logo}>Easy House</div>
               <p className={styles.description}>
                 Строительство модульных домов под ключ за 30 дней. Качество,
                 надежность и комфорт для вашей семьи.
@@ -42,7 +42,7 @@ export default function Footer() {
             </div>
 
             <div className={styles.links}>
-              <h4 className={styles.title}>Каталог</h4>
+              <div className={styles.title}>Каталог</div>
               <ul className={styles.linksList}>
                 <li>
                   <Link href="/catalog">Для бизнеса</Link>
@@ -69,7 +69,7 @@ export default function Footer() {
             </div>
 
             <div className={styles.links}>
-              <h4 className={styles.title}>Регионы</h4>
+              <div className={styles.title}>Регионы</div>
               <ul className={styles.linksList}>
                 <li>
                   <Link href="/">Вся Россия</Link>
@@ -90,7 +90,7 @@ export default function Footer() {
             </div>
 
             <div className={styles.links}>
-              <h4 className={styles.title}>Компания</h4>
+              <div className={styles.title}>Компания</div>
               <ul className={styles.linksList}>
                 <li>
                   <Link href="/about">О компании</Link>
