@@ -151,7 +151,7 @@ export default function VideoReviews({ title, description, showAllVideos = false
       <div className="container">
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <h2 id="video-reviews-title">
-            {title || "Видеообзоры наших домов"}
+            {title || "Наши дома изнутри: видеоэкскурсии"}
           </h2>
           
           <p className={styles.description}>

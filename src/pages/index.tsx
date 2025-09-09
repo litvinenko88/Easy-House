@@ -151,7 +151,7 @@ export default function Home() {
         canonical="https://house-modular.ru/"
       >
         <Hero 
-          title="Модульные дома"
+          title="Модульные дома "
           titleSub="под ключ от"
           price="855 000₽"
           subtitle="Это не просто коробка с окнами — это полноценный дом"

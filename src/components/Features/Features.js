@@ -141,7 +141,7 @@ const Features = ({ title, features: customFeatures }) => {
       <div className={styles.container} ref={containerRef}>
         <div>
           <h2 id="features-title" className={styles.sectionTitle}>
-            {title || "Что вы получаете при покупке модульного дома"}
+            {title || "Что входит в комплектацию дома для постоянного проживания"}
           </h2>
         </div>
 

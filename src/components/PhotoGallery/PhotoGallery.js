@@ -14,7 +14,7 @@ const PhotoGallery = ({ title, subtitle }) => {
     "/images/photo_gallery/7.jpg",
     "/images/photo_gallery/8.jpg",
     "/images/photo_gallery/9.jpg",
-    "/images/photo_gallery/10.jpg"
+    "/images/photo_gallery/10.jpg",
   ];
 
   useEffect(() => {
@@ -47,10 +47,11 @@ const PhotoGallery = ({ title, subtitle }) => {
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 id="gallery-title" className={styles.title}>
-            {title || "Наши модульные дома в реальной жизни"}
+            {title || "Реализованные проекты модульных домов"}
           </h2>
           <p className={styles.subtitle}>
-            {subtitle || "Лучше один раз увидеть, чем сто раз услышать. Посмотрите, как выглядят готовые проекты наших клиентов"}
+            {subtitle ||
+              "Лучше один раз увидеть, чем сто раз услышать. Посмотрите, как выглядят готовые проекты наших клиентов"}
           </p>
         </div>
 
@@ -61,7 +62,9 @@ const PhotoGallery = ({ title, subtitle }) => {
                 <div key={index} className={styles.slide}>
                   <img
                     src={photo}
-                    alt={`Готовый модульный дом Easy House - фото ${(index % photos.length) + 1}`}
+                    alt={`Готовый модульный дом Easy House - фото ${
+                      (index % photos.length) + 1
+                    }`}
                     className={styles.image}
                     loading="lazy"
                   />

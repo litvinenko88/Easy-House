@@ -96,7 +96,7 @@ const WhyChooseUs = ({ title, subtitle, advantages: customAdvantages, ctaTitle, 
     <section className={styles.section} ref={sectionRef}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h2 className={styles.title}>{title || "Причины выбрать модульный дом"}</h2>
+          <h2 className={styles.title}>{title || "Причины построить модульный дом"}</h2>
           <p className={styles.subtitle}>
             {subtitle || "Технология производства модульных домов - это принципиально новый уровень комфорта, надежности и экономии"}
           </p>

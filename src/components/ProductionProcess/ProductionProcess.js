@@ -96,7 +96,7 @@ const ProductionProcess = ({ title, subtitle, description, steps: customSteps, g
       <div className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>
-            {title || "Немецкая точность и российская надежность"}
+            {title || "Немецкая точность на каждом этапе производства"}
           </h2>
           <p className={styles.subtitle}>
             {subtitle || "От чертежа до готового дома: технологический процесс мирового уровня"}

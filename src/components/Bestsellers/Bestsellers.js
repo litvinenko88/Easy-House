@@ -80,7 +80,7 @@ const housesData = [
   },
 ];
 
-export default function Bestsellers({ title = "Наши бестселлеры", subtitle = "Популярные модульные дома, которые выбирают наши клиенты" }) {
+export default function Bestsellers({ title = "Готовые проекты для жизни", subtitle = "Популярные дома, которые выбирают наши клиенты" }) {
   const [visibleCards, setVisibleCards] = useState([]);
   const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef(null);

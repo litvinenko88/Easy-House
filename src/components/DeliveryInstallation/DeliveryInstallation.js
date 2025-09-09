@@ -56,7 +56,7 @@ export default function DeliveryInstallation({ title, subtitle, steps: customSte
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
           <div className={styles.header}>
             <h2 className={styles.title}>
-              {title || "Аккуратная доставка и монтаж за 1-2 дня"}
+              {title || "Доставка и монтаж дома за 1-2 дня"}
             </h2>
             <p className={styles.subtitle}>
               {subtitle || "Мы не просто производим модульные дома, мы берем на себя всю логистику и строительные работы на вашем участке."}
