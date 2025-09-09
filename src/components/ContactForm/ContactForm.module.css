@@ -513,3 +513,76 @@
     font-size: var(--font-text-xs);
   }
 }
+
+/* Стили для состояния загрузки */
+.uploadingState {
+  text-align: center;
+  padding: 2rem 1rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.progressContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.circularProgress {
+  position: relative;
+  display: inline-block;
+}
+
+.progressRing {
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 4px 8px rgba(223, 104, 43, 0.2));
+}
+
+.progressRingBackground {
+  opacity: 0.3;
+}
+
+.progressRingForeground {
+  transition: stroke-dashoffset 0.3s ease;
+  stroke-linecap: round;
+}
+
+.progressText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--font-text);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.uploadingTitle {
+  color: var(--color-primary);
+  font-size: var(--font-h4);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.uploadingMessage {
+  color: #dc3545;
+  font-size: var(--font-text-sm);
+  font-weight: 500;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0 auto;
+  max-width: 300px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.9;
+  }
+}

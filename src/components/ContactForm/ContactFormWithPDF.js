@@ -83,6 +83,7 @@ const ContactFormWithPDF = ({
   const [isSuccess, setIsSuccess] = useState(false);
   const [phoneError, setPhoneError] = useState('');
   const [consentError, setConsentError] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const validatePhone = (phone) => {
     const cleanPhone = phone.replace(/\D/g, '');
@@ -148,6 +149,7 @@ const ContactFormWithPDF = ({
     
     setConsentError(false);
     setIsSubmitting(true);
+    setUploadProgress(0);
 
     try {
       const formDataToSend = {
@@ -157,19 +159,35 @@ const ContactFormWithPDF = ({
         projectInfo: projectInfo
       };
 
+      // Симуляция прогресса для лучшего UX
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + Math.random() * 15;
+        });
+      }, 200);
+
       const result = await sendToTelegramWithFile(formDataToSend, pdfBlob);
       
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+      
       if (result.success) {
-        setIsSuccess(true);
-        setFormData({ name: '', phone: '', consent: false });
-        setPhoneError('');
-        setConsentError(false);
         setTimeout(() => {
-          setIsSuccess(false);
-          if (onClose) {
-            onClose();
-          }
-        }, 3000);
+          setIsSuccess(true);
+          setFormData({ name: '', phone: '', consent: false });
+          setPhoneError('');
+          setConsentError(false);
+          setTimeout(() => {
+            setIsSuccess(false);
+            if (onClose) {
+              onClose();
+            }
+          }, 3000);
+        }, 500);
       } else {
         throw new Error('Ошибка отправки в Telegram');
       }
@@ -177,7 +195,10 @@ const ContactFormWithPDF = ({
       console.error('Form submission error:', error);
       alert('Произошла ошибка при отправке. Попробуйте еще раз.');
     } finally {
-      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setUploadProgress(0);
+      }, 1000);
     }
   };
 
@@ -189,6 +210,44 @@ const ContactFormWithPDF = ({
           <h3>Проект отправлен!</h3>
           <p>Мы получили ваш план и свяжемся с вами для расчета стоимости</p>
           {pdfBlob && <p className={styles.pdfNote}>📋 План дома прикреплен к заявке</p>}
+        </div>
+      </div>
+    );
+  }
+
+  if (isSubmitting) {
+    return (
+      <div className={`${styles.form} ${className}`}>
+        <div className={styles.uploadingState}>
+          <div className={styles.progressContainer}>
+            <div className={styles.circularProgress}>
+              <svg className={styles.progressRing} width="80" height="80">
+                <circle
+                  className={styles.progressRingBackground}
+                  stroke="#e5e7eb"
+                  strokeWidth="6"
+                  fill="transparent"
+                  r="34"
+                  cx="40"
+                  cy="40"
+                />
+                <circle
+                  className={styles.progressRingForeground}
+                  stroke="#df682b"
+                  strokeWidth="6"
+                  fill="transparent"
+                  r="34"
+                  cx="40"
+                  cy="40"
+                  strokeDasharray={`${2 * Math.PI * 34}`}
+                  strokeDashoffset={`${2 * Math.PI * 34 * (1 - uploadProgress / 100)}`}
+                />
+              </svg>
+              <div className={styles.progressText}>{Math.round(uploadProgress)}%</div>
+            </div>
+          </div>
+          <h3 className={styles.uploadingTitle}>Отправка планировки...</h3>
+          <p className={styles.uploadingMessage}>Не закрывайте форму, идет отправка планировки</p>
         </div>
       </div>
     );
@@ -255,14 +314,7 @@ const ContactFormWithPDF = ({
         className={styles.submitButton}
         disabled={isSubmitting}
       >
-        {isSubmitting ? (
-          <>
-            <span className={styles.spinner}></span>
-            Отправляем проект...
-          </>
-        ) : (
-          'Отправить проект на расчет'
-        )}
+        Отправить проект на расчет
       </button>
     </form>
   );
