@@ -8,39 +8,56 @@ export const generateFloorPlanPDF = (canvasRef, projectData, walls, doors, windo
     throw new Error('Canvas not found');
   }
 
+  // Создаем временный canvas для лучшего качества изображения
+  const tempCanvas = document.createElement('canvas');
+  const tempCtx = tempCanvas.getContext('2d');
+  
+  // Увеличиваем разрешение для лучшего качества
+  const scale = 2;
+  tempCanvas.width = canvas.width * scale;
+  tempCanvas.height = canvas.height * scale;
+  tempCtx.scale(scale, scale);
+  
+  // Копируем содержимое оригинального canvas
+  tempCtx.drawImage(canvas, 0, 0);
+
   // Заголовок
   pdf.setFontSize(20);
-  pdf.text('План дома - Easy House', 20, 20);
+  pdf.text('Floor Plan - Easy House', 20, 20);
   
-  // Информация о проекте
-  pdf.setFontSize(12);
-  pdf.text(`Название: ${projectData.house.title}`, 20, 35);
-  pdf.text(`Размеры дома: ${(projectData.house.width * 1000).toFixed(0)}×${(projectData.house.height * 1000).toFixed(0)}мм`, 20, 45);
-  pdf.text(`Площадь: ${projectData.house.area}м²`, 20, 55);
-  pdf.text(`Участок: ${(projectData.lotSize.width * 1000).toFixed(0)}×${(projectData.lotSize.height * 1000).toFixed(0)}мм`, 20, 65);
-  pdf.text(`Дата создания: ${new Date().toLocaleDateString('ru-RU')}`, 20, 75);
+  // Информация о проекте в две колонки
+  pdf.setFontSize(11);
+  // Левая колонка
+  pdf.text(`Project: ${projectData.house.title}`, 20, 35);
+  pdf.text(`House size: ${(projectData.house.width * 1000).toFixed(0)}x${(projectData.house.height * 1000).toFixed(0)}mm`, 20, 45);
+  pdf.text(`Area: ${projectData.house.area}m2`, 20, 55);
+  
+  // Правая колонка
+  pdf.text(`Lot size: ${(projectData.lotSize.width * 1000).toFixed(0)}x${(projectData.lotSize.height * 1000).toFixed(0)}mm`, 150, 35);
+  pdf.text(`Walls: ${walls.length} | Doors: ${doors.length} | Windows: ${windows.length}`, 150, 45);
+  pdf.text(`Date: ${new Date().toLocaleDateString('en-US')}`, 150, 55);
 
-  // Статистика
-  pdf.text(`Количество стен: ${walls.length}`, 20, 90);
-  pdf.text(`Количество дверей: ${doors.length}`, 20, 100);
-  pdf.text(`Количество окон: ${windows.length}`, 20, 110);
-
-  // Добавляем изображение плана
+  // Добавляем изображение плана - большое и по центру
   try {
-    const imgData = canvas.toDataURL('image/png');
-    pdf.addImage(imgData, 'PNG', 20, 120, 250, 150);
+    const imgData = tempCanvas.toDataURL('image/png', 1.0);
+    
+    // Размеры для изображения (занимает большую часть страницы)
+    const imgWidth = 240;
+    const imgHeight = 140;
+    const pageWidth = 297; // A4 landscape width
+    const imgX = (pageWidth - imgWidth) / 2;
+    const imgY = 70; // Позиция сверху
+    
+    // Добавляем рамку вокруг изображения
+    pdf.setDrawColor(200, 200, 200);
+    pdf.setLineWidth(0.5);
+    pdf.rect(imgX - 2, imgY - 2, imgWidth + 4, imgHeight + 4);
+    
+    pdf.addImage(imgData, 'PNG', imgX, imgY, imgWidth, imgHeight);
   } catch (error) {
     console.error('Error adding canvas to PDF:', error);
-    pdf.text('Ошибка при добавлении изображения плана', 20, 130);
+    pdf.text('Error adding floor plan image', 20, 130);
   }
-
-  // Легенда
-  pdf.setFontSize(10);
-  pdf.text('Легенда:', 20, 280);
-  pdf.text('🏠 - Дом', 20, 285);
-  pdf.text('🧱 - Стены', 50, 285);
-  pdf.text('🚪 - Двери', 80, 285);
-  pdf.text('🪟 - Окна', 110, 285);
 
   return pdf;
 };
