@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import useWallBuilder from '../WallBuilder/WallBuilder';
+import ContactFormModal from '../../ContactForm/ContactFormModal';
+import { generateFloorPlanPDF, getPDFBlob } from '../../../utils/pdfGenerator';
 import styles from './ConstructorInterface.module.css';
 
 const House3DViewer = dynamic(() => import('../House3DViewer/House3DViewer'), {
@@ -48,6 +50,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [isDraggingWindow, setIsDraggingWindow] = useState(false);
   const [windowDragStart, setWindowDragStart] = useState({ x: 0, y: 0 });
   const [windowDeleteIcon, setWindowDeleteIcon] = useState(null);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [projectPDF, setProjectPDF] = useState(null);
 
   const SCALE = 30;
   
@@ -579,6 +583,40 @@ export default function ConstructorInterface({ initialData, onBack }) {
       }
     }
     return 0;
+  };
+
+  const handleCalculateProject = async () => {
+    try {
+      // Генерируем PDF с планировкой
+      const pdf = generateFloorPlanPDF(
+        canvasRef,
+        initialData,
+        walls,
+        doors,
+        windows,
+        perimeterPoints
+      );
+      
+      const pdfBlob = getPDFBlob(pdf);
+      setProjectPDF(pdfBlob);
+      setShowContactForm(true);
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      alert('Ошибка при создании PDF. Попробуйте еще раз.');
+    }
+  };
+
+  const getProjectInfo = () => {
+    const area = calculateHouseArea();
+    return {
+      name: initialData.house.title,
+      dimensions: `${(initialData.house.width * 1000).toFixed(0)}×${(initialData.house.height * 1000).toFixed(0)}мм`,
+      area: area.toFixed(1),
+      lotSize: `${(initialData.lotSize.width * 1000).toFixed(0)}×${(initialData.lotSize.height * 1000).toFixed(0)}мм (${((initialData.lotSize.width * initialData.lotSize.height) / 100).toFixed(2)} соток)`,
+      wallsCount: walls.length,
+      doorsCount: doors.length,
+      windowsCount: windows.length
+    };
   };
   
   const drawHouseArea = (ctx) => {
@@ -2095,7 +2133,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
               <button 
                 className={styles.calculateBtn}
                 title="Отправить проект на расчет"
-                onClick={() => alert('Проект отправлен на расчет!')}
+                onClick={handleCalculateProject}
               >
                 📊 Рассчитать проект
               </button>
@@ -2223,6 +2261,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
           )}
         </div>
       </div>
+      
+      <ContactFormModal
+        isOpen={showContactForm}
+        onClose={() => setShowContactForm(false)}
+        projectInfo={getProjectInfo()}
+        pdfBlob={projectPDF}
+      />
     </>
   );
 }

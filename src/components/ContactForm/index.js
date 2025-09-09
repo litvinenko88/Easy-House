@@ -1,1 +1,3 @@
-export { default } from './ContactForm';
+export { default as ContactForm } from './ContactForm';
+export { default as ContactFormWithPDF } from './ContactFormWithPDF';
+export { default as ContactFormModal } from './ContactFormModal';
