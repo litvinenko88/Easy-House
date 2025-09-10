@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./ProblemSolution.module.css";
 
-export default function ProblemSolution({ title, problems, solutions }) {
+export default function ProblemSolution({ title, subtitle, problems, solutions }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ export default function ProblemSolution({ title, problems, solutions }) {
         </div>
 
         <div className={styles.cta}>
-          <p className={styles.subtitle}>Хватит переживать, начните жить</p>
+          <p className={styles.subtitle}>{subtitle || "Хватит переживать, начните жить"}</p>
         </div>
       </div>
     </section>
