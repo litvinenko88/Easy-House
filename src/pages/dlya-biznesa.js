@@ -1,6 +1,7 @@
 import Layout from "../components/Layout/Layout";
 import Hero from "../components/Hero/Hero";
 import ProblemSolution from "../components/ProblemSolution";
+import Bestsellers from "../components/Bestsellers/Bestsellers";
 
 export default function DlyaBiznesa() {
   return (
@@ -42,6 +43,10 @@ export default function DlyaBiznesa() {
           "Один ответственный производитель",
           "Прозрачность на всех этапах",
         ]}
+      />
+      <Bestsellers
+        title="Наши готовые модульные дома и бани"
+        subtitle="Популярные готовые проекты - это модульные дома для бизнеса / для круглогодичного проживания, которые выбирают для глэмпинга и баз отдыха"
       />
     </Layout>
   );
