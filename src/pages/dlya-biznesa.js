@@ -1,5 +1,6 @@
 import Layout from "../components/Layout/Layout";
 import Hero from "../components/Hero/Hero";
+import ProblemSolution from "../components/ProblemSolution";
 
 export default function DlyaBiznesa() {
   return (
@@ -14,12 +15,34 @@ export default function DlyaBiznesa() {
             под ключ от 855 000₽
           </>
         }
-        titleSub="Это не временное решение — это капитальный актив"
+        titleSub="Строим на сложных грунтах"
         advantages={[
           "Быстрая окупаемость",
           "Стабильный доход",
           "Запуск бизнеса через 30 дней",
-          "Строим на сложных грунтах",
+        ]}
+      />
+      <ProblemSolution
+        title={
+          <>
+            Строительство дома для бизнеса - это дорого?{" "}
+            <span style={{ color: "#ff6b35" }}>Мы сделали это выгодно</span>
+          </>
+        }
+        subtitle="Быстрая окупаемость — это выгодно для дела"
+        problemTitle="Традиционная стройка"
+        solutionTitle="Быстровозводимый модульный дом"
+        problems={[
+          "Работы обычного дома идут месяцами",
+          "Бюджет растет из-за непредвиденных расходов",
+          "Поиск множества подрядчиков",
+          "Итоговая стоимость высока",
+        ]}
+        solutions={[
+          "Готовый объект с отделкой через 30 дней",
+          "Фиксированная цена без скрытых доплат",
+          "Один ответственный производитель",
+          "Прозрачность на всех этапах",
         ]}
       />
     </Layout>
