@@ -2,6 +2,8 @@ import Layout from "../components/Layout/Layout";
 import Hero from "../components/Hero/Hero";
 import ProblemSolution from "../components/ProblemSolution";
 import Bestsellers from "../components/Bestsellers/Bestsellers";
+import VideoReviews from "../components/VideoReviews";
+import Features from "../components/Features";
 
 export default function DlyaBiznesa() {
   return (
@@ -47,6 +49,64 @@ export default function DlyaBiznesa() {
       <Bestsellers
         title="Наши готовые модульные дома и бани"
         subtitle="Популярные готовые проекты - это модульные дома для бизнеса / для круглогодичного проживания, которые выбирают для глэмпинга и баз отдыха"
+      />
+      <VideoReviews
+        title="Видеообзоры наших домов"
+        description="Уникальные планировки и детально проработанные модели дома с панорамным остеклением и качественной внутренней отделкой"
+        showViewAllButton={true}
+      />
+      <Features
+        title="Почему модульные дома - это выгодная инвестиция"
+        features={[
+          {
+            id: 1,
+            title: "Капитальное строительство с гарантией",
+            description: "Прочная конструкция и современные материалы обеспечивают долгосрочную эксплуатацию и надежную защиту инвестиций.",
+            image: "/images/communications/1.webp"
+          },
+          {
+            id: 2,
+            title: "Энергоэффективность снижает затраты",
+            description: "Полное утепление и современные окна значительно сокращают расходы на отопление, повышая окупаемость вашего бизнеса.",
+            image: "/images/communications/8.webp"
+          },
+          {
+            id: 3,
+            title: "Под ключ в готовом виде",
+            description: "Все коммуникации и чистовая внутренняя отделка уже включены. Заселяйтесь и начинайте зарабатывать сразу.",
+            image: "/images/communications/12.webp"
+          },
+          {
+            id: 4,
+            title: "Комфортный климат для гостей",
+            description: "Экологичные материалы и эффективная вентиляция создают premium условия проживания круглогодичного формата.",
+            image: "/images/communications/5.webp"
+          },
+          {
+            id: 5,
+            title: "Быстрый старт для дохода",
+            description: "Объект полностью укомплектован для начала работы. Ваш бизнес запускается максимально быстро.",
+            image: "/images/communications/2.webp"
+          },
+          {
+            id: 6,
+            title: "Надежная кровля и фундамент",
+            description: "Прочная крыша и устойчивое основание на любом грунте обеспечивают защиту инвестиций в любую погоду.",
+            image: "/images/communications/7.webp"
+          },
+          {
+            id: 7,
+            title: "Готовая инженерия для комфорта",
+            description: "Встроенное отопление, горячее водоснабжение и электрика позволяют начать эксплуатацию без дополнительных вложений.",
+            image: "/images/communications/11.webp"
+          },
+          {
+            id: 8,
+            title: "Эстетика и практичность",
+            description: "Современный экстерьер создает привлекательный образ вашего бизнеса для клиентов и арендаторов.",
+            image: "/images/communications/6.webp"
+          }
+        ]}
       />
     </Layout>
   );
