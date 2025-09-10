@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./ProblemSolution.module.css";
 
-export default function ProblemSolution({ title, subtitle, problems, solutions }) {
+export default function ProblemSolution({ title, subtitle, problems, solutions, problemTitle, solutionTitle }) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function ProblemSolution({ title, subtitle, problems, solutions }
 
         <div className={styles.comparison}>
           <div className={styles.column}>
-            <h3 className={styles.columnTitle}>Обычная стройка</h3>
+            <h3 className={styles.columnTitle}>{problemTitle || "Обычная стройка"}</h3>
             <div className={styles.list}>
               {problems ? (
                 problems.map((problem, index) => (
@@ -67,7 +67,7 @@ export default function ProblemSolution({ title, subtitle, problems, solutions }
           <div className={styles.vs}>VS</div>
 
           <div className={styles.column}>
-            <h3 className={styles.columnTitle}>Наша технология</h3>
+            <h3 className={styles.columnTitle}>{solutionTitle || "Наша технология"}</h3>
             <div className={styles.list}>
               {solutions ? (
                 solutions.map((solution, index) => (
