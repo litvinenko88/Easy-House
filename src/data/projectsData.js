@@ -108,7 +108,7 @@ export const projectsData = {
     ],
   },
   "barnkhaus": {
-    name: "Барн-Хаус",
+    name: "БарнХаус",
     images: [
       "/images/Barnhouse/1.jpg",
       "/images/Barnhouse/2.webp",

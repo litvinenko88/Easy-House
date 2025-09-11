@@ -44,7 +44,7 @@ const housesData = [
   },
   {
     id: 4,
-    name: "Барн-хаус",
+    name: "БарнХаус",
     area: "35-40 м²",
     feature: "Стиль Barnhouse",
     price: "от 930 000 руб",
