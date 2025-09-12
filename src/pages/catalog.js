@@ -256,7 +256,7 @@ export default function Catalog() {
           content="https://house-modular.ru/images/catalog-preview.jpg"
         />
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="House Modular" />
+        <meta name="author" content="Easy House" />
         <meta name="language" content="ru" />
         <meta httpEquiv="Content-Language" content="ru" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
