@@ -42,28 +42,10 @@ export default function Footer() {
             </div>
 
             <div className={styles.links}>
-              <div className={styles.title}>Каталог</div>
+              <div className={styles.title}>Модульные дома</div>
               <ul className={styles.linksList}>
                 <li>
-                  <Link href="/catalog">Для бизнеса</Link>
-                </li>
-                <li>
-                  <Link href="/catalog/barnhouse">Барнхаус</Link>
-                </li>
-                <li>
-                  <Link href="/catalog/arkhangelsk">А-фрейм</Link>
-                </li>
-                <li>
-                  <Link href="/catalog/modern">С терассой</Link>
-                </li>
-                <li>
-                  <Link href="/catalog/modern">Для проживания</Link>
-                </li>
-                <li>
-                  <Link href="/catalog/modern">С баней</Link>
-                </li>
-                <li>
-                  <Link href="/catalog/modern">Мини</Link>
+                  <Link href="/modulnyye-doma-dlya-prozhivaniya">Для проживания</Link>
                 </li>
               </ul>
             </div>
