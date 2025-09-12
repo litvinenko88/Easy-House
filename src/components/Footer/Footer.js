@@ -49,6 +49,11 @@ export default function Footer() {
                     Для проживания
                   </Link>
                 </li>
+                <li>
+                  <Link href="/modulnyye-doma-dlya-baz-otdykha">
+                    Для баз отдыха и глэмпинга
+                  </Link>
+                </li>
               </ul>
             </div>
 
