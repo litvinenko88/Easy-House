@@ -45,7 +45,9 @@ export default function Footer() {
               <div className={styles.title}>Модульные дома</div>
               <ul className={styles.linksList}>
                 <li>
-                  <Link href="/modulnyye-doma-dlya-prozhivaniya">Для проживания</Link>
+                  <Link href="/modulnyye-doma-dlya-prozhivaniya">
+                    Для проживания
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -53,9 +55,6 @@ export default function Footer() {
             <div className={styles.links}>
               <div className={styles.title}>Регионы</div>
               <ul className={styles.linksList}>
-                <li>
-                  <Link href="/">Вся Россия</Link>
-                </li>
                 <li>
                   <Link href="/services/construction">Ставропольский край</Link>
                 </li>
