@@ -79,13 +79,10 @@ export default function Footer() {
               <div className={styles.title}>Компания</div>
               <ul className={styles.linksList}>
                 <li>
-                  <Link href="/about">О компании</Link>
+                  <Link href="/o-kompanii">О компании</Link>
                 </li>
                 <li>
-                  <Link href="/portfolio">Выполненые проекты</Link>
-                </li>
-                <li>
-                  <Link href="/reviews">Отзывы</Link>
+                  <Link href="/otzyvy">Отзывы</Link>
                 </li>
                 <li>
                   <Link href="/contacts">Контакты</Link>
@@ -99,7 +96,9 @@ export default function Footer() {
               © 2025 Easy House. Все права защищены.
             </div>
             <div className={styles.legal}>
-              <Link href="/politika-konfidentsialnosti">Политика конфиденциальности</Link>
+              <Link href="/politika-konfidentsialnosti">
+                Политика конфиденциальности
+              </Link>
             </div>
           </div>
         </div>
