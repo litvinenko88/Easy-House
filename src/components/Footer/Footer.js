@@ -96,11 +96,10 @@ export default function Footer() {
 
           <div className={styles.bottom}>
             <div className={styles.copyright}>
-              © 2024 Easy House. Все права защищены.
+              © 2025 Easy House. Все права защищены.
             </div>
             <div className={styles.legal}>
-              <Link href="/privacy">Политика конфиденциальности</Link>
-              <Link href="/terms">Пользовательское соглашение</Link>
+              <Link href="/politika-konfidentsialnosti">Политика конфиденциальности</Link>
             </div>
           </div>
         </div>
