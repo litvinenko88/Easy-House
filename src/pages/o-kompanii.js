@@ -10,23 +10,23 @@ export default function OKompanii() {
   return (
     <Layout>
       <Head>
-        <title>О компании Easy House - производитель модульных домов</title>
+        <title>О компании - производитель модульных домов</title>
         <meta
           name="description"
-          content="О компании Easy House. Производство модульных домов, наши преимущества, гарантии и процесс производства."
+          content="О компании. Производство модульных домов, наши преимущества, гарантии и процесс производства."
         />
         <meta
           name="keywords"
-          content="о компании Easy House, производство модульных домов, преимущества, гарантии, качество строительства"
+          content="о компании, производство модульных домов, преимущества, гарантии, качество строительства"
         />
         <link rel="canonical" href="https://house-modular.ru/o-kompanii" />
         <meta
           property="og:title"
-          content="О компании Easy House - производитель модульных домов"
+          content="О компании - производитель модульных домов"
         />
         <meta
           property="og:description"
-          content="О компании Easy House. Производство модульных домов, наши преимущества, гарантии и процесс производства."
+          content="О компании. Производство модульных домов, наши преимущества, гарантии и процесс производства."
         />
         <meta property="og:url" content="https://house-modular.ru/o-kompanii" />
         <meta property="og:type" content="website" />
@@ -34,8 +34,8 @@ export default function OKompanii() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebPage",
-            "name": "О компании Easy House",
-            "description": "О компании Easy House. Производство модульных домов, наши преимущества, гарантии и процесс производства.",
+            "name": "О компании",
+            "description": "О компании. Производство модульных домов, наши преимущества, гарантии и процесс производства.",
             "url": "https://house-modular.ru/o-kompanii",
             "breadcrumb": {
               "@type": "BreadcrumbList",
@@ -63,7 +63,7 @@ export default function OKompanii() {
         <section className={styles.heroSection}>
           <div className={styles.container}>
             <div className={styles.heroContent}>
-              <h1 className={styles.title}>О компании Easy House</h1>
+              <h1 className={styles.title}>О компании</h1>
               <p className={styles.subtitle}>
                 Мы производим качественные модульные дома для комфортной жизни
               </p>

@@ -168,7 +168,7 @@ export default function Catalog() {
   const structuredData = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "Каталог модульных домов Easy House",
+    "name": "Каталог модульных домов",
     "description": "Каталог готовых проектов модульных домов от 855 000 руб. Строительство под ключ.",
     "url": "https://house-modular.ru/catalog",
     "mainEntity": {
@@ -211,11 +211,11 @@ export default function Catalog() {
     <Layout>
       <Head>
         <title>
-          Каталог модульных домов под ключ от 855 000 руб | Easy House
+          Каталог модульных домов под ключ от 855 000 руб
         </title>
         <meta
           name="description"
-          content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества."
+          content="Каталог модульных домов от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества."
         />
         <meta
           name="keywords"
@@ -224,11 +224,11 @@ export default function Catalog() {
         <link rel="canonical" href="https://house-modular.ru/catalog" />
         <meta
           property="og:title"
-          content="Каталог модульных домов под ключ от 855 000 руб | Easy House"
+          content="Каталог модульных домов под ключ от 855 000 руб"
         />
         <meta
           property="og:description"
-          content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества."
+          content="Каталог модульных домов от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м². Строительство под ключ с гарантией качества."
         />
         <meta property="og:url" content="https://house-modular.ru/catalog" />
         <meta property="og:type" content="website" />
@@ -240,7 +240,7 @@ export default function Catalog() {
         <meta property="og:image:height" content="630" />
         <meta
           property="og:image:alt"
-          content="Каталог модульных домов Easy House"
+          content="Каталог модульных домов"
         />
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -249,14 +249,14 @@ export default function Catalog() {
         />
         <meta
           name="twitter:description"
-          content="Каталог модульных домов Easy House от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м²."
+          content="Каталог модульных домов от 855 000 руб. 11 готовых проектов площадью от 15 до 80 м²."
         />
         <meta
           name="twitter:image"
           content="https://house-modular.ru/images/catalog-preview.jpg"
         />
         <meta name="robots" content="index, follow" />
-        <meta name="author" content="Easy House" />
+        <meta name="author" content="House Modular" />
         <meta name="language" content="ru" />
         <meta httpEquiv="Content-Language" content="ru" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

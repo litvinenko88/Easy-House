@@ -7,7 +7,7 @@ export default function Document() {
         <meta charSet="utf-8" />
         <meta name="robots" content="index, follow" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="Easy House" />
+        <meta name="author" content="House Modular" />
         <meta name="theme-color" content="#df682b" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

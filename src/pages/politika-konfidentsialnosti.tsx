@@ -5,8 +5,8 @@ import styles from './politika-konfidentsialnosti.module.css'
 export default function PrivacyPolicy() {
   return (
     <Layout 
-      title="Политика конфиденциальности | Easy House"
-      description="Политика конфиденциальности компании Easy House - производителя модульных домов"
+      title="Политика конфиденциальности"
+      description="Политика конфиденциальности компании - производителя модульных домов"
       canonical="https://house-modular.ru/politika-konfidentsialnosti"
     >
       <div className={styles.container}>

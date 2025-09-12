@@ -19,7 +19,7 @@ export default function StavropolskiyKray() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": "https://house-modular.ru/stavropolskiy-kray/#business",
-    name: "Easy House - Ставропольский край",
+    name: "House Modular - Ставропольский край",
     description: "Строительство модульных домов под ключ в Ставропольском крае",
     url: "https://house-modular.ru/stavropolskiy-kray",
     telephone: "+7 (800) 123-45-67",

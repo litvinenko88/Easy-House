@@ -9,20 +9,20 @@ export default function Otzyvy() {
   return (
     <Layout>
       <Head>
-        <title>Отзывы наших клиентов | Easy House</title>
+        <title>Отзывы наших клиентов</title>
         <meta name="description" content="Реальные истории людей, которые уже живут в наших модульных домах. Видео отзывы и часто задаваемые вопросы." />
-        <meta name="keywords" content="отзывы о модульных домах, видео отзывы, мнения клиентов, качество строительства, Easy House отзывы" />
+        <meta name="keywords" content="отзывы о модульных домах, видео отзывы, мнения клиентов, качество строительства, отзывы" />
         <link rel="canonical" href="https://house-modular.ru/otzyvy" />
-        <meta property="og:title" content="Отзывы наших клиентов | Easy House" />
+        <meta property="og:title" content="Отзывы наших клиентов" />
         <meta property="og:description" content="Реальные истории людей, которые уже живут в наших модульных домах. Видео отзывы и часто задаваемые вопросы." />
         <meta property="og:url" content="https://house-modular.ru/otzyvy" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://house-modular.ru/images/reviews-preview.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Отзывы клиентов о модульных домах Easy House" />
+        <meta property="og:image:alt" content="Отзывы клиентов о модульных домах" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Отзывы наших клиентов | Easy House" />
+        <meta name="twitter:title" content="Отзывы наших клиентов" />
         <meta name="twitter:description" content="Реальные истории людей, которые уже живут в наших модульных домах. Видео отзывы и часто задаваемые вопросы." />
         <meta name="twitter:image" content="https://house-modular.ru/images/reviews-preview.jpg" />
         <meta name="robots" content="index, follow" />

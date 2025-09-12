@@ -15,12 +15,12 @@ export default function Contacts() {
   return (
     <Layout>
       <Head>
-        <title>Контакты Easy House - модульные дома | Телефон, адрес, время работы</title>
-        <meta name="description" content="Контакты компании Easy House. Телефон 8(996)417-90-01, адрес в Ставрополе, время работы. Свяжитесь с нами для заказа модульного дома." />
-        <meta name="keywords" content="контакты Easy House, телефон, адрес, связь, консультация, заказ модульного дома, Ставрополь" />
+        <title>Контакты - модульные дома | Телефон, адрес, время работы</title>
+        <meta name="description" content="Контакты компании. Телефон 8(996)417-90-01, адрес в Ставрополе, время работы. Свяжитесь с нами для заказа модульного дома." />
+        <meta name="keywords" content="контакты, телефон, адрес, связь, консультация, заказ модульного дома, Ставрополь" />
         <link rel="canonical" href="https://house-modular.ru/contacts" />
-        <meta property="og:title" content="Контакты Easy House - модульные дома" />
-        <meta property="og:description" content="Контакты компании Easy House. Телефон 8(996)417-90-01, адрес, время работы. Свяжитесь с нами для заказа модульного дома." />
+        <meta property="og:title" content="Контакты - модульные дома" />
+        <meta property="og:description" content="Контакты компании. Телефон 8(996)417-90-01, адрес, время работы. Свяжитесь с нами для заказа модульного дома." />
         <meta property="og:url" content="https://house-modular.ru/contacts" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://house-modular.ru/images/contacts-preview.jpg" />
@@ -29,12 +29,12 @@ export default function Contacts() {
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ContactPage",
-            "name": "Контакты Easy House",
-            "description": "Контакты компании Easy House - производителя модульных домов",
+            "name": "Контакты",
+            "description": "Контакты компании - производителя модульных домов",
             "url": "https://house-modular.ru/contacts",
             "mainEntity": {
               "@type": "Organization",
-              "name": "Easy House",
+              "name": "House Modular",
               "telephone": "+7-996-417-90-01",
               "email": "info@easyhouse.ru",
               "address": {

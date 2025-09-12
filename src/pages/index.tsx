@@ -18,7 +18,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": "https://house-modular.ru/#business",
-    "name": "Easy House",
+    "name": "House Modular",
     "description": "Производство и строительство модульных домов под ключ за 30 дней",
     "url": "https://house-modular.ru",
     "telephone": "+7 (800) 123-45-67",

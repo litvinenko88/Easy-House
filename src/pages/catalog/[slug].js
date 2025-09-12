@@ -20,7 +20,7 @@ export default function CatalogDetail() {
     return (
       <Layout>
         <Head>
-          <title>Проект не найден | Easy House</title>
+          <title>Проект не найден</title>
           <meta name="description" content="Запрашиваемый проект модульного дома не найден." />
           <meta name="robots" content="noindex, nofollow" />
         </Head>
@@ -65,11 +65,11 @@ export default function CatalogDetail() {
   return (
     <Layout>
       <Head>
-        <title>{project.name} - модульный дом от {formattedPrice} руб | Easy House</title>
+        <title>{project.name} - модульный дом от {formattedPrice} руб</title>
         <meta name="description" content={`Модульный дом ${project.name} от ${formattedPrice} руб. Подробные характеристики, фото, чертежи и комплектация.`} />
         <meta name="keywords" content={`${project.name}, модульный дом, цена, характеристики, купить`} />
         <link rel="canonical" href={`https://house-modular.ru/catalog/${sanitizedSlug}`} />
-        <meta property="og:title" content={`${project.name} - модульный дом от ${formattedPrice} руб | Easy House`} />
+        <meta property="og:title" content={`${project.name} - модульный дом от ${formattedPrice} руб`} />
         <meta property="og:description" content={`Модульный дом ${project.name} от ${formattedPrice} руб. Подробные характеристики, фото, чертежи и комплектация.`} />
         <meta property="og:url" content={`https://house-modular.ru/catalog/${sanitizedSlug}`} />
         <meta property="og:type" content="product" />
@@ -83,7 +83,7 @@ export default function CatalogDetail() {
             "image": project.images?.map(img => `https://house-modular.ru${img}`) || [],
             "brand": {
               "@type": "Brand",
-              "name": "Easy House"
+              "name": "House Modular"
             },
             "category": "Модульные дома",
             "offers": {
@@ -93,7 +93,7 @@ export default function CatalogDetail() {
               "availability": "https://schema.org/InStock",
               "seller": {
                 "@type": "Organization",
-                "name": "Easy House",
+                "name": "House Modular",
                 "url": "https://house-modular.ru"
               }
             }
