@@ -1,26 +1,236 @@
-import Layout from '../components/Layout/Layout'
-import Hero from '../components/Hero'
-import ProblemSolution from '../components/ProblemSolution'
-import Bestsellers from '../components/Bestsellers/Bestsellers'
-import VideoReviews from '../components/VideoReviews'
-import Features from '../components/Features'
-import VirtualTour from '../components/VirtualTour'
-import ProductionProcess from '../components/ProductionProcess'
-import ProjectConstructor from '../components/ProjectConstructor'
-import WhyChooseUs from '../components/WhyChooseUs'
-import Guarantees from '../components/Guarantees'
-import PhotoGallery from '../components/PhotoGallery'
-import DeliveryInstallation from '../components/DeliveryInstallation'
+import Layout from "../components/Layout/Layout";
+import Hero from "../components/Hero";
+import ProblemSolution from "../components/ProblemSolution";
+import Bestsellers from "../components/Bestsellers/Bestsellers";
+import VideoReviews from "../components/VideoReviews";
+import Features from "../components/Features";
+import VirtualTour from "../components/VirtualTour";
+import ProductionProcess from "../components/ProductionProcess";
+import ProjectConstructor from "../components/ProjectConstructor";
+import WhyChooseUs from "../components/WhyChooseUs";
+import Guarantees from "../components/Guarantees";
+import PhotoGallery from "../components/PhotoGallery";
+import DeliveryInstallation from "../components/DeliveryInstallation";
 
 export default function ModularHotels() {
   return (
-    <Layout 
-      title="Модульные гостиницы под ключ | Строительство отелей из модулей | Easy House"
-      description="Модульные гостиницы и отели под ключ от производителя. Быстрое строительство гостиничных комплексов из готовых модулей. Полная отделка, коммуникации, мебель."
-      keywords="модульная гостиница, модульный отель, строительство гостиниц, модульные здания для гостиниц, гостиничные модули"
-      canonical="https://house-modular.ru/modulnyye-gostinitsy"
-    >
- 
+    <Layout
+      title="Модульный дом | Модульные гостиницы под ключ | Модульный отель"
+      description="Профессиональное проектирование и строительство модульных гостиниц под ключ. Быстровозводимые модульные отелей и гостиниц для глэмпинга. Модульный дом и быстровозводимые решения под ключ."
+      keywords="Модульные гостиницы под ключ, строительство модульных отелей, быстровозводимые гостиницы, модульный дом для глэмпинга, проектирование гостиниц, готовые модульные решения, быстровозводимые отели, гостиничные модульные комплексы, модульные дома для туризма, строительство глэмпингов под ключ"
+      canonical="https://house-modular.ru/modulnyye-gostinitsy">
+      <Hero
+        title="Модульные гостиницы и отели "
+        titleSub="под ключ от"
+        price="855 000₽"
+        subtitle="Это готовые решения для гостиницы: быстровозводимый модульный дом с отделкой"
+        advantages={[
+          "Заезжайте через 30 дней",
+          "Все коммуникации",
+          "Фиксированная цена",
+          "Скорость и прозрачность",
+        ]}
+      />
+      <ProblemSolution
+        title={
+          <>
+            Строительство гостиницы - это сложно?{" "}
+            <span style={{ color: "#ff6b35" }}>Мы решили проблему</span>
+          </>
+        }
+        problemTitle="Обычное строительство гостиниц"
+        solutionTitle="Наша технология"
+        problems={[
+          "Работы затягиваются на месяцы",
+          "Смета растет в процессе",
+          "Много подрядчиков",
+          "Непрозрачное качество сборки",
+        ]}
+        solutions={[
+          "Сборка модулей за 1-2 дня",
+          "Фиксированная стоимость",
+          "Один исполнитель на монтаж",
+          "Фото/видео отчеты с завода",
+        ]}
+        subtitle="Хватит переживать, начните принимать гостей"
+      />
+      <Bestsellers 
+        title="Проекты и цены модульных гостиниц"
+        subtitle="Популярные решения для мини-гостиниц и гостиничных комплексов"
+      />
+      <VideoReviews 
+        title="Планировка и отделка дома под ключ: видеоэкскурсия"
+        description="Убедитесь в комфортных условиях проживания и качестве сборки каждой детали"
+        showViewAllButton={true}
+      />
+      <Features 
+        title="Комплектации каркасных отелей для глэмпинга"
+        features={[
+          {
+            id: 1,
+            title: "Надежная защита",
+            description: "Прочная конструкция с мягкой кровлей обеспечивает герметичность и устойчивость в любых климатических условиях.",
+            image: "/images/communications/1.webp"
+          },
+          {
+            id: 2,
+            title: "Прочность каждого модуле",
+            description: "Каркас из бруса камерной сушки гарантирует идеальную геометрию и долговечность для гостиничных комплексов.",
+            image: "/images/communications/2.webp"
+          },
+          {
+            id: 3,
+            title: "Тепло и тишина круглый год",
+            description: "Полный контур утеплителя создает теплый контур для комфортного микроклимата и энергоэффективности.",
+            image: "/images/communications/3.webp"
+          },
+          {
+            id: 4,
+            title: "Готовое решение для отелей глэмпингов",
+            description: "Возводится прочное основание с финишной отделкой или подготовкой под вашу индивидуальную планировку.",
+            image: "/images/communications/4.webp"
+          },
+          {
+            id: 5,
+            title: "Уютная атмосфера",
+            description: "Внутренняя отделка создает здоровый микроклимат, экологичность и атмосферу уюта для средств размещения в глэмпинг с удобствами.",
+            image: "/images/communications/5.webp"
+          },
+          {
+            id: 6,
+            title: "Стильный экстерьер",
+            description: "Эстетичная и практичная отделка фасада: классическая красота и современная надежность.",
+            image: "/images/communications/6.webp"
+          },
+          {
+            id: 7,
+            title: "Прочное основание",
+            description: "Надежный фундамент обеспечивает устойчивость модуля на любом типе грунта.",
+            image: "/images/communications/7.webp"
+          },
+          {
+            id: 8,
+            title: "Тепло и экономия",
+            description: "Энергоэффективные окна сохраняют тепло и позволяют экономить на отоплении отеля.",
+            image: "/images/communications/8.webp"
+          },
+          {
+            id: 9,
+            title: "Безопасность и защита",
+            description: "Дверь мотеля с терморазрывом надежно сохраняет тепло, предотвращая сквозняки.",
+            image: "/images/communications/9.webp"
+          },
+          {
+            id: 10,
+            title: "Горячая вода всегда",
+            description: "Накопительный бойлер обеспечит запас воды для нужд гостиницы.",
+            image: "/images/communications/10.webp"
+          },
+          {
+            id: 11,
+            title: "Комфортное тепло и кондиционирование",
+            description: "Эффективные конвекторы равномерно прогревают каждый модуль отеля.",
+            image: "/images/communications/11.webp"
+          },
+          {
+            id: 12,
+            title: "Полная готовность к эксплуатации",
+            description: "Комплект всей необходимой сантехники и электрики для немедленного использования.",
+            image: "/images/communications/12.webp"
+          }
+        ]}
+      />
+      <VirtualTour 
+        title="Оцените планировку вашего модульного отеля"
+        description="Хотите заранее оценить планировку гостиницы, где будет стоять кровать? Воспользуйтесь 3D-экскурсией по типовым проектам. Изучите каждую деталь и представьте работу вашего отеля - еще до начала проектирование и строительство модульных гостиниц"
+      />
+      <ProductionProcess 
+        title="Немецкая точность при строительстве модульных гостиниц"
+        subtitle="От проекта до готового модуля: процесс в заводских условиях"
+        description="Наш заводской процесс гарантирует строгий контроль качества каждого модуля. Мы используем точное оборудование и отборные материалы для создания энергоэффективных отелей."
+        steps={[
+          {
+            id: 1,
+            title: "Проектирование",
+            description: "Создаем цифровой макет и детальные чертежи быстровозводимых гостиниц с учетом строительных норм.",
+            icon: "📏"
+          },
+          {
+            id: 2,
+            title: "Раскрой",
+            description: "Автомат раскраивает пиломатериал с точностью до миллиметра.",
+            icon: "🔧"
+          },
+          {
+            id: 3,
+            title: "Сборка каркаса",
+            description: "Роботизированная линия собирает прочный каркас модуля.",
+            icon: "🏧"
+          },
+          {
+            id: 4,
+            title: "Обшивка ГСП",
+            description: "Каркас обшивается экологичной плитой.",
+            icon: "🛡️"
+          },
+          {
+            id: 5,
+            title: "Монтаж пароизоляции",
+            description: "Укладывается пароизоляционная мембрана.",
+            icon: "💨"
+          },
+          {
+            id: 6,
+            title: "Укладка утеплителя",
+            description: "Плотно укладывается негорючий утеплитель.",
+            icon: "🧧"
+          },
+          {
+            id: 7,
+            title: "Прокладка коммуникаций",
+            description: "Монтируется электропроводка для будущего монтажа.",
+            icon: "⚡"
+          },
+          {
+            id: 8,
+            title: "Маркировка",
+            description: "Каждый элемент маркируется для быстрой сборки.",
+            icon: "📦"
+          },
+          {
+            id: 9,
+            title: "Контроль качества",
+            description: "Инженер проверяет каждую деталь мини-гостиницы на соответствие стандартам.",
+            icon: "✅"
+          }
+        ]}
+        guarantee="Этот подход гарантирует, что ваш модульный отель будет готов к эксплуатации сразу после монтажа."
+      />
+      <ProjectConstructor 
+        title="Нужна индивидуальная планировка модульного отеля?"
+        subtitle="Спроектируйте идеальный план гостиницы сами для семейного размещения"
+        description="Быстрая разработка проекта блок-модулей - и готовый 3D-тур по вашей будущей гостинице. Сразу можете отправить размеры модулей менеджеру рассчитываться"
+      />
+      <WhyChooseUs 
+        title="Причины построить модульную гостиницу"
+        subtitle="Технология строительства модульных гостиниц - это новый уровень комфорта, надежности и окупаемости"
+        ctaTitle="Готовы начать строительство?"
+        ctaText="Получите расчет стоимости вашей модульной гостиницы"
+      />
+      <Guarantees 
+        title="Ваша уверенность прописана в договоре"
+        subtitle="Мы понимаем, что строительство гостиницы — ответственный шаг. Наша работа прозрачна и защищена юридически"
+        footerText="С нами вы спокойны: ваша модульная гостиница будет построена в срок, за оговоренную сумму и с гарантией."
+      />
+      <PhotoGallery 
+        title="Реализованные проекты модульных гостиниц"
+        subtitle="Лучше один раз увидеть: готовые модульные гостиницы и отели, базы отдыха и глэмпинги наших клиентов"
+      />
+      <DeliveryInstallation 
+        title="Доставка и монтаж гостиницы за 1-2 дня"
+        subtitle="Мы берем на себя всю логистику и возведение вашего модульного отеля под ключ."
+        footerText="Вы выбираете проект — мы делаем всё для строительства гостиниц под ключ."
+      />
     </Layout>
-  )
+  );
 }
