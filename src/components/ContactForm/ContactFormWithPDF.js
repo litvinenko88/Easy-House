@@ -1,71 +1,6 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-const TELEGRAM_BOT_TOKEN = '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
-const TELEGRAM_CHAT_ID = '682859146';
-
-const sendToTelegramWithFile = async (data, pdfBlob = null) => {
-  let message = `🏠 Новая заявка с сайта Easy House
-
-👤 Имя: ${data.name}
-📞 Телефон: ${data.phone}
-📍 Источник: ${data.source}`;
-
-  if (data.projectInfo) {
-    message += `
-
-🏡 Информация о проекте:
-🏷️ Название: ${data.projectInfo.name}
-📏 Размеры дома: ${data.projectInfo.dimensions}
-📐 Площадь: ${data.projectInfo.area}м²
-🏞️ Участок: ${data.projectInfo.lotSize}
-🧱 Стен: ${data.projectInfo.wallsCount}
-🚪 Дверей: ${data.projectInfo.doorsCount}
-🪟 Окон: ${data.projectInfo.windowsCount}`;
-  }
-
-  message += `
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
-
-  try {
-    // Сначала отправляем текстовое сообщение
-    const textResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      })
-    });
-
-    const textResult = await textResponse.json();
-    
-    // Если есть PDF файл, отправляем его
-    if (pdfBlob) {
-      const formData = new FormData();
-      formData.append('chat_id', TELEGRAM_CHAT_ID);
-      formData.append('document', pdfBlob, 'floor-plan.pdf');
-      formData.append('caption', '📋 План дома от клиента');
-
-      const fileResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`, {
-        method: 'POST',
-        body: formData
-      });
-
-      const fileResult = await fileResponse.json();
-      return { success: textResult.ok && fileResult.ok, data: { text: textResult, file: fileResult } };
-    }
-
-    return { success: textResult.ok, data: textResult };
-  } catch (error) {
-    console.error('Telegram send error:', error);
-    return { success: false, error: error.message };
-  }
-};
-
 const ContactFormWithPDF = ({ 
   title = "Рассчитать проект", 
   source = "constructor",
@@ -151,55 +86,38 @@ const ContactFormWithPDF = ({
     setIsSubmitting(true);
     setUploadProgress(0);
 
-    try {
-      const formDataToSend = {
-        name: formData.name,
-        phone: formData.phone,
-        source: source,
-        projectInfo: projectInfo
-      };
+    // Логика отправки удалена
+    
+    const progressInterval = setInterval(() => {
+      setUploadProgress(prev => {
+        if (prev >= 90) {
+          clearInterval(progressInterval);
+          return 90;
+        }
+        return prev + Math.random() * 15;
+      });
+    }, 200);
 
-      // Симуляция прогресса для лучшего UX
-      const progressInterval = setInterval(() => {
-        setUploadProgress(prev => {
-          if (prev >= 90) {
-            clearInterval(progressInterval);
-            return 90;
-          }
-          return prev + Math.random() * 15;
-        });
-      }, 200);
-
-      const result = await sendToTelegramWithFile(formDataToSend, pdfBlob);
-      
+    setTimeout(() => {
       clearInterval(progressInterval);
       setUploadProgress(100);
       
-      if (result.success) {
-        setTimeout(() => {
-          setIsSuccess(true);
-          setFormData({ name: '', phone: '', consent: false });
-          setPhoneError('');
-          setConsentError(false);
-          setTimeout(() => {
-            setIsSuccess(false);
-            if (onClose) {
-              onClose();
-            }
-          }, 3000);
-        }, 500);
-      } else {
-        throw new Error('Ошибка отправки в Telegram');
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      alert('Произошла ошибка при отправке. Попробуйте еще раз.');
-    } finally {
       setTimeout(() => {
+        setIsSuccess(true);
+        setFormData({ name: '', phone: '', consent: false });
+        setPhoneError('');
+        setConsentError(false);
         setIsSubmitting(false);
         setUploadProgress(0);
-      }, 1000);
-    }
+        
+        setTimeout(() => {
+          setIsSuccess(false);
+          if (onClose) {
+            onClose();
+          }
+        }, 3000);
+      }, 500);
+    }, 2000);
   };
 
   if (isSuccess) {

@@ -1,36 +1,5 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
-const TELEGRAM_BOT_TOKEN = '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
-const TELEGRAM_CHAT_ID = '682859146';
-
-const sendToTelegram = async (data) => {
-  const message = `🏠 Новая заявка с сайта Easy House
-
-👤 Имя: ${data.name}
-📞 Телефон: ${data.phone}
-📍 Источник: ${data.source}
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
-  
-  try {
-    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      })
-    });
-    
-    const result = await response.json();
-    return { success: result.ok, data: result };
-  } catch (error) {
-    console.error('Telegram send error:', error);
-    return { success: false, error: error.message };
-  }
-};
 
 const ContactForm = ({ 
   title = "Оставьте заявку", 
@@ -111,74 +80,41 @@ const ContactForm = ({
     }
     
     setConsentError(false);
-
     setIsSubmitting(true);
 
-    let message = `🏠 Новая заявка с сайта
-
-👤 Имя: ${formData.name}
-📞 Телефон: ${formData.phone}
-📍 Источник: ${source}`;
+    // Логика отправки удалена
     
-    if (productInfo) {
-      message += `
-
-🏡 Информация о доме:
-🏷️ Название: ${productInfo.name}
-📏 Размер: ${productInfo.size}${productInfo.dimensions ? ` (${productInfo.dimensions})` : ''}
-💰 Цена: ${productInfo.price.toLocaleString('ru-RU')} руб.`;
-    }
-    
-    message += `
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
-
-    try {
-      const formDataToSend = {
-        name: formData.name,
-        phone: formData.phone,
-        source: source + (productInfo ? ` - Интерес к дому: ${productInfo.name} (${productInfo.size}, ${productInfo.price.toLocaleString('ru-RU')} руб.)` : '')
-      };
-
-      const result = await sendToTelegram(formDataToSend);
-      
-      if (result.success) {
-        setIsSuccess(true);
-        setFormData({ name: '', phone: '', consent: false });
-        setPhoneError('');
-        setConsentError(false);
-        setTimeout(() => {
-          setIsSuccess(false);
-          // Закрываем форму через родительский компонент
-          if (typeof window !== 'undefined') {
-            if (window.closeContactForm) {
-              window.closeContactForm();
-            }
-            if (window.closeContactFormHero) {
-              window.closeContactFormHero();
-            }
-            if (window.closeContactFormWhyChooseUs) {
-              window.closeContactFormWhyChooseUs();
-            }
-            if (window.closeContactFormCatalog) {
-              window.closeContactFormCatalog();
-            }
-            if (window.closeContactFormProjectInfo) {
-              window.closeContactFormProjectInfo();
-            }
-            if (window.closeContactFormProductInfo) {
-              window.closeContactFormProductInfo();
-            }
-          }
-        }, 3000);
-      } else {
-        throw new Error('Ошибка отправки в Telegram');
-      }
-    } catch (error) {
-      console.error('Form submission error:', error);
-      alert('Произошла ошибка при отправке. Попробуйте еще раз.');
-    } finally {
+    setTimeout(() => {
+      setIsSuccess(true);
+      setFormData({ name: '', phone: '', consent: false });
+      setPhoneError('');
+      setConsentError(false);
       setIsSubmitting(false);
-    }
+      
+      setTimeout(() => {
+        setIsSuccess(false);
+        if (typeof window !== 'undefined') {
+          if (window.closeContactForm) {
+            window.closeContactForm();
+          }
+          if (window.closeContactFormHero) {
+            window.closeContactFormHero();
+          }
+          if (window.closeContactFormWhyChooseUs) {
+            window.closeContactFormWhyChooseUs();
+          }
+          if (window.closeContactFormCatalog) {
+            window.closeContactFormCatalog();
+          }
+          if (window.closeContactFormProjectInfo) {
+            window.closeContactFormProjectInfo();
+          }
+          if (window.closeContactFormProductInfo) {
+            window.closeContactFormProductInfo();
+          }
+        }
+      }, 3000);
+    }, 1000);
   };
 
   if (isSuccess) {
