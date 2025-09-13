@@ -72,13 +72,16 @@ ${formData.message}
 ⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI/sendMessage`, {
+      const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
+      const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || '682859146';
+      
+      const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chat_id: '682859146',
+          chat_id: TELEGRAM_CHAT_ID,
           text: message,
           parse_mode: 'HTML'
         })

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-const TELEGRAM_BOT_TOKEN = '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
-const TELEGRAM_CHAT_ID = '682859146';
+const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
+const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || '682859146';
 
 const sendToTelegramWithFile = async (data, pdfBlob = null) => {
   let message = `🏠 Новая заявка с сайта Easy House
