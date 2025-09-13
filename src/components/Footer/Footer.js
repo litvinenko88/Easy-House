@@ -72,16 +72,16 @@ export default function Footer() {
               <div className={styles.title}>Регионы</div>
               <ul className={styles.linksList}>
                 <li>
-                  <Link href="/services/construction">Ставропольский край</Link>
+                  <Link href="/stavropolskiy-kray">Ставропольский край</Link>
                 </li>
                 <li>
-                  <Link href="/services/delivery">Краснодарский край</Link>
+                  <Link href="/krasnodarskiy-kray">Краснодарский край</Link>
                 </li>
                 <li>
-                  <Link href="/services/installation">Республика КЧР</Link>
+                  <Link href="/respublika-kchr">Республика КЧР</Link>
                 </li>
                 <li>
-                  <Link href="/services/warranty">Республика КБР</Link>
+                  <Link href="/respublika-kbr">Республика КБР</Link>
                 </li>
               </ul>
             </div>
