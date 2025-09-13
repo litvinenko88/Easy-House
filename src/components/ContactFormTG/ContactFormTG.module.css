@@ -151,7 +151,11 @@
 }
 
 .checkboxLabel.error {
-  color: #ef4444;
+  color: #ef4444 !important;
+}
+
+.checkboxLabel.error .checkboxText {
+  color: #ef4444 !important;
 }
 
 .checkboxLabel input[type="checkbox"] {

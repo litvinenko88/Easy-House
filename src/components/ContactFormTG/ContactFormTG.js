@@ -70,22 +70,25 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
   const handleSubmit = (e) => {
     e.preventDefault();
     
+    let hasErrors = false;
+    
     const phoneValidationError = validatePhone(formData.phone);
     if (phoneValidationError) {
       setPhoneError(phoneValidationError);
-      return;
+      hasErrors = true;
     }
     
     if (!formData.consent) {
       setConsentError(true);
+      hasErrors = true;
+    } else {
+      setConsentError(false);
+    }
+    
+    if (!formData.name || !formData.phone || hasErrors) {
       return;
     }
     
-    if (!formData.name || !formData.phone) {
-      return;
-    }
-    
-    setConsentError(false);
     setIsSubmitting(true);
 
     // Имитация отправки
