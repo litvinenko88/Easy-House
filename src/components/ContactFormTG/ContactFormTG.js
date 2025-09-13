@@ -10,6 +10,7 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [phoneError, setPhoneError] = useState('');
+  const [nameError, setNameError] = useState('');
   const [consentError, setConsentError] = useState(false);
 
   useEffect(() => {
@@ -25,9 +26,16 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
   }, [isOpen]);
 
   const validatePhone = (phone) => {
-    const phoneRegex = /^(\+7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
-    if (!phone) return '';
-    if (!phoneRegex.test(phone.replace(/\s/g, ''))) return 'Некорректный формат телефона';
+    if (!phone || phone.length < 5) return 'Введите номер телефона';
+    const phoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
+    if (!phoneRegex.test(phone)) return 'Введите корректный номер телефона';
+    return '';
+  };
+
+  const validateName = (name) => {
+    if (!name.trim()) return 'Введите ваше имя';
+    if (name.trim().length < 2) return 'Имя должно содержать минимум 2 символа';
+    if (!/^[а-яёА-ЯЁa-zA-Z\s-]+$/.test(name.trim())) return 'Имя может содержать только буквы, пробелы и дефисы';
     return '';
   };
 
@@ -50,6 +58,10 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       setFormData({ ...formData, [name]: formattedPhone });
       const error = validatePhone(formattedPhone);
       setPhoneError(error);
+    } else if (name === 'name') {
+      setFormData({ ...formData, [name]: value });
+      const error = validateName(value);
+      setNameError(error);
     } else {
       setFormData({ 
         ...formData, 
@@ -72,10 +84,20 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     
     let hasErrors = false;
     
+    const nameValidationError = validateName(formData.name);
+    if (nameValidationError) {
+      setNameError(nameValidationError);
+      hasErrors = true;
+    } else {
+      setNameError('');
+    }
+    
     const phoneValidationError = validatePhone(formData.phone);
     if (phoneValidationError) {
       setPhoneError(phoneValidationError);
       hasErrors = true;
+    } else {
+      setPhoneError('');
     }
     
     if (!formData.consent) {
@@ -85,7 +107,7 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       setConsentError(false);
     }
     
-    if (!formData.name || !formData.phone || hasErrors) {
+    if (hasErrors) {
       return;
     }
     
@@ -95,6 +117,7 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     setTimeout(() => {
       setIsSuccess(true);
       setFormData({ name: '', phone: '', consent: false });
+      setNameError('');
       setPhoneError('');
       setConsentError(false);
       setIsSubmitting(false);
@@ -135,10 +158,11 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className={styles.input}
+                  className={`${styles.input} ${nameError ? styles.inputError : ''}`}
                   placeholder=" "
                 />
                 <label className={styles.label}>Ваше имя</label>
+                {nameError && <div className={styles.errorText}>{nameError}</div>}
               </div>
               
               <div className={styles.inputGroup}>
