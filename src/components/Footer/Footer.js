@@ -45,7 +45,7 @@ export default function Footer() {
               <div className={styles.title}>Модульные дома</div>
               <ul className={styles.linksList}>
                 <li>
-                  <Link href="/modulnyye-gostinitsy">
+                  <Link href="/bystrovozvodimyye-modulnyye-doma">
                     Быстровозводимые
                   </Link>
                 </li>
