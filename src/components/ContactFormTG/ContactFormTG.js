@@ -34,7 +34,8 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
   const formatPhone = (value) => {
     const cleaned = value.replace(/\D/g, '');
     if (cleaned.length === 0) return '';
-    if (cleaned.length <= 1) return `+7 (${cleaned}`;
+    if (cleaned.length === 1 && cleaned !== '7') return `+7 (${cleaned}`;
+    if (cleaned.length === 1 && cleaned === '7') return '+7';
     if (cleaned.length <= 4) return `+7 (${cleaned.slice(1)}`;
     if (cleaned.length <= 7) return `+7 (${cleaned.slice(1, 4)}) ${cleaned.slice(4)}`;
     if (cleaned.length <= 9) return `+7 (${cleaned.slice(1, 4)}) ${cleaned.slice(4, 7)}-${cleaned.slice(7)}`;
@@ -60,7 +61,13 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handlePhoneFocus = () => {
+    if (!formData.phone) {
+      setFormData({ ...formData, phone: '+7 (' });
+    }
+  };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     const phoneValidationError = validatePhone(formData.phone);
@@ -81,44 +88,18 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     setConsentError(false);
     setIsSubmitting(true);
 
-    const message = `📞 Новая заявка с сайта
-
-👤 Имя: ${formData.name}
-📱 Телефон: ${formData.phone}
-📍 Источник: ${title}
-
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
-
-    try {
-      const response = await fetch(`https://api.telegram.org/bot8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chat_id: '682859146',
-          text: message,
-          parse_mode: 'HTML'
-        })
-      });
-
-      if (response.ok) {
-        setIsSuccess(true);
-        setFormData({ name: '', phone: '', consent: false });
-        setPhoneError('');
-        setConsentError(false);
-        setTimeout(() => {
-          setIsSuccess(false);
-          onClose();
-        }, 3000);
-      } else {
-        throw new Error('Ошибка отправки');
-      }
-    } catch (error) {
-      alert('Произошла ошибка при отправке. Попробуйте еще раз.');
-    } finally {
+    // Имитация отправки
+    setTimeout(() => {
+      setIsSuccess(true);
+      setFormData({ name: '', phone: '', consent: false });
+      setPhoneError('');
+      setConsentError(false);
       setIsSubmitting(false);
-    }
+      setTimeout(() => {
+        setIsSuccess(false);
+        onClose();
+      }, 3000);
+    }, 1000);
   };
 
   if (!isOpen) return null;
@@ -163,6 +144,7 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
+                  onFocus={handlePhoneFocus}
                   required
                   className={`${styles.input} ${phoneError ? styles.inputError : ''}`}
                   placeholder=" "
