@@ -1,19 +1,68 @@
+import { useMemo } from "react";
+import Head from "next/head";
+import dynamic from "next/dynamic";
 import Layout from "../components/Layout/Layout";
 import Hero from "../components/Hero";
 import ProblemSolution from "../components/ProblemSolution";
 import Bestsellers from "../components/Bestsellers/Bestsellers";
-import VideoReviews from "../components/VideoReviews";
 import Features from "../components/Features";
 import VirtualTour from "../components/VirtualTour";
 import ProductionProcess from "../components/ProductionProcess";
 import ProjectConstructor from "../components/ProjectConstructor";
 import WhyChooseUs from "../components/WhyChooseUs";
 import Guarantees from "../components/Guarantees";
-import PhotoGallery from "../components/PhotoGallery";
-import DeliveryInstallation from "../components/DeliveryInstallation";
+
+const VideoReviews = dynamic(() => import("../components/VideoReviews"));
+const PhotoGallery = dynamic(() => import("../components/PhotoGallery"));
+const DeliveryInstallation = dynamic(() => import("../components/DeliveryInstallation"));
 
 export default function ModulnyeDomaDlyaProzhivaniya() {
+  const breadcrumbSchema = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Главная",
+        "item": "https://house-modular.ru/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Дома для проживания",
+        "item": "https://house-modular.ru/modulnyye-doma-dlya-prozhivaniya"
+      }
+    ]
+  }), []);
+
   return (
+    <>
+    <Head>
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow" />
+      <meta name="yandex" content="index, follow" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      <meta name="format-detection" content="telephone=yes" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="House Modular" />
+      <meta property="og:locale" content="ru_RU" />
+      <meta property="og:image" content="https://house-modular.ru/images/living-og.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="author" content="House Modular" />
+      <meta name="language" content="ru" />
+      <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+      <meta httpEquiv="X-Frame-Options" content="DENY" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+    </Head>
     <Layout
       title="Модульные дома под ключ | Модульные дома для круглогодичного проживания"
       description="Наше производство и продажа модульных домов под ключ - это ваш надежный дом для круглогодичного проживания. У нас вы можете купить модульные дома с отделкой по готовым проектам или изменить планировку. Дом под ключ вашей мечты уже ждет!"
@@ -365,5 +414,6 @@ export default function ModulnyeDomaDlyaProzhivaniya() {
         footerText="Вы просто выбираете проект — мы делаем всё остальное."
       />
     </Layout>
+    </>
   );
 }

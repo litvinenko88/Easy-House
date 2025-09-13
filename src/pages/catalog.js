@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import Head from "next/head";
 import Layout from "../components/Layout/Layout";
 import Breadcrumbs from "../components/Breadcrumbs/Breadcrumbs";
@@ -134,18 +134,20 @@ const allHousesData = [
 
 export default function Catalog() {
   const [visibleCards, setVisibleCards] = useState(new Set());
-  const [isInView, setIsInView] = useState(false);
   const sectionRef = useRef(null);
   const timeoutsRef = useRef([]);
+  const isMountedRef = useRef(true);
 
   useEffect(() => {
+    isMountedRef.current = true;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
+        if (entry.isIntersecting && isMountedRef.current) {
           allHousesData.forEach((_, index) => {
             const timeoutId = setTimeout(() => {
-              setVisibleCards((prev) => new Set([...prev, index]));
+              if (isMountedRef.current) {
+                setVisibleCards((prev) => new Set([...prev, index]));
+              }
             }, index * 150);
             timeoutsRef.current.push(timeoutId);
           });
@@ -159,6 +161,7 @@ export default function Catalog() {
     }
 
     return () => {
+      isMountedRef.current = false;
       observer.disconnect();
       timeoutsRef.current.forEach(clearTimeout);
       timeoutsRef.current = [];
@@ -255,7 +258,15 @@ export default function Catalog() {
           name="twitter:image"
           content="https://house-modular.ru/images/catalog-preview.jpg"
         />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="googlebot" content="index, follow" />
+        <meta name="yandex" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="format-detection" content="telephone=yes" />
+        <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+        <meta httpEquiv="X-Frame-Options" content="DENY" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="//www.google-analytics.com" />
         <meta name="author" content="Easy House" />
         <meta name="language" content="ru" />
         <meta httpEquiv="Content-Language" content="ru" />

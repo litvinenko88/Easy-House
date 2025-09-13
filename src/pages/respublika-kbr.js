@@ -1,26 +1,73 @@
+import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import Layout from "../components/Layout/Layout";
 import Hero from "../components/Hero/Hero";
 import ProblemSolution from "../components/ProblemSolution/ProblemSolution";
 import Features from "../components/Features/Features";
 import Bestsellers from "../components/Bestsellers/Bestsellers";
-import VideoReviews from "../components/VideoReviews";
 import VirtualTour from "../components/VirtualTour/VirtualTour";
 import ProductionProcess from "../components/ProductionProcess/ProductionProcess";
 import ProjectConstructor from "../components/ProjectConstructor/ProjectConstructor";
 import WhyChooseUs from "../components/WhyChooseUs/WhyChooseUs";
 import Guarantees from "../components/Guarantees/Guarantees";
-import PhotoGallery from "../components/PhotoGallery/PhotoGallery";
-import VideoTestimonials from "../components/VideoTestimonials/VideoTestimonials";
-import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryInstallation";
-import FAQReviews from "../components/FAQReviews/FAQReviews";
+
+const VideoReviews = dynamic(() => import("../components/VideoReviews"));
+const PhotoGallery = dynamic(() => import("../components/PhotoGallery/PhotoGallery"));
+const VideoTestimonials = dynamic(() => import("../components/VideoTestimonials/VideoTestimonials"));
+const DeliveryInstallation = dynamic(() => import("../components/DeliveryInstallation/DeliveryInstallation"));
+const FAQReviews = dynamic(() => import("../components/FAQReviews/FAQReviews"));
 
 export default function RespublikaKBR() {
+  const breadcrumbSchema = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Главная",
+        "item": "https://house-modular.ru/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Республика КБР",
+        "item": "https://house-modular.ru/respublika-kbr"
+      }
+    ]
+  }), []);
+
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify(breadcrumbSchema),
+      }}
+    />
     <Layout
       title="Модульные дома под ключ в Республике КБР | Строительство домов | модульных | каркасных домов"
       description="Строительство 🔨 модульных и каркасных домов под ключ 🔑 в Республике КБР | Быстровозводимые дома недорого | 👷 Строительство домов doorhan | Гарантия и доставка дома в Республике КБР"
       keywords="модульные дома под ключ, модульные дома цена, модульные дома купить, модульные дома Республика КБР, модульные дома проекты, модульные дома стоимость, модульные дома производство, модульные дома готовые, модульные дома недорого, модульные дома с гарантией"
       canonical="https://house-modular.ru/respublika-kbr">
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow" />
+      <meta name="yandex" content="index, follow" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      <meta name="format-detection" content="telephone=yes" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="House Modular" />
+      <meta property="og:locale" content="ru_RU" />
+      <meta property="og:image" content="https://house-modular.ru/images/kbr-og.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="author" content="House Modular" />
+      <meta name="language" content="ru" />
+      <meta name="geo.region" content="RU-KB" />
+      <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+      <meta httpEquiv="X-Frame-Options" content="DENY" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />>
       <Hero
         title={
           <>
@@ -340,5 +387,6 @@ export default function RespublikaKBR() {
         footerText="Вам необходимо только выбрать проект - мы берём на себя полное сопровождение работ, включая обустройство на местности. Купить модульный дом в Нальчике - значит выбрать комфорт и качество."
       />
     </Layout>
+    </>
   );
 }

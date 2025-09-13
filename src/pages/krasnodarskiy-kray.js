@@ -1,21 +1,24 @@
+import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import Layout from "../components/Layout/Layout";
 import Hero from "../components/Hero/Hero";
 import ProblemSolution from "../components/ProblemSolution/ProblemSolution";
 import Features from "../components/Features/Features";
 import Bestsellers from "../components/Bestsellers/Bestsellers";
-import VideoReviews from "../components/VideoReviews";
 import VirtualTour from "../components/VirtualTour/VirtualTour";
 import ProductionProcess from "../components/ProductionProcess/ProductionProcess";
 import ProjectConstructor from "../components/ProjectConstructor/ProjectConstructor";
 import WhyChooseUs from "../components/WhyChooseUs/WhyChooseUs";
 import Guarantees from "../components/Guarantees/Guarantees";
-import PhotoGallery from "../components/PhotoGallery/PhotoGallery";
-import VideoTestimonials from "../components/VideoTestimonials/VideoTestimonials";
-import DeliveryInstallation from "../components/DeliveryInstallation/DeliveryInstallation";
-import FAQReviews from "../components/FAQReviews/FAQReviews";
+
+const VideoReviews = dynamic(() => import("../components/VideoReviews"));
+const PhotoGallery = dynamic(() => import("../components/PhotoGallery/PhotoGallery"));
+const VideoTestimonials = dynamic(() => import("../components/VideoTestimonials/VideoTestimonials"));
+const DeliveryInstallation = dynamic(() => import("../components/DeliveryInstallation/DeliveryInstallation"));
+const FAQReviews = dynamic(() => import("../components/FAQReviews/FAQReviews"));
 
 export default function KrasnodarskiyKray() {
-  const structuredData = {
+  const structuredData = useMemo(() => ({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": "https://house-modular.ru/krasnodarskiy-kray/#business",
@@ -33,14 +36,57 @@ export default function KrasnodarskiyKray() {
       "@type": "State",
       name: "Краснодарский край",
     },
-  };
+  }), []);
+
+  const breadcrumbSchema = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Главная",
+        "item": "https://house-modular.ru/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Краснодарский край",
+        "item": "https://house-modular.ru/krasnodarskiy-kray"
+      }
+    ]
+  }), []);
 
   return (
     <>
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+      <meta name="googlebot" content="index, follow" />
+      <meta name="yandex" content="index, follow" />
+      <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+      <meta name="format-detection" content="telephone=yes" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="House Modular" />
+      <meta property="og:locale" content="ru_RU" />
+      <meta property="og:image" content="https://house-modular.ru/images/krasnodar-og.jpg" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="author" content="House Modular" />
+      <meta name="language" content="ru" />
+      <meta name="geo.region" content="RU-KDA" />
+      <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
+      <meta httpEquiv="X-Frame-Options" content="DENY" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(structuredData),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
         }}
       />
       <Layout

@@ -1,12 +1,12 @@
-import Layout from '../components/Layout/Layout'
-
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 export default function Contact() {
-  return (
-    <Layout title="Контакты" description="Свяжитесь с нами для получения информации о модульных домах">
-      <div>
-        
-      </div>
-    </Layout>
-  )
+  const router = useRouter()
+  
+  useEffect(() => {
+    router.replace('/contacts')
+  }, [router])
+  
+  return null
 }

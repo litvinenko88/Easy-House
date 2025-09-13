@@ -5,7 +5,7 @@ export default function Document() {
     <Html lang="ru">
       <Head>
         <meta charSet="utf-8" />
-        <meta name="robots" content="index, follow" />
+        <meta name="robots" content="index, follow, noarchive, nosnippet, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
         <meta name="author" content="House Modular" />
         <meta name="theme-color" content="#df682b" />
@@ -21,7 +21,6 @@ export default function Document() {
         <link rel="preload" href="/fonts/Raleway-Regular.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/Raleway-Bold.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/videos/glav2308.mp4" as="video" type="video/mp4" />
-        <meta name="robots" content="noarchive, nosnippet" />
         <meta httpEquiv="X-Robots-Tag" content="noarchive, nosnippet" />
         
         <script
