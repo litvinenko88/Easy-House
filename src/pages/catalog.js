@@ -294,7 +294,7 @@ export default function Catalog() {
 
         <section
           ref={sectionRef}
-          className={`${styles.catalog} ${isInView ? styles.inView : ""}`}
+          className={styles.catalog}
           itemScope
           itemType="https://schema.org/ItemList"
           aria-labelledby="catalog-heading">
