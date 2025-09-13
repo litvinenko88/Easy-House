@@ -10,6 +10,8 @@
     "deploy": "npm run build"
   },
   "dependencies": {
+    "form-data": "^4.0.4",
+    "formidable": "^3.5.4",
     "jspdf": "^3.0.2",
     "next": "^14.0.0",
     "react": "^18.2.0",

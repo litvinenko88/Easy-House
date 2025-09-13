@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
+
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
@@ -60,17 +62,6 @@ export default function ContactForm() {
     setConsentError(false);
     setIsSubmitting(true);
 
-    const message = `📬 Новое сообщение с сайта
-
-👤 Имя: ${formData.name}
-📧 Email: ${formData.email}
-📍 Источник: страница контактов
-
-💬 Сообщение:
-${formData.message}
-
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
-
     try {
       const response = await fetch('/api/send-contact', {
         method: 'POST',
@@ -93,9 +84,10 @@ ${formData.message}
         setConsentError(false);
         setTimeout(() => setIsSuccess(false), 5000);
       } else {
-        throw new Error(result.error || 'Ошибка отправки');
+        throw new Error('Ошибка отправки в Telegram');
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       alert('Произошла ошибка при отправке. Попробуйте еще раз.');
     } finally {
       setIsSubmitting(false);

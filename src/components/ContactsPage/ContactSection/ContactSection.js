@@ -68,28 +68,31 @@ export default function ContactSection() {
 ⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI/sendMessage`, {
+      const response = await fetch('/api/send-telegram', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          chat_id: '682859146',
-          text: message,
-          parse_mode: 'HTML'
+          name: formData.name,
+          phone: formData.phone,
+          source: 'страница контактов'
         })
       });
 
-      if (response.ok) {
+      const result = await response.json();
+      
+      if (result.success) {
         setIsSuccess(true);
         setFormData({ name: '', phone: '', consent: false });
         setPhoneError('');
         setConsentError(false);
         setTimeout(() => setIsSuccess(false), 5000);
       } else {
-        throw new Error('Ошибка отправки');
+        throw new Error(result.error || 'Ошибка отправки');
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       alert('Произошла ошибка при отправке. Попробуйте еще раз.');
     } finally {
       setIsSubmitting(false);

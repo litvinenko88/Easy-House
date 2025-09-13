@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-
 const sendToTelegram = async (data) => {
   try {
     const response = await fetch('/api/send-telegram', {
@@ -101,24 +100,6 @@ const ContactForm = ({
     setConsentError(false);
 
     setIsSubmitting(true);
-
-    let message = `🏠 Новая заявка с сайта
-
-👤 Имя: ${formData.name}
-📞 Телефон: ${formData.phone}
-📍 Источник: ${source}`;
-    
-    if (productInfo) {
-      message += `
-
-🏡 Информация о доме:
-🏷️ Название: ${productInfo.name}
-📏 Размер: ${productInfo.size}${productInfo.dimensions ? ` (${productInfo.dimensions})` : ''}
-💰 Цена: ${productInfo.price.toLocaleString('ru-RU')} руб.`;
-    }
-    
-    message += `
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
 
     try {
       const formDataToSend = {

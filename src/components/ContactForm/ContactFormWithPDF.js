@@ -1,37 +1,18 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-
-
 const sendToTelegramWithFile = async (data, pdfBlob = null) => {
   try {
-    if (pdfBlob) {
-      const formData = new FormData();
-      formData.append('name', data.name);
-      formData.append('phone', data.phone);
-      formData.append('source', data.source);
-      if (data.projectInfo) {
-        formData.append('projectInfo', JSON.stringify(data.projectInfo));
-      }
-      formData.append('pdfFile', pdfBlob, 'floor-plan.pdf');
-
-      const response = await fetch('/api/send-telegram-file', {
-        method: 'POST',
-        body: formData
-      });
-
-      return await response.json();
-    } else {
-      const response = await fetch('/api/send-telegram', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-
-      return await response.json();
-    }
+    // Всегда отправляем через обычный API
+    const response = await fetch('/api/send-telegram-file', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+    
+    return await response.json();
   } catch (error) {
     console.error('Telegram send error:', error);
     return { success: false, error: error.message };
@@ -181,7 +162,7 @@ const ContactFormWithPDF = ({
           <div className={styles.successIcon}>✓</div>
           <h3>Проект отправлен!</h3>
           <p>Мы получили ваш план и свяжемся с вами для расчета стоимости</p>
-          {pdfBlob && <p className={styles.pdfNote}>📋 План дома прикреплен к заявке</p>}
+          {pdfBlob && <p className={styles.pdfNote}>📋 План дома сохранен и будет отправлен</p>}
         </div>
       </div>
     );
@@ -235,7 +216,7 @@ const ContactFormWithPDF = ({
           <p><strong>{projectInfo.name}</strong></p>
           <p>Размеры: {projectInfo.dimensions}</p>
           <p>Площадь: {projectInfo.area}м²</p>
-          {pdfBlob && <p className={styles.pdfAttached}>📋 План дома будет приложен</p>}
+          {pdfBlob && <p className={styles.pdfAttached}>📋 План дома будет отправлен отдельно</p>}
         </div>
       )}
       
