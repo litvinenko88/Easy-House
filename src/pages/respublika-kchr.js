@@ -67,7 +67,7 @@ export default function RespublikaKCHR() {
       <meta name="geo.region" content="RU-KC" />
       <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
       <meta httpEquiv="X-Frame-Options" content="DENY" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
       <Hero
         title="Модульные дома под ключ в Черкесске и КЧР"
         titleSub=""

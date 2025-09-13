@@ -67,7 +67,7 @@ export default function RespublikaKBR() {
       <meta name="geo.region" content="RU-KB" />
       <meta httpEquiv="X-Content-Type-Options" content="nosniff" />
       <meta httpEquiv="X-Frame-Options" content="DENY" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
       <Hero
         title={
           <>
