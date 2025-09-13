@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
-import ContactForm from "../ContactForm/ContactForm";
+
 
 const Header = ({ onConstructorOpen }) => {
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+
   const [selectedRegion, setSelectedRegion] = useState("");
   const [dropdownPosition, setDropdownPosition] = useState({
     top: 0,
@@ -97,16 +97,10 @@ const Header = ({ onConstructorOpen }) => {
     setIsMobileMenuOpen(false);
   };
 
-  // Глобальная функция для закрытия формы
-  useEffect(() => {
-    window.closeContactForm = () => setIsContactFormOpen(false);
-    return () => {
-      delete window.closeContactForm;
-    };
-  }, []);
+
 
   useEffect(() => {
-    if (isMobileMenuOpen || isContactFormOpen) {
+    if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -115,7 +109,7 @@ const Header = ({ onConstructorOpen }) => {
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isMobileMenuOpen, isContactFormOpen]);
+  }, [isMobileMenuOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -202,7 +196,6 @@ const Header = ({ onConstructorOpen }) => {
             <button
               className={`${styles.contactBtn} ${styles.desktopOnly}`}
               type="button"
-              onClick={() => setIsContactFormOpen(true)}
               aria-label="Открыть форму обратной связи">
               Обратная связь
             </button>
@@ -358,40 +351,14 @@ const Header = ({ onConstructorOpen }) => {
 
           <div className={styles.mobileActions}>
             <button
-              className={styles.mobileContactBtn}
-              onClick={() => {
-                setIsContactFormOpen(true);
-                closeMobileMenu();
-              }}>
+              className={styles.mobileContactBtn}>
               Обратная связь
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Модальное окно с формой обратной связи */}
-      {isContactFormOpen && (
-        <div
-          className={styles.modal}
-          onClick={() => setIsContactFormOpen(false)}
-          onWheel={(e) => e.preventDefault()}
-          onTouchMove={(e) => e.preventDefault()}>
-          <div
-            className={styles.modalContent}
-            onClick={(e) => e.stopPropagation()}>
-            <button
-              className={styles.modalClose}
-              onClick={() => setIsContactFormOpen(false)}
-              aria-label="Закрыть форму">
-              ×
-            </button>
-            <ContactForm
-              title="Обратная связь"
-              source="header - кнопка обратной связи"
-            />
-          </div>
-        </div>
-      )}
+
     </>
   );
 };

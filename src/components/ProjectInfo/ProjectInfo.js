@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
 import styles from "./ProjectInfo.module.css";
-import ContactForm from "../ContactForm/ContactForm";
+
 
 const ProjectInfo = ({ project, onOrderClick }) => {
   const [selectedSize, setSelectedSize] = useState(0);
-  const [showContactForm, setShowContactForm] = useState(false);
+
 
   const currentPrice = useMemo(() => {
     return project?.sizes?.[selectedSize]?.price || 0;
@@ -19,26 +19,12 @@ const ProjectInfo = ({ project, onOrderClick }) => {
   }, [project, selectedSize]);
 
   const handleOrderClick = () => {
-    console.log('Order button clicked');
-    setShowContactForm(true);
-    onOrderClick?.(project, selectedSize);
+    window.location.href = '/contacts';
   };
-
-  // Глобальная функция для закрытия формы
-  if (typeof window !== 'undefined') {
-    window.closeContactFormProjectInfo = () => {
-      setShowContactForm(false);
-    };
-  }
 
   if (!project) return null;
 
-  const productInfo = {
-    name: project?.name || '',
-    size: currentSize?.area || '',
-    dimensions: currentSize?.dimensions || '',
-    price: currentPrice
-  };
+
 
   return (
     <div className={styles.info}>
@@ -74,18 +60,7 @@ const ProjectInfo = ({ project, onOrderClick }) => {
         Заказать проект
       </button>
 
-      {showContactForm && (
-        <div style={{ marginTop: '20px' }}>
-          <ContactForm
-            title="Заказать проект"
-            source="Каталог проектов"
-            productInfo={productInfo}
-          />
-        </div>
-      )}
-      
-      {/* Отладка */}
-      {showContactForm && <div style={{color: 'red', fontSize: '12px'}}>Form is visible: {showContactForm.toString()}</div>}
+
 
       <section className={styles.specs}>
         <h2>Технические характеристики</h2>
