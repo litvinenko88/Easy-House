@@ -1,31 +1,19 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
-const TELEGRAM_BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || '8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI';
-const TELEGRAM_CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || '682859146';
+
 
 const sendToTelegram = async (data) => {
-  const message = `🏠 Новая заявка с сайта Easy House
-
-👤 Имя: ${data.name}
-📞 Телефон: ${data.phone}
-📍 Источник: ${data.source}
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
-  
   try {
-    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    const response = await fetch('/api/send-telegram', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      })
+      body: JSON.stringify(data)
     });
     
     const result = await response.json();
-    return { success: result.ok, data: result };
+    return result;
   } catch (error) {
     console.error('Telegram send error:', error);
     return { success: false, error: error.message };
