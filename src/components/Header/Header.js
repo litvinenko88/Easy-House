@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./Header.module.css";
+import ContactFormTG from '../ContactFormTG';
 
 
 const Header = ({ onConstructorOpen }) => {
   const [isRegionOpen, setIsRegionOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   const [selectedRegion, setSelectedRegion] = useState("");
   const [dropdownPosition, setDropdownPosition] = useState({
@@ -196,6 +198,7 @@ const Header = ({ onConstructorOpen }) => {
             <button
               className={`${styles.contactBtn} ${styles.desktopOnly}`}
               type="button"
+              onClick={() => setIsContactFormOpen(true)}
               aria-label="Открыть форму обратной связи">
               Обратная связь
             </button>
@@ -351,14 +354,22 @@ const Header = ({ onConstructorOpen }) => {
 
           <div className={styles.mobileActions}>
             <button
-              className={styles.mobileContactBtn}>
+              className={styles.mobileContactBtn}
+              onClick={() => {
+                setIsContactFormOpen(true);
+                closeMobileMenu();
+              }}>
               Обратная связь
             </button>
           </div>
         </div>
       </nav>
 
-
+      <ContactFormTG 
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+        title="Обратная связь"
+      />
     </>
   );
 };

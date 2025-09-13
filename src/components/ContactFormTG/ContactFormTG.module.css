@@ -1,0 +1,369 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+  background: var(--color-white);
+  border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15);
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.4s ease-out;
+  border: 1px solid rgba(223, 104, 43, 0.1);
+}
+
+.closeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: var(--color-gray);
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.closeButton:hover {
+  background: rgba(223, 104, 43, 0.1);
+  color: var(--color-accent);
+  transform: rotate(90deg);
+}
+
+.content {
+  padding: 50px 40px 40px;
+}
+
+.title {
+  font-size: var(--font-h3);
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12px;
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--color-gray);
+  margin-bottom: 35px;
+  font-size: var(--font-text);
+  line-height: 1.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.inputGroup {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  padding: 20px 16px 8px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  color: var(--color-primary);
+  font-size: var(--font-text);
+  transition: all 0.3s ease;
+  font-family: var(--font-family);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  background: var(--color-white);
+  box-shadow: 0 0 0 3px rgba(223, 104, 43, 0.1);
+}
+
+.label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-gray);
+  font-size: var(--font-text);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  background: var(--color-white);
+  padding: 0 4px;
+}
+
+.input:focus + .label,
+.input:not(:placeholder-shown) + .label {
+  top: 0;
+  font-size: var(--font-text-sm);
+  color: var(--color-accent);
+  transform: translateY(-50%);
+  background: var(--color-white);
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+}
+
+.errorText {
+  color: #ef4444;
+  font-size: var(--font-text-sm);
+  margin-top: 8px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.checkboxGroup {
+  margin: 8px 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-size: var(--font-text-sm);
+  color: var(--color-gray);
+  line-height: 1.4;
+  gap: 12px;
+}
+
+.checkboxLabel.error {
+  color: #ef4444;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 4px;
+  background: var(--color-white);
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkmark::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid var(--color-white);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.3s ease;
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.checkboxLabel input[type="checkbox"]:checked + .checkmark::after {
+  transform: rotate(45deg) scale(1);
+}
+
+.checkboxLabel.error .checkmark {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.checkboxText {
+  flex: 1;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, var(--color-accent) 0%, #e8763a 100%);
+  color: var(--color-white);
+  border: none;
+  padding: 18px 32px;
+  border-radius: 12px;
+  font-size: var(--font-text-lg);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  font-family: var(--font-family);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submitButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(223, 104, 43, 0.4);
+}
+
+.submitButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid var(--color-white);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.successMessage {
+  text-align: center;
+  animation: fadeIn 0.6s ease-out;
+  padding: 20px 0;
+}
+
+.successIcon {
+  width: 60px;
+  height: 60px;
+  background: #10b981;
+  color: var(--color-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 auto 20px;
+  animation: bounce 0.6s ease-out;
+}
+
+.successMessage h3 {
+  color: var(--color-primary);
+  margin-bottom: 12px;
+  font-size: var(--font-h4);
+  font-weight: 600;
+}
+
+.successMessage p {
+  color: var(--color-gray);
+  font-size: var(--font-text);
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(0);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: 15px;
+  }
+
+  .modal {
+    border-radius: 20px;
+  }
+
+  .content {
+    padding: 40px 24px 32px;
+  }
+
+  .title {
+    font-size: var(--font-h4);
+  }
+
+  .closeButton {
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  .input {
+    padding: 18px 14px 6px;
+  }
+
+  .label {
+    left: 14px;
+  }
+
+  .input:focus + .label,
+  .input:not(:placeholder-shown) + .label {
+    top: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 35px 20px 28px;
+  }
+
+  .form {
+    gap: 20px;
+  }
+}
