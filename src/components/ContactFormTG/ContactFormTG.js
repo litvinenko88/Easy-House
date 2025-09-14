@@ -105,8 +105,10 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
     
     // Отправляем сообщение
-    setUploadStatus('Отправка данных...');
-    setUploadProgress(25);
+    if (data.projectPDF) {
+      setUploadStatus('Отправка данных...');
+      setUploadProgress(25);
+    }
     
     const messagePromises = chatIds.map(chatId => 
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -123,7 +125,9 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     const messageResponses = await Promise.all(messagePromises);
     const messageSuccess = messageResponses.some(response => response.ok);
     
-    setUploadProgress(50);
+    if (data.projectPDF) {
+      setUploadProgress(50);
+    }
     
     // Отправляем PDF файл, если он есть
     if (data.projectPDF && messageSuccess) {
@@ -143,10 +147,10 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       });
       
       await Promise.all(pdfPromises);
+      
+      setUploadStatus('Завершение...');
+      setUploadProgress(100);
     }
-    
-    setUploadStatus('Завершение...');
-    setUploadProgress(100);
     
     return messageSuccess;
   };
@@ -184,8 +188,10 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     }
     
     setIsSubmitting(true);
-    setUploadProgress(0);
-    setUploadStatus('Подготовка...');
+    if (projectPDF) {
+      setUploadProgress(0);
+      setUploadStatus('Подготовка...');
+    }
 
     try {
       const success = await sendToTelegram({ ...formData, source, productInfo, projectPDF });
@@ -281,7 +287,7 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
                 {consentError && <div className={styles.errorText}>Необходимо дать согласие на обработку данных</div>}
               </div>
               
-              {isSubmitting ? (
+              {isSubmitting && projectPDF ? (
                 <div className={styles.progressContainer}>
                   <div className={styles.progressText}>
                     {uploadStatus}
@@ -300,8 +306,15 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
                   </div>
                 </div>
               ) : (
-                <button type="submit" className={styles.submitButton}>
-                  Отправить заявку
+                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      Отправляем...
+                    </>
+                  ) : (
+                    'Отправить заявку'
+                  )}
                 </button>
               )}
             </form>
