@@ -16,7 +16,11 @@ export default function ConstructorPage() {
         <title>Конструктор модульных домов</title>
         <meta name="description" content="Интерактивный конструктор для проектирования модульных домов. Создайте свой идеальный дом с помощью нашего 3D конструктора." />
         <meta name="keywords" content="конструктор домов, модульные дома, проектирование дома, 3D конструктор" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes, viewport-fit=cover" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#31323d" />
         <meta property="og:title" content="Конструктор модульных домов" />
         <meta property="og:description" content="Интерактивный конструктор для проектирования модульных домов" />
         <meta property="og:type" content="website" />

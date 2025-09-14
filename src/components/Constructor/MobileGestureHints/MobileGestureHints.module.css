@@ -1,0 +1,148 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hintContainer {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 320px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+  from { 
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to { 
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.hintContent {
+  margin-bottom: 20px;
+}
+
+.hintIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.hintTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary-dark);
+  margin: 0 0 8px 0;
+}
+
+.hintDescription {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hintIndicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-gray);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: var(--accent-orange);
+  transform: scale(1.2);
+}
+
+.closeButton {
+  background: var(--accent-orange);
+  color: var(--white);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.closeButton:hover {
+  background: #c55a24;
+  transform: translateY(-1px);
+}
+
+.closeButton:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+  .overlay {
+    padding: 16px;
+  }
+
+  .hintContainer {
+    padding: 20px;
+    max-width: none;
+  }
+
+  .hintIcon {
+    font-size: 40px;
+  }
+
+  .hintTitle {
+    font-size: 16px;
+  }
+
+  .hintDescription {
+    font-size: 13px;
+  }
+
+  .closeButton {
+    padding: 14px 24px;
+    font-size: 15px;
+  }
+}

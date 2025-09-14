@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import useWallBuilder from '../WallBuilder/WallBuilder';
 import ContactFormTG from '../../ContactFormTG';
+import MobileGestureHints from '../MobileGestureHints/MobileGestureHints';
 
 import { generateFloorPlanPDF, getPDFBlob } from '../../../utils/pdfGenerator';
+import { isMobileDevice } from '../../../utils/deviceUtils';
 import styles from './ConstructorInterface.module.css';
 
 const House3DViewer = dynamic(() => import('../House3DViewer/House3DViewer'), {
@@ -53,8 +55,14 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [windowDeleteIcon, setWindowDeleteIcon] = useState(null);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [projectPDF, setProjectPDF] = useState(null);
-
-
+  const [isMobile, setIsMobile] = useState(false);
+  const [touchStartDistance, setTouchStartDistance] = useState(0);
+  const [lastTouchCenter, setLastTouchCenter] = useState({ x: 0, y: 0 });
+  const [isMultiTouch, setIsMultiTouch] = useState(false);
+  const [showGestureHints, setShowGestureHints] = useState(false);
+  const [touchIndicator, setTouchIndicator] = useState(null);
+  const [lastTouchTime, setLastTouchTime] = useState(0);
+  const [touchStartPos, setTouchStartPos] = useState(null);
 
   const SCALE = 30;
   
@@ -171,6 +179,19 @@ export default function ConstructorInterface({ initialData, onBack }) {
   };
 
   useEffect(() => {
+    const checkMobile = () => {
+      const mobile = isMobileDevice();
+      setIsMobile(mobile);
+      
+      // Показываем подсказки при первом запуске на мобильном устройстве
+      if (mobile && !localStorage.getItem('gestureHintsShown')) {
+        setTimeout(() => setShowGestureHints(true), 1000);
+      }
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     const canvas = canvasRef.current;
     if (canvas) {
       const resizeCanvas = () => {
@@ -183,7 +204,10 @@ export default function ConstructorInterface({ initialData, onBack }) {
       resizeCanvas();
       window.addEventListener('resize', resizeCanvas);
       
-      return () => window.removeEventListener('resize', resizeCanvas);
+      return () => {
+        window.removeEventListener('resize', resizeCanvas);
+        window.removeEventListener('resize', checkMobile);
+      };
     }
   }, []);
 
@@ -1115,7 +1139,177 @@ export default function ConstructorInterface({ initialData, onBack }) {
     }
   };
 
+  // Функции для работы с касаниями
+  const getTouchCenter = (touches) => {
+    if (touches.length === 1) {
+      return { x: touches[0].clientX, y: touches[0].clientY };
+    }
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2
+    };
+  };
+
+  const getTouchDistance = (touches) => {
+    if (touches.length < 2) return 0;
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  const getTouchCoordinates = (touch) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { clientX: 0, clientY: 0 };
+    
+    const rect = canvas.getBoundingClientRect();
+    
+    return {
+      clientX: touch.clientX,
+      clientY: touch.clientY
+    };
+  };
+
+  const showTouchIndicator = (x, y) => {
+    if (!isMobile) return;
+    
+    setTouchIndicator({ x, y });
+    setTimeout(() => setTouchIndicator(null), 200);
+  };
+
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const currentTime = Date.now();
+    setLastTouchTime(currentTime);
+    
+    // Обработка мультитача (масштабирование)
+    if (e.touches.length === 2) {
+      setIsMultiTouch(true);
+      setTouchStartDistance(getTouchDistance(e.touches));
+      setLastTouchCenter(getTouchCenter(e.touches));
+      return;
+    }
+    
+    // Обработка одиночного касания
+    if (e.touches.length === 1 && !isMultiTouch) {
+      const touch = e.touches[0];
+      const coords = getTouchCoordinates(touch);
+      
+      // Сохраняем начальную позицию
+      setTouchStartPos({ x: coords.clientX, y: coords.clientY, time: currentTime });
+      
+      // Показываем индикатор касания
+      if (['wall', 'door', 'window'].includes(selectedTool)) {
+        const rect = canvasRef.current.getBoundingClientRect();
+        showTouchIndicator(coords.clientX - rect.left, coords.clientY - rect.top);
+      }
+      
+      // Создаем событие мыши
+      const mouseEvent = {
+        clientX: coords.clientX,
+        clientY: coords.clientY,
+        preventDefault: () => {},
+        stopPropagation: () => {},
+        button: 0,
+        buttons: 1
+      };
+      
+      // Обрабатываем касание как клик мыши
+      handleCanvasMouseDown(mouseEvent);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    // Обработка мультитача (масштабирование и панорамирование)
+    if (e.touches.length === 2 && isMultiTouch) {
+      const currentDistance = getTouchDistance(e.touches);
+      const currentCenter = getTouchCenter(e.touches);
+      
+      // Масштабирование
+      if (touchStartDistance > 0) {
+        const scaleChange = currentDistance / touchStartDistance;
+        const newZoom = Math.max(0.3, Math.min(5, zoom * scaleChange));
+        setZoom(newZoom);
+        setTouchStartDistance(currentDistance);
+      }
+      
+      // Панорамирование
+      const deltaX = currentCenter.x - lastTouchCenter.x;
+      const deltaY = currentCenter.y - lastTouchCenter.y;
+      setPanOffset(prev => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY
+      }));
+      setLastTouchCenter(currentCenter);
+      return;
+    }
+    
+    // Обработка одиночного касания
+    if (e.touches.length === 1 && !isMultiTouch) {
+      const touch = e.touches[0];
+      const coords = getTouchCoordinates(touch);
+      
+      const mouseEvent = {
+        clientX: coords.clientX,
+        clientY: coords.clientY,
+        button: 0,
+        buttons: 1
+      };
+      
+      handleCanvasMouseMove(mouseEvent);
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.touches.length === 0) {
+      // Сбрасываем состояние мультитача
+      setIsMultiTouch(false);
+      setTouchStartDistance(0);
+      
+      // Проверяем валидность касания
+      const currentTime = Date.now();
+      const touchDuration = touchStartPos ? currentTime - touchStartPos.time : 0;
+      
+      // Обрабатываем как клик, если касание было коротким
+      if (touchDuration < 2000 && touchDuration > 10) {
+        handleCanvasMouseUp();
+      }
+      
+      setTouchStartPos(null);
+    } else if (e.touches.length === 1 && isMultiTouch) {
+      // Переход от мультитача к одиночному касанию
+      setIsMultiTouch(false);
+      setTouchStartDistance(0);
+    }
+  };
+
+  const getCanvasCoordinates = (clientX, clientY) => {
+    const canvas = canvasRef.current;
+    if (!canvas) return { worldX: 0, worldY: 0, canvasX: 0, canvasY: 0 };
+    
+    const rect = canvas.getBoundingClientRect();
+    const canvasX = clientX - rect.left;
+    const canvasY = clientY - rect.top;
+    
+    const worldX = (canvasX - panOffset.x) / zoom;
+    const worldY = (canvasY - panOffset.y) / zoom;
+    
+    return { worldX, worldY, canvasX, canvasY };
+  };
+
   const handleCanvasMouseDown = (e) => {
+    // Пропускаем мышь на мобильных устройствах
+    if (isMobile && e.type === 'mousedown') {
+      return;
+    }
+    
     // Проверяем обработку WallBuilder
     if (wallBuilder && wallBuilder.handleMouseDown(e)) {
       return;
@@ -1124,16 +1318,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.clientX - rect.left;
-    const clientY = e.clientY - rect.top;
-    
-    const worldX = (clientX - panOffset.x) / zoom;
-    const worldY = (clientY - panOffset.y) / zoom;
+    const { worldX, worldY, canvasX, canvasY } = getCanvasCoordinates(e.clientX, e.clientY);
     
     // Проверяем клик по точкам изменения размера
-    const resizeClickX = clientX - panOffset.x;
-    const resizeClickY = clientY - panOffset.y;
+    const resizeClickX = canvasX - panOffset.x;
+    const resizeClickY = canvasY - panOffset.y;
     
     if (selectedElement && selectedElement.start && wallResizePoints.start && 
         Math.abs(resizeClickX - wallResizePoints.start.x) <= wallResizePoints.start.size && 
@@ -1152,8 +1341,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
     }
     
     // Проверяем клик по иконке удаления двери
-    const iconClickX = clientX - panOffset.x;
-    const iconClickY = clientY - panOffset.y;
+    const iconClickX = canvasX - panOffset.x;
+    const iconClickY = canvasY - panOffset.y;
     
     if (selectedElement && selectedElement.wallStart && doorDeleteIcon && 
         Math.abs(iconClickX - doorDeleteIcon.x) <= doorDeleteIcon.size/2 && 
@@ -1532,13 +1721,18 @@ export default function ConstructorInterface({ initialData, onBack }) {
       setSelectedElement(null);
     }
     
-    if (!isDrawingWall) {
+    if (!isDrawingWall && selectedTool === 'select') {
       setIsDragging(true);
       setDragStart({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
     }
   };
 
   const handleCanvasMouseMove = (e) => {
+    // Пропускаем мышь на мобильных устройствах
+    if (isMobile && e.type === 'mousemove') {
+      return;
+    }
+    
     // Проверяем обработку WallBuilder
     if (wallBuilder && wallBuilder.handleMouseMove(e)) {
       return;
@@ -1547,11 +1741,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
     const canvas = canvasRef.current;
     if (!canvas) return;
     
-    const rect = canvas.getBoundingClientRect();
-    const clientX = e.clientX - rect.left;
-    const clientY = e.clientY - rect.top;
-    const worldX = (clientX - panOffset.x) / zoom;
-    const worldY = (clientY - panOffset.y) / zoom;
+    const { worldX, worldY, canvasX, canvasY } = getCanvasCoordinates(e.clientX, e.clientY);
     
     // Изменение размера стены
     if (isDraggingResizePoint && selectedElement && resizePointType) {
@@ -1918,7 +2108,12 @@ export default function ConstructorInterface({ initialData, onBack }) {
     }
   };
 
-  const handleCanvasMouseUp = () => {
+  const handleCanvasMouseUp = (e) => {
+    // Пропускаем мышь на мобильных устройствах
+    if (isMobile && e && e.type === 'mouseup') {
+      return;
+    }
+    
     // Проверяем обработку WallBuilder
     if (wallBuilder && wallBuilder.handleMouseUp()) {
       return;
@@ -2022,6 +2217,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
     drawCanvas
   });
 
+
+
+  const handleCloseGestureHints = () => {
+    setShowGestureHints(false);
+    localStorage.setItem('gestureHintsShown', 'true');
+  };
+
   return (
     <>
       {view3D && (
@@ -2035,6 +2237,11 @@ export default function ConstructorInterface({ initialData, onBack }) {
           onClose={() => setView3D(false)}
         />
       )}
+      
+      <MobileGestureHints 
+        isVisible={showGestureHints}
+        onClose={handleCloseGestureHints}
+      />
       
       <div className={styles.constructorInterface}>
         <div className={styles.constructorHeader}>
@@ -2056,21 +2263,20 @@ export default function ConstructorInterface({ initialData, onBack }) {
           <div className={styles.workspace}>
             <canvas 
               ref={canvasRef}
-              className={selectedTool === 'wall' || selectedTool === 'rotate' ? styles.wallTool : selectedTool === 'door' ? styles.doorTool : selectedTool === 'window' ? styles.windowTool : ''}
+              className={`${selectedTool === 'wall' || selectedTool === 'rotate' ? styles.wallTool : selectedTool === 'door' ? styles.doorTool : selectedTool === 'window' ? styles.windowTool : ''} ${isMobile ? styles.mobileCanvas : ''}`}
               onMouseDown={handleCanvasMouseDown}
+              onTouchStart={isMobile ? handleTouchStart : undefined}
+              onTouchMove={isMobile ? handleTouchMove : undefined}
+              onTouchEnd={isMobile ? handleTouchEnd : undefined}
               onMouseMove={(e) => {
         handleCanvasMouseMove(e);
         
-        // Подсветка элементов при наведении
-        if (!isDragging && !isDraggingHouse && !isDrawingWall && selectedTool === 'select' && selectedTool !== 'rotate') {
+        // Подсветка элементов при наведении (только для десктопа)
+        if (!isMobile && !isDragging && !isDraggingHouse && !isDrawingWall && selectedTool === 'select' && selectedTool !== 'rotate') {
           const canvas = canvasRef.current;
           if (!canvas) return;
           
-          const rect = canvas.getBoundingClientRect();
-          const clientX = e.clientX - rect.left;
-          const clientY = e.clientY - rect.top;
-          const hoverWorldX = (clientX - panOffset.x) / zoom;
-          const hoverWorldY = (clientY - panOffset.y) / zoom;
+          const { worldX: hoverWorldX, worldY: hoverWorldY } = getCanvasCoordinates(e.clientX, e.clientY);
           
           // Сначала проверяем двери
           let hoveredDoor = null;
@@ -2120,9 +2326,20 @@ export default function ConstructorInterface({ initialData, onBack }) {
               onMouseLeave={handleCanvasMouseUp}
               onWheel={handleWheel}
             />
+            
+            {/* Индикатор касания для мобильных устройств */}
+            {touchIndicator && isMobile && (
+              <div 
+                className={styles.touchIndicator}
+                style={{
+                  left: touchIndicator.x,
+                  top: touchIndicator.y
+                }}
+              />
+            )}
           </div>
 
-          <div className={`${styles.controlPanel} ${panelCollapsed ? styles.collapsed : ''}`}>
+          <div className={`${styles.controlPanel} ${panelCollapsed ? styles.collapsed : ''} ${isMobile ? styles.mobile : ''}`}>
             <div className={styles.panelHeader}>
               <button 
                 className={styles.calculateBtn}
@@ -2133,10 +2350,10 @@ export default function ConstructorInterface({ initialData, onBack }) {
               </button>
               <button 
                 className={styles.collapseBtn}
-                title="Свернуть"
+                title={isMobile ? (panelCollapsed ? 'Показать панель' : 'Скрыть панель') : 'Свернуть'}
                 onClick={() => setPanelCollapsed(!panelCollapsed)}
               >
-                {panelCollapsed ? '◀' : '▶'}
+                {isMobile ? (panelCollapsed ? '▲' : '▼') : (panelCollapsed ? '◀' : '▶')}
               </button>
             </div>
 
@@ -2160,7 +2377,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
 
             <div className={styles.panelSection}>
               <h3>Инструменты</h3>
-              <div className={styles.toolsGrid}>
+              <div className={`${styles.toolsGrid} ${isMobile ? styles.mobileToolsGrid : ''}`}>
                 {[
                   { id: 'select', name: 'Выбор', icon: '👆' },
                   { id: 'wall', name: 'Стена', icon: '🧱' },
@@ -2171,7 +2388,7 @@ export default function ConstructorInterface({ initialData, onBack }) {
                 ].map(tool => (
                   <button
                     key={tool.id}
-                    className={`${styles.toolBtn} ${selectedTool === tool.id ? styles.active : ''}`}
+                    className={`${styles.toolBtn} ${selectedTool === tool.id ? styles.active : ''} ${isMobile ? styles.mobileToolBtn : ''}`}
                     onClick={() => setSelectedTool(tool.id)}
                   >
                     <span className={styles.toolIcon}>{tool.icon}</span>
@@ -2199,6 +2416,22 @@ export default function ConstructorInterface({ initialData, onBack }) {
 
             <div className={styles.panelSection}>
               <h3>Управление</h3>
+              {isMobile && (
+                <div className={styles.mobileHint}>
+                  {selectedTool === 'select' && '👆 Коснитесь элемента для выбора'}
+                  {selectedTool === 'wall' && '🧱 Коснитесь и проведите линию для стены'}
+                  {selectedTool === 'door' && '🚪 Коснитесь стены для размещения двери'}
+                  {selectedTool === 'window' && '🪟 Коснитесь стены для размещения окна'}
+                  {selectedTool === 'fix' && '🔒 Коснитесь дома для фиксации'}
+                  {selectedTool === 'rotate' && '📐 Коснитесь углов дома для деформации'}
+                  <button 
+                    className={styles.showHintsBtn}
+                    onClick={() => setShowGestureHints(true)}
+                  >
+                    ❓ Подсказки
+                  </button>
+                </div>
+              )}
               <div className={styles.zoomControls} style={{ display: 'flex', gap: '5px', width: '100%' }}>
                 <button onClick={() => setZoom(prev => Math.min(5, prev * 1.2))} style={{ flex: 1 }}>
                   🔍+
@@ -2243,13 +2476,13 @@ export default function ConstructorInterface({ initialData, onBack }) {
           </div>
           
           {panelCollapsed && (
-            <div className={styles.collapsedPanel}>
+            <div className={`${styles.collapsedPanel} ${isMobile ? styles.mobileCollapsedPanel : ''}`}>
               <button 
-                className={styles.expandBtn}
+                className={`${styles.expandBtn} ${isMobile ? styles.mobileExpandBtn : ''}`}
                 onClick={() => setPanelCollapsed(false)}
                 title="Развернуть панель"
               >
-                ◀
+                {isMobile ? '▲' : '◀'}
               </button>
             </div>
           )}

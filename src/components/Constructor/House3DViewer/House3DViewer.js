@@ -18,6 +18,12 @@ export default function House3DViewer({
   const rendererRef = useRef(null);
   const cameraRef = useRef(null);
   const animationIdRef = useRef(null);
+  
+  const isMobileDevice = typeof window !== 'undefined' && (
+    'ontouchstart' in window || 
+    navigator.maxTouchPoints > 0 ||
+    window.innerWidth <= 768
+  );
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -60,23 +66,32 @@ export default function House3DViewer({
     // Создание дома
     createHouse(scene);
 
-    // Управление мышью
-    let mouseDown = false;
-    let mouseX = 0;
-    let mouseY = 0;
+    // Управление мышью и касаниями
+    let isInteracting = false;
+    let lastX = 0;
+    let lastY = 0;
+    let isMobile = isMobileDevice;
+    let touchStartDistance = 0;
+    let isMultiTouch = false;
 
-    const handleMouseDown = (event) => {
-      mouseDown = true;
-      mouseX = event.clientX;
-      mouseY = event.clientY;
+    const getTouchDistance = (touches) => {
+      if (touches.length < 2) return 0;
+      const dx = touches[0].clientX - touches[1].clientX;
+      const dy = touches[0].clientY - touches[1].clientY;
+      return Math.sqrt(dx * dx + dy * dy);
     };
 
-    const handleMouseMove = (event) => {
-      if (!mouseDown) return;
-      
-      const deltaX = event.clientX - mouseX;
-      const deltaY = event.clientY - mouseY;
-      
+    const getTouchCenter = (touches) => {
+      if (touches.length === 1) {
+        return { x: touches[0].clientX, y: touches[0].clientY };
+      }
+      return {
+        x: (touches[0].clientX + touches[1].clientX) / 2,
+        y: (touches[0].clientY + touches[1].clientY) / 2
+      };
+    };
+
+    const rotateCamera = (deltaX, deltaY) => {
       const spherical = new THREE.Spherical();
       spherical.setFromVector3(camera.position.clone().sub(new THREE.Vector3(0, 20, 0)));
       spherical.theta -= deltaX * 0.01;
@@ -86,25 +101,132 @@ export default function House3DViewer({
       const newPosition = new THREE.Vector3().setFromSpherical(spherical).add(new THREE.Vector3(0, 20, 0));
       camera.position.copy(newPosition);
       camera.lookAt(0, 20, 0);
+    };
+
+    const zoomCamera = (delta) => {
+      const zoomFactor = delta > 0 ? 1.1 : 0.9;
+      const newDistance = camera.position.length() * zoomFactor;
+      if (newDistance > 30 && newDistance < 300) {
+        camera.position.multiplyScalar(zoomFactor);
+      }
+    };
+
+    // Обработчики мыши
+    const handleMouseDown = (event) => {
+      if (isMobile) return;
+      isInteracting = true;
+      lastX = event.clientX;
+      lastY = event.clientY;
+    };
+
+    const handleMouseMove = (event) => {
+      if (!isInteracting || isMobile) return;
       
-      mouseX = event.clientX;
-      mouseY = event.clientY;
+      const deltaX = event.clientX - lastX;
+      const deltaY = event.clientY - lastY;
+      
+      rotateCamera(deltaX, deltaY);
+      
+      lastX = event.clientX;
+      lastY = event.clientY;
     };
 
     const handleMouseUp = () => {
-      mouseDown = false;
+      if (isMobile) return;
+      isInteracting = false;
     };
 
     const handleWheel = (event) => {
+      if (isMobile) return;
       event.preventDefault();
-      const delta = event.deltaY > 0 ? 1.1 : 0.9;
-      camera.position.multiplyScalar(delta);
+      zoomCamera(event.deltaY);
     };
 
+    // Обработчики касаний
+    const handleTouchStart = (event) => {
+      event.preventDefault();
+      
+      if (event.touches.length === 2) {
+        isMultiTouch = true;
+        touchStartDistance = getTouchDistance(event.touches);
+        const center = getTouchCenter(event.touches);
+        lastX = center.x;
+        lastY = center.y;
+      } else if (event.touches.length === 1) {
+        isMultiTouch = false;
+        isInteracting = true;
+        lastX = event.touches[0].clientX;
+        lastY = event.touches[0].clientY;
+      }
+    };
+
+    const handleTouchMove = (event) => {
+      event.preventDefault();
+      
+      if (event.touches.length === 2 && isMultiTouch) {
+        // Масштабирование двумя пальцами
+        const currentDistance = getTouchDistance(event.touches);
+        if (touchStartDistance > 0) {
+          const scale = currentDistance / touchStartDistance;
+          
+          if (Math.abs(scale - 1) > 0.05) {
+            const currentCameraDistance = camera.position.length();
+            const newDistance = currentCameraDistance / scale;
+            
+            if (newDistance >= 30 && newDistance <= 300) {
+              const direction = camera.position.clone().normalize();
+              camera.position.copy(direction.multiplyScalar(newDistance));
+              camera.lookAt(0, 20, 0);
+            }
+            touchStartDistance = currentDistance;
+          }
+        }
+        
+        // Поворот двумя пальцами
+        const center = getTouchCenter(event.touches);
+        const deltaX = center.x - lastX;
+        const deltaY = center.y - lastY;
+        
+        rotateCamera(deltaX, deltaY);
+        
+        lastX = center.x;
+        lastY = center.y;
+      } else if (event.touches.length === 1 && !isMultiTouch && isInteracting) {
+        // Поворот одним пальцем
+        const deltaX = event.touches[0].clientX - lastX;
+        const deltaY = event.touches[0].clientY - lastY;
+        
+        rotateCamera(deltaX, deltaY);
+        
+        lastX = event.touches[0].clientX;
+        lastY = event.touches[0].clientY;
+      }
+    };
+
+    const handleTouchEnd = (event) => {
+      event.preventDefault();
+      
+      if (event.touches.length === 0) {
+        isInteracting = false;
+        isMultiTouch = false;
+        touchStartDistance = 0;
+      } else if (event.touches.length === 1 && isMultiTouch) {
+        isMultiTouch = false;
+        isInteracting = true;
+        lastX = event.touches[0].clientX;
+        lastY = event.touches[0].clientY;
+      }
+    };
+
+    // Добавляем обработчики
     renderer.domElement.addEventListener('mousedown', handleMouseDown);
     renderer.domElement.addEventListener('mousemove', handleMouseMove);
     renderer.domElement.addEventListener('mouseup', handleMouseUp);
     renderer.domElement.addEventListener('wheel', handleWheel);
+    
+    renderer.domElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+    renderer.domElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+    renderer.domElement.addEventListener('touchend', handleTouchEnd, { passive: false });
 
     // Анимация
     const animate = () => {
@@ -129,6 +251,9 @@ export default function House3DViewer({
       renderer.domElement.removeEventListener('mousemove', handleMouseMove);
       renderer.domElement.removeEventListener('mouseup', handleMouseUp);
       renderer.domElement.removeEventListener('wheel', handleWheel);
+      renderer.domElement.removeEventListener('touchstart', handleTouchStart);
+      renderer.domElement.removeEventListener('touchmove', handleTouchMove);
+      renderer.domElement.removeEventListener('touchend', handleTouchEnd);
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
       }
@@ -156,7 +281,11 @@ export default function House3DViewer({
         0,
         (b.y - (houseElement.y + houseElement.height / 2)) * scale
       );
-      return aPos.distanceTo(startPos) - bPos.distanceTo(startPos);
+      
+      // Проецируем позицию проема на вектор стены
+      const aProjected = aPos.clone().sub(startPos).dot(wallVector);
+      const bProjected = bPos.clone().sub(startPos).dot(wallVector);
+      return aProjected - bProjected;
     });
     
     let lastPos = 0;
@@ -167,7 +296,8 @@ export default function House3DViewer({
         0,
         (opening.y - (houseElement.y + houseElement.height / 2)) * scale
       );
-      const distFromStart = openingPos.distanceTo(startPos);
+      // Проецируем позицию проема на вектор стены для правильного расчета расстояния
+      const distFromStart = openingPos.clone().sub(startPos).dot(wallVector);
       const openingWidth = (opening.width || 30) * scale;
       const isDoor = doors && doors.find(d => d.id === opening.id);
       const openingHeight = isDoor ? 60 : 36; // Дверь 2м, окно 1.2м
@@ -370,24 +500,37 @@ export default function House3DViewer({
         }
       }
     } else {
-      // Обычные стены
+      // Обычные стены с проемами
       const houseWidth = houseElement.width * scale;
       const houseHeight = houseElement.height * scale;
       
-      const wallPositions = [
-        { x: 0, z: -houseHeight/2, width: houseWidth, height: wallThickness },
-        { x: houseWidth/2, z: 0, width: wallThickness, height: houseHeight },
-        { x: 0, z: houseHeight/2, width: houseWidth, height: wallThickness },
-        { x: -houseWidth/2, z: 0, width: wallThickness, height: houseHeight }
+      const wallData = [
+        { id: 'perimeter-0', startX: -houseWidth/2, startZ: -houseHeight/2, endX: houseWidth/2, endZ: -houseHeight/2, angle: 0 },
+        { id: 'perimeter-1', startX: houseWidth/2, startZ: -houseHeight/2, endX: houseWidth/2, endZ: houseHeight/2, angle: Math.PI/2 },
+        { id: 'perimeter-2', startX: houseWidth/2, startZ: houseHeight/2, endX: -houseWidth/2, endZ: houseHeight/2, angle: Math.PI },
+        { id: 'perimeter-3', startX: -houseWidth/2, startZ: houseHeight/2, endX: -houseWidth/2, endZ: -houseHeight/2, angle: -Math.PI/2 }
       ];
 
-      wallPositions.forEach(pos => {
-        const wallGeometry = new THREE.BoxGeometry(pos.width, wallHeight, pos.height);
-        const wall = new THREE.Mesh(wallGeometry, wallMaterial);
-        wall.position.set(pos.x, pileHeight + wallHeight/2, pos.z);
-        wall.castShadow = true;
-        wall.receiveShadow = true;
-        scene.add(wall);
+      wallData.forEach(wall => {
+        const wallOpenings = [...(doors || []), ...(windows || [])].filter(opening => 
+          opening.wallId === wall.id && opening.type === 'perimeter'
+        );
+        
+        if (wallOpenings.length === 0) {
+          const wallLength = Math.sqrt(Math.pow(wall.endX - wall.startX, 2) + Math.pow(wall.endZ - wall.startZ, 2));
+          const centerX = (wall.startX + wall.endX) / 2;
+          const centerZ = (wall.startZ + wall.endZ) / 2;
+          
+          const wallGeometry = new THREE.BoxGeometry(wallLength, wallHeight, wallThickness);
+          const wallMesh = new THREE.Mesh(wallGeometry, wallMaterial);
+          wallMesh.position.set(centerX, pileHeight + wallHeight/2, centerZ);
+          wallMesh.rotation.y = -wall.angle;
+          wallMesh.castShadow = true;
+          wallMesh.receiveShadow = true;
+          scene.add(wallMesh);
+        } else {
+          createWallWithOpenings(scene, wallMaterial, wall.startX, wall.startZ, wall.endX, wall.endZ, wall.angle, wallHeight, wallThickness, wallOpenings, houseElement, scale, pileHeight);
+        }
       });
     }
 
@@ -670,8 +813,17 @@ export default function House3DViewer({
           ✕ Закрыть 3D
         </button>
         <div className={styles.controlsInfo}>
-          <span>🖱️ Перетаскивайте для поворота</span>
-          <span>🔍 Колесо мыши для масштаба</span>
+          {isMobileDevice ? (
+            <>
+              <span>👆 Один палец - поворот</span>
+              <span>🤏 Два пальца - масштаб</span>
+            </>
+          ) : (
+            <>
+              <span>🖱️ Перетаскивайте для поворота</span>
+              <span>🔍 Колесо мыши для масштаба</span>
+            </>
+          )}
         </div>
       </div>
       
