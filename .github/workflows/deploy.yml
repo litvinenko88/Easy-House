@@ -1,11 +1,11 @@
-name: Build and Deploy
+name: Deploy to Hosting
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     
     steps:
@@ -20,15 +20,8 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Build static site
+    - name: Build project
       run: npm run build
-    
-    - name: Verify static files
-      run: |
-        echo "Checking for static files..."
-        ls -la out/
-        echo "HTML files count:"
-        find out/ -name "*.html" | wc -l
     
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -36,5 +29,5 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: out/
+        local-dir: ./out/
         server-dir: ${{ secrets.FTP_REMOTE_PATH }}
