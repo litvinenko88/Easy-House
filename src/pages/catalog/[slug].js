@@ -6,17 +6,15 @@ import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import ProductDetail from '../../components/ProductDetail/ProductDetail';
 import { projectsData } from '../../data/projectsData';
 
-export default function CatalogDetail() {
+export default function CatalogDetail({ project, slug: propSlug }) {
   const router = useRouter();
   const { slug } = router.query;
 
-  const sanitizedSlug = useMemo(() => {
-    return typeof slug === 'string' ? slug.replace(/[^a-zA-Z0-9-_]/g, '') : '';
-  }, [slug]);
+  const sanitizedSlug = propSlug || (typeof slug === 'string' ? slug.replace(/[^a-zA-Z0-9-_]/g, '') : '');
 
-  const project = projectsData[sanitizedSlug];
+  const currentProject = project || projectsData[sanitizedSlug];
 
-  if (!project) {
+  if (!currentProject) {
     return (
       <Layout>
         <Head>
@@ -59,31 +57,31 @@ export default function CatalogDetail() {
     );
   }
 
-  const currentPrice = project?.sizes?.[0]?.price || 0;
+  const currentPrice = currentProject?.sizes?.[0]?.price || 0;
   const formattedPrice = currentPrice.toLocaleString('ru-RU');
 
   return (
     <Layout>
       <Head>
-        <title>{project.name} - модульный дом от {formattedPrice} руб</title>
-        <meta name="description" content={`Модульный дом ${project.name} от ${formattedPrice} руб. Подробные характеристики, фото, чертежи и комплектация.`} />
-        <meta name="keywords" content={`${project.name}, модульный дом, цена, характеристики, купить`} />
+        <title>{currentProject.name} - модульный дом от {formattedPrice} руб | Easy House</title>
+        <meta name="description" content={`Модульный дом ${currentProject.name} от ${formattedPrice} руб. Подробные характеристики, фото, чертежи и комплектация.`} />
+        <meta name="keywords" content={`${currentProject.name}, модульный дом, цена, характеристики, купить`} />
         <link rel="canonical" href={`https://house-modular.ru/catalog/${sanitizedSlug}`} />
-        <meta property="og:title" content={`${project.name} - модульный дом от ${formattedPrice} руб`} />
-        <meta property="og:description" content={`Модульный дом ${project.name} от ${formattedPrice} руб. Подробные характеристики, фото, чертежи и комплектация.`} />
+        <meta property="og:title" content={`${currentProject.name} - модульный дом от {formattedPrice} руб | Easy House`} />
+        <meta property="og:description" content={`Модульный дом ${currentProject.name} от ${formattedPrice} руб. Подробные характеристики, фото, чертежи и комплектация.`} />
         <meta property="og:url" content={`https://house-modular.ru/catalog/${sanitizedSlug}`} />
         <meta property="og:type" content="product" />
-        <meta property="og:image" content={`https://house-modular.ru${project.images?.[0] || '/images/default-house.jpg'}`} />
+        <meta property="og:image" content={`https://house-modular.ru${currentProject.images?.[0] || '/images/default-house.jpg'}`} />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Product",
-            "name": project.name,
-            "description": `Модульный дом ${project.name}. Подробные характеристики, фото и комплектация.`,
-            "image": project.images?.map(img => `https://house-modular.ru${img}`) || [],
+            "name": currentProject.name,
+            "description": `Модульный дом ${currentProject.name}. Подробные характеристики, фото и комплектация.`,
+            "image": currentProject.images?.map(img => `https://house-modular.ru${img}`) || [],
             "brand": {
               "@type": "Brand",
-              "name": "House Modular"
+              "name": "Easy House"
             },
             "category": "Модульные дома",
             "offers": {
@@ -93,7 +91,7 @@ export default function CatalogDetail() {
               "availability": "https://schema.org/InStock",
               "seller": {
                 "@type": "Organization",
-                "name": "House Modular",
+                "name": "Easy House",
                 "url": "https://house-modular.ru"
               }
             }
@@ -102,7 +100,36 @@ export default function CatalogDetail() {
       </Head>
 
       <Breadcrumbs />
-      <ProductDetail project={project} />
+      <ProductDetail project={currentProject} />
     </Layout>
   );
+}
+
+export async function getStaticPaths() {
+  const paths = Object.keys(projectsData).map((slug) => ({
+    params: { slug }
+  }));
+
+  return {
+    paths,
+    fallback: false
+  };
+}
+
+export async function getStaticProps({ params }) {
+  const { slug } = params;
+  const project = projectsData[slug];
+
+  if (!project) {
+    return {
+      notFound: true
+    };
+  }
+
+  return {
+    props: {
+      project,
+      slug
+    }
+  };
 }
