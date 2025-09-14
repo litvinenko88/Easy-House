@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./WhyChooseUs.module.css";
-
+import ContactFormTG from '../ContactFormTG';
 
 const WhyChooseUs = ({ title, subtitle, advantages: customAdvantages, ctaTitle, ctaText }) => {
   const [visibleItems, setVisibleItems] = useState(new Set());
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   const sectionRef = useRef(null);
   const itemsRef = useRef([]);
@@ -127,7 +128,8 @@ const WhyChooseUs = ({ title, subtitle, advantages: customAdvantages, ctaTitle, 
               {ctaText || "Получите персональный расчет стоимости вашего модульного дома"}
             </p>
             <button
-              className={styles.ctaButton}>
+              className={styles.ctaButton}
+              onClick={() => setIsContactFormOpen(true)}>
               <span>Рассчитать стоимость</span>
               <div className={styles.buttonGlow}></div>
             </button>
@@ -135,7 +137,12 @@ const WhyChooseUs = ({ title, subtitle, advantages: customAdvantages, ctaTitle, 
         </div>
       </div>
 
-
+      <ContactFormTG 
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+        title="Рассчитать стоимость"
+        source="WhyChooseUs - Рассчитать стоимость"
+      />
     </section>
   );
 };

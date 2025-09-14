@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './ContactFormTG.module.css';
 
-const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами" }) => {
+const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами", source = "Неизвестный блок", productInfo = null, projectPDF = null }) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -9,6 +9,8 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [nameError, setNameError] = useState('');
   const [consentError, setConsentError] = useState(false);
@@ -79,7 +81,81 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     }
   };
 
-  const handleSubmit = (e) => {
+  const sendToTelegram = async (data) => {
+    const botToken = '8120824235:AAGEqe_EUGsJJEMHENHHzEdTwNiqxBv_61Y';
+    const chatIds = ['682859146'];
+    
+    const pageTitle = document.title || 'Неизвестная страница';
+    
+    let message = `🏠 Новая заявка с сайта Easy House\n\n` +
+      `👤 Имя: ${data.name}\n` +
+      `📞 Телефон: ${data.phone}\n` +
+      `📍 Источник: ${data.source}\n`;
+    
+    if (data.productInfo) {
+      message += `\n🏠 Информация о товаре:\n` +
+        `• Название: ${data.productInfo.name}\n` +
+        `• Площадь: ${data.productInfo.size}\n` +
+        `• Размеры: ${data.productInfo.dimensions}\n` +
+        `• Цена: ${data.productInfo.price.toLocaleString('ru-RU')} руб.\n`;
+    }
+    
+    message += `\n📄 Страница: ${pageTitle}\n` +
+      `🔗 URL: ${window.location.href}\n` +
+      `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
+    
+    // Отправляем сообщение
+    if (data.projectPDF) {
+      setUploadStatus('Отправка данных...');
+      setUploadProgress(25);
+    }
+    
+    const messagePromises = chatIds.map(chatId => 
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      })
+    );
+    
+    const messageResponses = await Promise.all(messagePromises);
+    const messageSuccess = messageResponses.some(response => response.ok);
+    
+    if (data.projectPDF) {
+      setUploadProgress(50);
+    }
+    
+    // Отправляем PDF файл, если он есть
+    if (data.projectPDF && messageSuccess) {
+      setUploadStatus('Отправка PDF файла...');
+      setUploadProgress(75);
+      
+      const pdfPromises = chatIds.map(chatId => {
+        const pdfFormData = new FormData();
+        pdfFormData.append('chat_id', chatId);
+        pdfFormData.append('document', data.projectPDF, 'Проект_дома.pdf');
+        pdfFormData.append('caption', '📄 Проект дома в 2D виде');
+        
+        return fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+          method: 'POST',
+          body: pdfFormData
+        });
+      });
+      
+      await Promise.all(pdfPromises);
+      
+      setUploadStatus('Завершение...');
+      setUploadProgress(100);
+    }
+    
+    return messageSuccess;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     let hasErrors = false;
@@ -112,20 +188,34 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     }
     
     setIsSubmitting(true);
+    if (projectPDF) {
+      setUploadProgress(0);
+      setUploadStatus('Подготовка...');
+    }
 
-    // Имитация отправки
-    setTimeout(() => {
-      setIsSuccess(true);
-      setFormData({ name: '', phone: '', consent: false });
-      setNameError('');
-      setPhoneError('');
-      setConsentError(false);
+    try {
+      const success = await sendToTelegram({ ...formData, source, productInfo, projectPDF });
+      if (success) {
+        await new Promise(resolve => setTimeout(resolve, 500)); // Короткая задержка
+        setIsSuccess(true);
+        setFormData({ name: '', phone: '', consent: false });
+        setNameError('');
+        setPhoneError('');
+        setConsentError(false);
+        setTimeout(() => {
+          setIsSuccess(false);
+          onClose();
+        }, 3000);
+      } else {
+        alert('Ошибка отправки. Попробуйте еще раз.');
+      }
+    } catch (error) {
+      alert('Ошибка отправки. Попробуйте еще раз.');
+    } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-        setIsSuccess(false);
-        onClose();
-      }, 3000);
-    }, 1000);
+      setUploadProgress(0);
+      setUploadStatus('');
+    }
   };
 
   if (!isOpen) return null;
@@ -197,16 +287,36 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
                 {consentError && <div className={styles.errorText}>Необходимо дать согласие на обработку данных</div>}
               </div>
               
-              <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <span className={styles.spinner}></span>
-                    Отправляем...
-                  </>
-                ) : (
-                  'Отправить заявку'
-                )}
-              </button>
+              {isSubmitting && projectPDF ? (
+                <div className={styles.progressContainer}>
+                  <div className={styles.progressText}>
+                    {uploadStatus}
+                  </div>
+                  <div className={styles.progressBar}>
+                    <div 
+                      className={styles.progressFill} 
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <div className={styles.progressPercent}>
+                    {uploadProgress}%
+                  </div>
+                  <div className={styles.warningText}>
+                    Не закрывайте окно до завершения отправки
+                  </div>
+                </div>
+              ) : (
+                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <span className={styles.spinner}></span>
+                      Отправляем...
+                    </>
+                  ) : (
+                    'Отправить заявку'
+                  )}
+                </button>
+              )}
             </form>
           )}
         </div>

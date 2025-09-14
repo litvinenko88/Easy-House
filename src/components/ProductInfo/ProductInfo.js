@@ -3,19 +3,20 @@ import SizeSelector from '../SizeSelector/SizeSelector';
 import OrderButton from '../OrderButton/OrderButton';
 import ProductSpecs from '../ProductSpecs/ProductSpecs';
 import ProductEquipment from '../ProductEquipment/ProductEquipment';
-
+import ContactFormTG from '../ContactFormTG';
 
 import styles from './ProductInfo.module.css';
 
 export default function ProductInfo({ project }) {
   const [selectedSize, setSelectedSize] = useState(0);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   
   const currentPrice = project?.sizes?.[selectedSize]?.price || 0;
   const formattedPrice = currentPrice.toLocaleString('ru-RU');
 
   const handleOrderClick = () => {
-    window.location.href = '/contacts';
+    setIsContactFormOpen(true);
   };
 
   const currentSize = project?.sizes?.[selectedSize];
@@ -51,6 +52,14 @@ export default function ProductInfo({ project }) {
       <ProductSpecs specs={project.specs} />
 
       <ProductEquipment equipment={project.equipment} />
+      
+      <ContactFormTG 
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+        title="Заказать дом"
+        source={`Товар: ${project.name} - ${currentSize?.area || ''} - ${formattedPrice} руб.`}
+        productInfo={productInfo}
+      />
     </div>
   );
 }

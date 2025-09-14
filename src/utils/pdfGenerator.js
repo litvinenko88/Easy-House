@@ -41,12 +41,12 @@ export const generateFloorPlanPDF = (canvasRef, projectData, walls, doors, windo
   try {
     const imgData = tempCanvas.toDataURL('image/png', 1.0);
     
-    // Размеры для изображения (занимает большую часть страницы)
-    const imgWidth = 240;
-    const imgHeight = 140;
+    // Размеры для изображения (занимает почти всю страницу)
+    const imgWidth = 260;
+    const imgHeight = 160;
     const pageWidth = 297; // A4 landscape width
     const imgX = (pageWidth - imgWidth) / 2;
-    const imgY = 70; // Позиция сверху
+    const imgY = 65; // Позиция сверху
     
     // Добавляем рамку вокруг изображения
     pdf.setDrawColor(200, 200, 200);

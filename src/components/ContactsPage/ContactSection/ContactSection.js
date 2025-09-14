@@ -59,37 +59,37 @@ export default function ContactSection() {
     setConsentError(false);
     setIsSubmitting(true);
 
-    const message = `📬 Новое сообщение с сайта
-
-👤 Имя: ${formData.name}
-📞 Телефон: ${formData.phone}
-📍 Источник: страница контактов
-
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
+    const pageTitle = document.title || 'Неизвестная страница';
+    
+    const message = `🏠 Новая заявка с сайта Easy House\n\n` +
+      `👤 Имя: ${formData.name}\n` +
+      `📞 Телефон: ${formData.phone}\n` +
+      `📍 Источник: Страница контактов\n` +
+      `📄 Страница: ${pageTitle}\n` +
+      `🔗 URL: ${window.location.href}\n` +
+      `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
 
     try {
-      const response = await fetch('/api/send-telegram', {
+      const response = await fetch(`https://api.telegram.org/bot8120824235:AAGEqe_EUGsJJEMHENHHzEdTwNiqxBv_61Y/sendMessage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
-          phone: formData.phone,
-          source: 'страница контактов'
+          chat_id: '682859146',
+          text: message,
+          parse_mode: 'HTML'
         })
       });
 
-      const result = await response.json();
-      
-      if (result.success) {
+      if (response.ok) {
         setIsSuccess(true);
         setFormData({ name: '', phone: '', consent: false });
         setPhoneError('');
         setConsentError(false);
         setTimeout(() => setIsSuccess(false), 5000);
       } else {
-        throw new Error(result.error || 'Ошибка отправки');
+        throw new Error('Ошибка отправки');
       }
     } catch (error) {
       console.error('Form submission error:', error);
