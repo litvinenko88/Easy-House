@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Главная страница -->
+  <url>
+    <loc>https://house-modular.ru/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/hero-bg.jpg</image:loc>
+      <image:title>Модульные дома под ключ Easy House</image:title>
+      <image:caption>Строительство модульных домов под ключ за 30 дней</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/photo_gallery/1.jpg</image:loc>
+      <image:title>Готовый модульный дом Easy House</image:title>
+      <image:caption>Модульный дом для постоянного проживания</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Каталог -->
+  <url>
+    <loc>https://house-modular.ru/catalog/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/New_Arkhangelsk/1.jpg</image:loc>
+      <image:title>Модульный дом Новый Архангельск</image:title>
+      <image:caption>Популярная модель модульного дома</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Barnhouse/1.jpg</image:loc>
+      <image:title>Модульный дом Барнхаус</image:title>
+      <image:caption>Современный дизайн модульного дома</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Модели домов -->
+  <url>
+    <loc>https://house-modular.ru/catalog/novyj-arkhangelsk/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/New_Arkhangelsk/1.jpg</image:loc>
+      <image:title>Модульный дом Новый Архангельск</image:title>
+      <image:caption>Модульный дом от 855 000 рублей</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/arkhangelsk-s-terrasoj/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Arkhangelsk_terrace/1.jpg</image:loc>
+      <image:title>Модульный дом Архангельск с террасой</image:title>
+      <image:caption>Модульный дом с террасой из лиственницы</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/uglovoj-arkhangelsk/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Angular_Arkhangelsk/1.jpg</image:loc>
+      <image:title>Угловой модульный дом Архангельск</image:title>
+      <image:caption>Угловая планировка модульного дома</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/barnkhaus/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Barnhouse/1.jpg</image:loc>
+      <image:title>Модульный дом Барнхаус</image:title>
+      <image:caption>Современный стиль барнхаус</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/dvukhmodulnaya-dvineya/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Two_module_Lane/1.jpg</image:loc>
+      <image:title>Двухмодульный дом Двинея</image:title>
+      <image:caption>Просторный двухмодульный дом</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/chetyrekhmodulnyj-barn/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Four_Module_Barn/1.jpg</image:loc>
+      <image:title>Четырехмодульный дом Барн</image:title>
+      <image:caption>Большой четырехмодульный дом</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/novyj-s-paluboj/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/New_House_with_Deck _and_Pergola/1.jpg</image:loc>
+      <image:title>Модульный дом с палубой и перголой</image:title>
+      <image:caption>Дом с палубой и перголой</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/barn-s-terrasoj/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Barn_with_terrace/1.jpg</image:loc>
+      <image:title>Модульный дом Барн с террасой</image:title>
+      <image:caption>Барн с террасой</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/barn/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Barn_House/1.jpg</image:loc>
+      <image:title>Модульный дом Барн</image:title>
+      <image:caption>Классический стиль барн</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/trekhmodulnyj-barn/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Three_Module_Barn/1.jpg</image:loc>
+      <image:title>Трехмодульный дом Барн</image:title>
+      <image:caption>Трехмодульный дом в стиле барн</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/catalog/uglovoj-arkhangelsk-s-terrasoj/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/Arkhangelsk_corner_with_terrace/1.jpg</image:loc>
+      <image:title>Угловой Архангельск с террасой</image:title>
+      <image:caption>Угловой дом с террасой</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Региональные страницы -->
+  <url>
+    <loc>https://house-modular.ru/stavropolskiy-kray/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/1.webp</image:loc>
+      <image:title>Модульные дома в Ставропольском крае</image:title>
+      <image:caption>Строительство модульных домов в Ставрополе</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/krasnodarskiy-kray/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/2.webp</image:loc>
+      <image:title>Модульные дома в Краснодарском крае</image:title>
+      <image:caption>Строительство модульных домов в Краснодарском крае</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/respublika-kchr/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/3.webp</image:loc>
+      <image:title>Модульные дома в Республике КЧР</image:title>
+      <image:caption>Строительство модульных домов в КЧР</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/respublika-kbr/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/4.webp</image:loc>
+      <image:title>Модульные дома в Республике КБР</image:title>
+      <image:caption>Строительство модульных домов в КБР</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Для бизнеса -->
+  <url>
+    <loc>https://house-modular.ru/dlya-biznesa/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/photo_gallery/1.jpg</image:loc>
+      <image:title>Модульные дома для бизнеса</image:title>
+      <image:caption>Коммерческие модульные здания</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Отзывы -->
+  <url>
+    <loc>https://house-modular.ru/otzyvy/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/reviews/1.jpg</image:loc>
+      <image:title>Отзывы о модульных домах Easy House</image:title>
+      <image:caption>Отзывы клиентов о строительстве модульных домов</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- О компании -->
+  <url>
+    <loc>https://house-modular.ru/o-kompanii/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/sotrudnik/1.jpg</image:loc>
+      <image:title>О компании Easy House</image:title>
+      <image:caption>Производство модульных домов</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Контакты -->
+  <url>
+    <loc>https://house-modular.ru/contacts/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/1.webp</image:loc>
+      <image:title>Контакты Easy House</image:title>
+      <image:caption>Связаться с нами для заказа модульного дома</image:caption>
+    </image:image>
+  </url>
+  
+  <url>
+    <loc>https://house-modular.ru/contact/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/2.webp</image:loc>
+      <image:title>Обратная связь Easy House</image:title>
+      <image:caption>Форма обратной связи</image:caption>
+    </image:image>
+  </url>
+  
+</urlset>
