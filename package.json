@@ -8,6 +8,7 @@
     "start": "next start",
     "deploy": "npm run build && node deploy-local.js",
     "deploy:ftp": "npm run build && node deploy.js",
+    "deploy:static": "npm run build && node deploy-static.js",
     "deploy:local": "npm run build && node deploy-local.js"
   },
   "dependencies": {
