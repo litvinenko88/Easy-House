@@ -20,21 +20,15 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Build project
+    - name: Build static site
       run: npm run build
     
-    - name: List build output
-      run: ls -la
-    
-    - name: Check out directory
+    - name: Verify static files
       run: |
-        if [ -d "out" ]; then
-          echo "out directory exists"
-          ls -la out/
-        else
-          echo "out directory does not exist"
-          exit 1
-        fi
+        echo "Checking for static files..."
+        ls -la out/
+        echo "HTML files count:"
+        find out/ -name "*.html" | wc -l
     
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4

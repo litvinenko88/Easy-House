@@ -2,23 +2,12 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  distDir: 'out',
   images: {
-    unoptimized: true,
-    formats: ['image/webp', 'image/avif']
+    unoptimized: true
   },
   compress: true,
   poweredByHeader: false,
-  generateEtags: false,
-  experimental: {
-    outputFileTracingRoot: undefined
-  },
-  webpack: (config, { dev }) => {
-    if (dev) {
-      config.cache = false;
-    }
-    return config;
-  }
+  generateEtags: false
 }
 
 module.exports = nextConfig
