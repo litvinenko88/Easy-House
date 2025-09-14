@@ -59,16 +59,18 @@ export default function ContactSection() {
     setConsentError(false);
     setIsSubmitting(true);
 
-    const message = `📬 Новое сообщение с сайта
-
-👤 Имя: ${formData.name}
-📞 Телефон: ${formData.phone}
-📍 Источник: страница контактов
-
-⏰ Время: ${new Date().toLocaleString('ru-RU')}`;
+    const pageTitle = document.title || 'Неизвестная страница';
+    
+    const message = `🏠 Новая заявка с сайта Easy House\n\n` +
+      `👤 Имя: ${formData.name}\n` +
+      `📞 Телефон: ${formData.phone}\n` +
+      `📍 Источник: Страница контактов\n` +
+      `📄 Страница: ${pageTitle}\n` +
+      `🔗 URL: ${window.location.href}\n` +
+      `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
 
     try {
-      const response = await fetch(`https://api.telegram.org/bot8498114010:AAFcJmkf9AOaA2p6xUgaQ0edyNJPOIgY2DI/sendMessage`, {
+      const response = await fetch(`https://api.telegram.org/bot8120824235:AAGEqe_EUGsJJEMHENHHzEdTwNiqxBv_61Y/sendMessage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

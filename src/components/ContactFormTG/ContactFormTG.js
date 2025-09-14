@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './ContactFormTG.module.css';
 
-const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами", source = "Неизвестный блок" }) => {
+const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами", source = "Неизвестный блок", productInfo = null }) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -85,11 +85,20 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     
     const pageTitle = document.title || 'Неизвестная страница';
     
-    const message = `🏠 Новая заявка с сайта Easy House\n\n` +
+    let message = `🏠 Новая заявка с сайта Easy House\n\n` +
       `👤 Имя: ${data.name}\n` +
       `📞 Телефон: ${data.phone}\n` +
-      `📍 Источник: ${data.source}\n` +
-      `📄 Страница: ${pageTitle}\n` +
+      `📍 Источник: ${data.source}\n`;
+    
+    if (data.productInfo) {
+      message += `\n🏠 Информация о товаре:\n` +
+        `• Название: ${data.productInfo.name}\n` +
+        `• Площадь: ${data.productInfo.size}\n` +
+        `• Размеры: ${data.productInfo.dimensions}\n` +
+        `• Цена: ${data.productInfo.price.toLocaleString('ru-RU')} руб.\n`;
+    }
+    
+    message += `\n📄 Страница: ${pageTitle}\n` +
       `🔗 URL: ${window.location.href}\n` +
       `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
     
@@ -144,7 +153,7 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     setIsSubmitting(true);
 
     try {
-      const success = await sendToTelegram({ ...formData, source });
+      const success = await sendToTelegram({ ...formData, source, productInfo });
       if (success) {
         setIsSuccess(true);
         setFormData({ name: '', phone: '', consent: false });
