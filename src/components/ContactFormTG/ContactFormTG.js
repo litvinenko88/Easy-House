@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './ContactFormTG.module.css';
 
-const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами" }) => {
+const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами", source = "Неизвестный блок" }) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -79,7 +79,37 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     }
   };
 
-  const handleSubmit = (e) => {
+  const sendToTelegram = async (data) => {
+    const botToken = '8120824235:AAGEqe_EUGsJJEMHENHHzEdTwNiqxBv_61Y';
+    const chatIds = ['682859146'];
+    
+    const pageTitle = document.title || 'Неизвестная страница';
+    
+    const message = `🏠 Новая заявка с сайта Easy House\n\n` +
+      `👤 Имя: ${data.name}\n` +
+      `📞 Телефон: ${data.phone}\n` +
+      `📍 Источник: ${data.source}\n` +
+      `📄 Страница: ${pageTitle}\n` +
+      `🔗 URL: ${window.location.href}\n` +
+      `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
+    
+    const promises = chatIds.map(chatId => 
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: message,
+          parse_mode: 'HTML'
+        })
+      })
+    );
+    
+    const responses = await Promise.all(promises);
+    return responses.some(response => response.ok);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     let hasErrors = false;
@@ -113,19 +143,26 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     
     setIsSubmitting(true);
 
-    // Имитация отправки
-    setTimeout(() => {
-      setIsSuccess(true);
-      setFormData({ name: '', phone: '', consent: false });
-      setNameError('');
-      setPhoneError('');
-      setConsentError(false);
+    try {
+      const success = await sendToTelegram({ ...formData, source });
+      if (success) {
+        setIsSuccess(true);
+        setFormData({ name: '', phone: '', consent: false });
+        setNameError('');
+        setPhoneError('');
+        setConsentError(false);
+        setTimeout(() => {
+          setIsSuccess(false);
+          onClose();
+        }, 3000);
+      } else {
+        alert('Ошибка отправки. Попробуйте еще раз.');
+      }
+    } catch (error) {
+      alert('Ошибка отправки. Попробуйте еще раз.');
+    } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-        setIsSuccess(false);
-        onClose();
-      }, 3000);
-    }, 1000);
+    }
   };
 
   if (!isOpen) return null;

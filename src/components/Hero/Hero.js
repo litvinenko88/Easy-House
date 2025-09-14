@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import styles from './Hero.module.css'
-
+import ContactFormTG from '../ContactFormTG'
 
 export default function Hero({ title, titleSub, price, subtitle, advantages }) {
   const [isVisible, setIsVisible] = useState(false)
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false)
 
 
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function Hero({ title, titleSub, price, subtitle, advantages }) {
               <button 
                 className={`${styles.btn} ${styles.btnPrimary}`} 
                 type="button" 
-
+                onClick={() => setIsContactFormOpen(true)}
                 aria-label="Рассчитать стоимость модульного дома"
               >
                 Рассчитать стоимость
@@ -100,7 +101,12 @@ export default function Hero({ title, titleSub, price, subtitle, advantages }) {
         </div>
       </div>
 
-
+      <ContactFormTG 
+        isOpen={isContactFormOpen}
+        onClose={() => setIsContactFormOpen(false)}
+        title="Рассчитать стоимость"
+        source="Hero - Рассчитать стоимость"
+      />
     </section>
   )
 }
