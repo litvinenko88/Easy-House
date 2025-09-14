@@ -1,0 +1,4 @@
+Contact: mailto:security@house-modular.ru
+Expires: 2025-12-31T23:59:59.000Z
+Preferred-Languages: ru, en
+Canonical: https://house-modular.ru/.well-known/security.txt

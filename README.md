@@ -23,17 +23,36 @@ npm run dev
 ## Деплой
 
 ```bash
-# Сборка и автоматический деплой
+# Локальный деплой (копирование в папку deploy)
+npm run deploy
+
+# Деплой на FTP сервер (требует настройки .env.local)
+npm run deploy:ftp
+
+# Только сборка без деплоя
 npm run build
 ```
 
+### Автоматический деплой
 При пуше в main ветку автоматически:
 1. Собирается статический сайт
-2. Выгружается в ветку production
-3. Деплоится на хостинг по FTP
+2. Деплоится на хостинг по FTP
 
-## Настройка GitHub Secrets
+### Локальный деплой
+Для локального тестирования файлы копируются в папку `deploy/`
 
+## Настройка FTP
+
+### Локальная настройка
+Отредактируйте файл `.env.local`:
+```
+FTP_SERVER=your-ftp-server.com
+FTP_USERNAME=your-username
+FTP_PASSWORD=your-password
+FTP_REMOTE_PATH=/public_html/
+```
+
+### GitHub Secrets
 Добавьте в Settings > Secrets and variables > Actions:
 - `FTP_SERVER` - адрес FTP сервера
 - `FTP_USERNAME` - имя пользователя FTP
