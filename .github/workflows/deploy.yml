@@ -23,6 +23,19 @@ jobs:
     - name: Build project
       run: npm run build
     
+    - name: List build output
+      run: ls -la
+    
+    - name: Check out directory
+      run: |
+        if [ -d "out" ]; then
+          echo "out directory exists"
+          ls -la out/
+        else
+          echo "out directory does not exist"
+          exit 1
+        fi
+    
     - name: Deploy to FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
