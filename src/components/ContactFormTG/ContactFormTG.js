@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './ContactFormTG.module.css';
 
-const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами", source = "Неизвестный блок", productInfo = null }) => {
+const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нами", source = "Неизвестный блок", productInfo = null, projectPDF = null }) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -9,6 +9,8 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState('');
   const [phoneError, setPhoneError] = useState('');
   const [nameError, setNameError] = useState('');
   const [consentError, setConsentError] = useState(false);
@@ -102,7 +104,11 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       `🔗 URL: ${window.location.href}\n` +
       `🕐 Время: ${new Date().toLocaleString('ru-RU')}`;
     
-    const promises = chatIds.map(chatId => 
+    // Отправляем сообщение
+    setUploadStatus('Отправка данных...');
+    setUploadProgress(25);
+    
+    const messagePromises = chatIds.map(chatId => 
       fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -114,8 +120,35 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       })
     );
     
-    const responses = await Promise.all(promises);
-    return responses.some(response => response.ok);
+    const messageResponses = await Promise.all(messagePromises);
+    const messageSuccess = messageResponses.some(response => response.ok);
+    
+    setUploadProgress(50);
+    
+    // Отправляем PDF файл, если он есть
+    if (data.projectPDF && messageSuccess) {
+      setUploadStatus('Отправка PDF файла...');
+      setUploadProgress(75);
+      
+      const pdfPromises = chatIds.map(chatId => {
+        const pdfFormData = new FormData();
+        pdfFormData.append('chat_id', chatId);
+        pdfFormData.append('document', data.projectPDF, 'Проект_дома.pdf');
+        pdfFormData.append('caption', '📄 Проект дома в 2D виде');
+        
+        return fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, {
+          method: 'POST',
+          body: pdfFormData
+        });
+      });
+      
+      await Promise.all(pdfPromises);
+    }
+    
+    setUploadStatus('Завершение...');
+    setUploadProgress(100);
+    
+    return messageSuccess;
   };
 
   const handleSubmit = async (e) => {
@@ -151,10 +184,13 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
     }
     
     setIsSubmitting(true);
+    setUploadProgress(0);
+    setUploadStatus('Подготовка...');
 
     try {
-      const success = await sendToTelegram({ ...formData, source, productInfo });
+      const success = await sendToTelegram({ ...formData, source, productInfo, projectPDF });
       if (success) {
+        await new Promise(resolve => setTimeout(resolve, 500)); // Короткая задержка
         setIsSuccess(true);
         setFormData({ name: '', phone: '', consent: false });
         setNameError('');
@@ -171,6 +207,8 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
       alert('Ошибка отправки. Попробуйте еще раз.');
     } finally {
       setIsSubmitting(false);
+      setUploadProgress(0);
+      setUploadStatus('');
     }
   };
 
@@ -243,16 +281,29 @@ const ContactFormTG = ({ isOpen, onClose, title = "Свяжитесь с нам�
                 {consentError && <div className={styles.errorText}>Необходимо дать согласие на обработку данных</div>}
               </div>
               
-              <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <span className={styles.spinner}></span>
-                    Отправляем...
-                  </>
-                ) : (
-                  'Отправить заявку'
-                )}
-              </button>
+              {isSubmitting ? (
+                <div className={styles.progressContainer}>
+                  <div className={styles.progressText}>
+                    {uploadStatus}
+                  </div>
+                  <div className={styles.progressBar}>
+                    <div 
+                      className={styles.progressFill} 
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <div className={styles.progressPercent}>
+                    {uploadProgress}%
+                  </div>
+                  <div className={styles.warningText}>
+                    Не закрывайте окно до завершения отправки
+                  </div>
+                </div>
+              ) : (
+                <button type="submit" className={styles.submitButton}>
+                  Отправить заявку
+                </button>
+              )}
             </form>
           )}
         </div>

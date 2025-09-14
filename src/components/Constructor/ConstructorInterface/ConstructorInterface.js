@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import useWallBuilder from '../WallBuilder/WallBuilder';
+import ContactFormTG from '../../ContactFormTG';
 
 import { generateFloorPlanPDF, getPDFBlob } from '../../../utils/pdfGenerator';
 import styles from './ConstructorInterface.module.css';
@@ -50,6 +51,8 @@ export default function ConstructorInterface({ initialData, onBack }) {
   const [isDraggingWindow, setIsDraggingWindow] = useState(false);
   const [windowDragStart, setWindowDragStart] = useState({ x: 0, y: 0 });
   const [windowDeleteIcon, setWindowDeleteIcon] = useState(null);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [projectPDF, setProjectPDF] = useState(null);
 
 
 
@@ -598,9 +601,10 @@ export default function ConstructorInterface({ initialData, onBack }) {
       );
       
       const pdfBlob = getPDFBlob(pdf);
+      setProjectPDF(pdfBlob);
       
-      // Перенаправляем на страницу контактов
-      window.location.href = '/contacts';
+      // Открываем форму
+      setIsContactFormOpen(true);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Ошибка при создании PDF. Попробуйте еще раз.');
@@ -2252,7 +2256,16 @@ export default function ConstructorInterface({ initialData, onBack }) {
         </div>
       </div>
       
-
+      <ContactFormTG 
+        isOpen={isContactFormOpen}
+        onClose={() => {
+          setIsContactFormOpen(false);
+          setProjectPDF(null);
+        }}
+        title="Рассчитать проект"
+        source="Конструктор - Рассчитать проект"
+        projectPDF={projectPDF}
+      />
     </>
   );
 }
