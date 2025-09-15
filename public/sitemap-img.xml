@@ -17,6 +17,21 @@
     </image:image>
   </url>
   
+  <!-- Дачный модульный дом -->
+  <url>
+    <loc>https://house-modular.ru/dachniy-modulniy-dom/</loc>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/dacha-house-og.jpg</image:loc>
+      <image:title>Дачный модульный дом под ключ</image:title>
+      <image:caption>Готовый дачный модульный дом для круглогодичного проживания</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://house-modular.ru/images/communications/1.webp</image:loc>
+      <image:title>Комплектация дачного дома</image:title>
+      <image:caption>Надежная защита и качественная кровля</image:caption>
+    </image:image>
+  </url>
+  
   <!-- Каталог -->
   <url>
     <loc>https://house-modular.ru/catalog/</loc>

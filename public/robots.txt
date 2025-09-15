@@ -9,6 +9,7 @@ Allow: /o-kompanii
 Allow: /contacts
 Allow: /contact
 Allow: /dlya-biznesa
+Allow: /dachniy-modulniy-dom
 
 # Региональные страницы
 Allow: /stavropolskiy-kray
@@ -49,3 +50,5 @@ Sitemap: https://house-modular.ru/sitemap-img.xml
 
 # Время задержки для ботов
 Crawl-delay: 1
+
+# Дата последнего обновления: 15.09.2025
