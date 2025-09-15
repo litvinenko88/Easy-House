@@ -68,6 +68,9 @@ export default function Footer() {
                   <Link href="/modulnyye-gostinitsy">Для гостиниц</Link>
                 </li>
                 <li>
+                  <Link href="/dachniy-modulniy-dom">Для дачи</Link>
+                </li>
+                <li>
                   <Link href="/modulnyye-doma-s-terrasoy">С террасой</Link>
                 </li>
               </ul>
