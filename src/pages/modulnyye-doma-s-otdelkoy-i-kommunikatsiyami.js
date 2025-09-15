@@ -296,6 +296,7 @@ export default function ModularHomesWithFinishing() {
             "Цену знаете сразу",
             "Заезжайте после монтажа",
             "Гарантия 5 лет",
+            "Теплея кирпича",
           ]}
         />
         <ProblemSolution
