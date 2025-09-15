@@ -45,16 +45,6 @@ export default function Footer() {
               <div className={styles.title}>Модульные дома</div>
               <ul className={styles.linksList}>
                 <li>
-                  <Link href="/bystrovozvodimyye-modulnyye-doma">
-                    Быстровозводимые
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/modulnyye-doma-dlya-prozhivaniya">
-                    Для проживания
-                  </Link>
-                </li>
-                <li>
                   <Link href="/modulnyye-doma-dlya-baz-otdykha">
                     Для баз отдыха и глэмпинга
                   </Link>
@@ -62,6 +52,16 @@ export default function Footer() {
                  <li>
                   <Link href="/modulnyye-doma-s-otdelkoy-i-kommunikatsiyami">
                     С отделкой и коммуникациями
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/bystrovozvodimyye-modulnyye-doma">
+                    Быстровозводимые
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/modulnyye-doma-dlya-prozhivaniya">
+                    Для проживания
                   </Link>
                 </li>
                 <li>
