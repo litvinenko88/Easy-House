@@ -26,7 +26,7 @@ export default function MapSection() {
                 <div style="padding: 15px; font-family: Arial, sans-serif; line-height: 1.4;">
                   <p style="margin: 8px 0; color: #333; font-size: 14px;">
                     <strong>📍 Адрес:</strong><br>
-                    г. Ставрополь, ул. Севрюкова, 94
+                    г. Ставрополь, ул. Севрюкова, 58
                   </p>
                   <p style="margin: 8px 0; color: #333; font-size: 14px;">
                     <strong>🏭 Производственная база модульных домов</strong>
@@ -132,7 +132,7 @@ export default function MapSection() {
                 <div className={styles.placeholderContent}>
                   <div className={styles.placeholderIcon}>📍</div>
                   <h3>Наш адрес</h3>
-                  <p>г. Ставрополь, ул. Севрюкова, 94</p>
+                  <p>г. Ставрополь, ул. Севрюкова, 58</p>
                   <p>Производственная база Easy House</p>
                   <div className={styles.loadingText}>Загрузка карты...</div>
                 </div>
@@ -144,7 +144,7 @@ export default function MapSection() {
                 <div className={styles.placeholderContent}>
                   <div className={styles.placeholderIcon}>⚠️</div>
                   <h3>Карта временно недоступна</h3>
-                  <p>г. Ставрополь, ул. Севрюкова, 94</p>
+                  <p>г. Ставрополь, ул. Севрюкова, 58</p>
                   <p>Производственная база Easy House</p>
                   <div className={styles.errorText}>
                     Используйте кнопки ниже для построения маршрута
@@ -161,7 +161,7 @@ export default function MapSection() {
                 <h3>Наш адрес</h3>
               </div>
               <div className={styles.infoContent}>
-                <p><strong>г. Ставрополь, ул. Севрюкова, 94</strong></p>
+                <p><strong>г. Ставрополь, ул. Севрюкова, 58</strong></p>
                 <p>Производственная база Easy House</p>
               </div>
               <div className={styles.infoActions}>

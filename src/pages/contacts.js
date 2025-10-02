@@ -39,7 +39,7 @@ export default function Contacts() {
               "email": "info@easyhouse.ru",
               "address": {
                 "@type": "PostalAddress",
-                "streetAddress": "ул. Севрюкова, 94",
+                "streetAddress": "ул. Севрюкова, 58",
                 "addressLocality": "Ставрополь",
                 "addressCountry": "RU"
               }

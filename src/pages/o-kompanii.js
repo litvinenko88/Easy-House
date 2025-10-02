@@ -215,14 +215,14 @@ export default function OKompanii() {
                   <p>
                     <strong>Название организации:</strong>
                     <br />
-                    ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ БАЖАНОВ ВЛАДИМИР
+                    ИНДИВИДУАЛЬНЫЙ ПРЕДПРИНИМАТЕЛЬ БАГАНОВ ВЛАДИМИР
                     АЛЕКСАНДРОВИЧ
                   </p>
                   <p>
-                    <strong>ИНН:</strong> 263411519024
+                    <strong>ИНН:</strong> 263411519058
                   </p>
                   <p>
-                    <strong>ОГРНИП:</strong> 322265100067452
+                    <strong>ОГРНИП:</strong> 322265100067458
                   </p>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function OKompanii() {
                 <div className={styles.infoText}>
                   <p>
                     355013, РОССИЯ, СТАВРОПОЛЬСКИЙ КРАЙ, Г СТАВРОПОЛЬ, УЛ
-                    СЕВРЮКОВА, Д 94
+                    СЕВРЮКОВА, Д 58
                   </p>
                 </div>
               </div>
@@ -239,16 +239,16 @@ export default function OKompanii() {
                 <h3 className={styles.infoTitle}>Банковские реквизиты</h3>
                 <div className={styles.infoText}>
                   <p>
-                    <strong>Расчетный счет:</strong> 40802810400003407449
+                    <strong>Расчетный счет:</strong> 40802810400003405858
                   </p>
                   <p>
                     <strong>Банк:</strong> АО «ТБанк»
                   </p>
                   <p>
-                    <strong>БИК:</strong> 044525974
+                    <strong>БИК:</strong> 044525858
                   </p>
                   <p>
-                    <strong>Корр. счет:</strong> 30101810145250000974
+                    <strong>Корр. счет:</strong> 30101810145250005858
                   </p>
                 </div>
               </div>

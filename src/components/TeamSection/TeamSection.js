@@ -3,7 +3,7 @@ import styles from './TeamSection.module.css';
 
 const teamMembers = [
   {
-    name: "Владимир Бажанов",
+    name: "Владимир Баганов",
     position: "Руководитель",
     photo: "/images/sotrudnik/1.jpg",
   },
